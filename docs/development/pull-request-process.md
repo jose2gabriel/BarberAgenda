@@ -30,6 +30,17 @@ Closes #numero-da-issue
 
 O Pull Request deve ser revisado antes do merge.
 
-Após aprovação:
+## Fluxo
 
-develop ← merge
+feature/*, fix/* ou docs/*
+→ Pull Request para develop
+→ Revisão
+→ Aprovação
+→ Merge para develop
+
+## Release
+
+develop
+→ Validação da equipe
+→ Merge para main
+→ Produção

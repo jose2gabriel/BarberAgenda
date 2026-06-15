@@ -31,7 +31,7 @@ fix/erro-login
 Utilizada para documentação.
 
 Exemplo:
-docs/development-documentation
+docs/development-standards
 
 ### hotfix/<nome>
 
@@ -45,6 +45,14 @@ hotfix/falha-autenticacao
 Issue
 → Branch
 → Desenvolvimento
-→ Pull Request
+→ Pull Request para develop
 → Revisão
 → Merge para develop
+
+## Fluxo de Release
+
+develop
+→ Testes
+→ Aprovação da Equipe
+→ Merge para main
+→ Produção

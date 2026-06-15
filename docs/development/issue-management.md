@@ -18,19 +18,19 @@ fix: corrigir conflito de horários
 
 docs: criar documentação de desenvolvimento
 
-## Descrição
+### Descrição
 
 Toda Issue deve conter:
 
-### Contexto
+#### Contexto
 
 Descrição do problema ou necessidade.
 
-### Objetivo
+#### Objetivo
 
 Resultado esperado da tarefa.
 
-### Critérios de Aceitação
+#### Critérios de Aceitação
 
 Checklist que define quando a tarefa será considerada concluída.
 
@@ -73,7 +73,7 @@ Issue #12
 docs: estabelecer documentação inicial de desenvolvimento
 
 Branch:
-docs/development-documentation
+docs/development-standards
 
 ## Relacionamento com Pull Requests
 

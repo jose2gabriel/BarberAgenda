@@ -11,7 +11,7 @@ Este documento define as diretrizes para contribuições no projeto Barber Agend
 3. Implementar a funcionalidade ou correção.
 4. Realizar testes locais.
 5. Atualizar a documentação quando necessário.
-6. Abrir um Pull Request.
+6. Abrir um Pull Request para `develop`.
 7. Aguardar revisão e aprovação.
 
 ## Boas Práticas
@@ -21,3 +21,4 @@ Este documento define as diretrizes para contribuições no projeto Barber Agend
 * Evitar duplicação de código.
 * Escrever código legível e de fácil manutenção.
 * Respeitar a arquitetura estabelecida para o projeto.
+* Relacionar commits, branches e Pull Requests às respectivas Issues.
