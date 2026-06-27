@@ -1,69 +1,41 @@
-# Monólito Modular
+# Monolito Modular
 
 ## Conceito
 
-Monólito Modular é um estilo arquitetural onde toda a aplicação é executada como uma única unidade de implantação, porém organizada internamente em módulos independentes.
+Um Monolito Modular é uma aplicação única dividida internamente em módulos com isolamento lógico, responsabilidades bem definidas e barreiras de domínio respeitadas. Os módulos compartilham infraestrutura (rede, banco, processo), mas não compartilham estado interno nem dependem uns dos outros diretamente.
 
-Diferentemente de um monólito tradicional, cada módulo possui responsabilidades bem definidas e baixo acoplamento com os demais módulos.
+## Por que Monolito Modular no Barber Agenda?
 
-## Objetivo
+Com equipe reduzida (4 integrantes) e prazo acadêmico, microsserviços aumentariam exponencialmente a complexidade de desenvolvimento e deploy. O Monolito Modular oferece:
 
-O principal objetivo dessa abordagem é reduzir a complexidade operacional sem perder organização interna.
+- Desenvolvimento e deploy simplificados
+- Menor custo de infraestrutura (Vercel free tier + Supabase free tier)
+- Consistência transacional nativa (sem SAGA ou 2PC)
+- Organização interna sem overhead operacional
+- Possibilidade de evolução para microsserviços no futuro
 
-## Estrutura dos Módulos
+## Vantagens e Desvantagens
 
-### Usuários
+| Vantagens | Desvantagens |
+|-----------|-------------|
+| Desenvolvimento e deploy simplificados vs. microsserviços | Crescimento excessivo pode aumentar complexidade |
+| Menor custo de infraestrutura | Deploy conjunto — falha pode afetar toda a aplicação |
+| Consistência transacional nativa | Escalabilidade horizontal limitada vs. microsserviços |
+| Facilidade de evoluir para microsserviços no futuro | Requer disciplina arquitetural para não degradar |
 
-Responsável por:
+## Módulos Internos
 
-- Cadastro
-- Autenticação
-- Controle de acesso
+```
+barber-agenda/
+├── usuarios/        ← Autenticação, perfil, permissões (JWT)
+├── barbeiros/       ← Cadastro, agenda, disponibilidade
+├── servicos/        ← Catálogo, preços, duração
+├── agendamentos/    ← Criação, validação de conflitos, notificações
+└── administrativo/  ← Relatórios, configurações, painel
+```
 
-### Barbeiros
+> **Regra:** módulos se comunicam por interfaces bem definidas, nunca por acesso direto a repositórios ou banco de dados uns dos outros.
 
-Responsável por:
+## Referências
 
-- Cadastro de profissionais
-- Disponibilidade
-- Agenda
-
-### Serviços
-
-Responsável por:
-
-- Cadastro de serviços
-- Valores
-- Tempo de execução
-
-### Agendamentos
-
-Responsável por:
-
-- Criação de agendamentos
-- Cancelamentos
-- Histórico
-
-### Administrativo
-
-Responsável por:
-
-- Configurações
-- Relatórios
-- Gestão geral
-
-## Vantagens
-
-- Simplicidade de implantação
-- Menor custo operacional
-- Facilidade de desenvolvimento
-- Comunicação interna rápida
-
-## Desvantagens
-
-- Escalabilidade limitada em comparação a microsserviços
-- Necessidade de disciplina arquitetural
-
-## Justificativa da Escolha
-
-O Barber Agenda possui escopo controlado e equipe reduzida, tornando o Monólito Modular uma alternativa adequada por equilibrar simplicidade e organização.
+- ADR-001: [Decisão de adoção do Monolito Modular](../adr/ADR-001-monolith-modular.md)
