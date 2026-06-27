@@ -1,52 +1,58 @@
-# Roadmap
+# Roadmap — Barber Agenda
 
-## MVP
+## MVP (Fase 1) — Prazo Acadêmico 2026
 
-### Usuários
+### Módulo 1 — Identidade e Acesso
+- [ ] RF001 — Cadastro de usuário
+- [ ] RF002 — Autenticação JWT
+- [ ] RF017 — Autorização por perfil
+- [ ] RF018 — Encerramento de sessão
+- [ ] RF019 — Atualização de dados
+- [ ] RF030 — Recuperação de senha
 
-* [ ] Cadastro de usuários
-* [ ] Login
-* [ ] Recuperação de senha
-* [ ] Controle de permissões
+### Módulo 2 — Profissionais e Serviços
+- [ ] RF003 — Cadastro de profissionais
+- [ ] RF004 — Listagem de profissionais
+- [ ] RF014 — Cadastro de serviços
+- [ ] RF015 — Seleção de serviço
+- [ ] RF020 — Horário de funcionamento compartilhado
+- [ ] RF021 — Agenda individual por profissional
+- [ ] RF024 — Controle de indisponibilidade
+- [ ] RF025 — Bloqueio por indisponibilidade
 
-### Barbeiros
+### Módulo 3 — Motor de Agendamento
+- [ ] RF006 — Agendamento de horário
+- [ ] RF007 — Validação de disponibilidade
+- [ ] RF008 — Cancelamento
+- [ ] RF009 — Reagendamento
+- [ ] RF010 — Consulta de agendamentos (cliente)
+- [ ] RF011 — Consulta de agenda (profissional)
+- [ ] RF016 — Controle de duração do serviço
+- [ ] RF029 — Controle de status
 
-* [ ] Cadastro de barbeiros
-* [ ] Gerenciamento de disponibilidade
-* [ ] Consulta de agenda
+### Módulo 4 — Notificações
+- [ ] RF012 — Notificação de agendamento
+- [ ] RF013 — Notificação de cancelamento
+- [ ] ADR-006 — Adapter para provedores
 
-### Serviços
+---
 
-* [ ] Cadastro de serviços
-* [ ] Definição de preços
-* [ ] Definição de duração
+## Fase 2 — Pós-MVP (Futuras Evoluções)
 
-### Agendamentos
+- Notificações via WhatsApp (quando integração estiver estável)
+- RF028 — Histórico de atendimentos com filtros avançados
+- Relatórios de utilização para administradores
+- Painel de métricas (Observer — MetricsObserver)
+- Possível migração de módulos críticos para microsserviços
 
-* [ ] Criar agendamento
-* [ ] Cancelar agendamento
-* [ ] Reagendar atendimento
-* [ ] Consultar agenda
+---
 
-## Pós-MVP
+## Riscos Monitorados
 
-### Comunicação
-
-* [ ] Notificações de agendamento
-* [ ] Lembretes automáticos
-
-### Gestão
-
-* [ ] Relatórios de atendimentos
-* [ ] Relatórios financeiros
-* [ ] Dashboard administrativo
-
-## Longo Prazo
-
-### Escalabilidade
-
-* [ ] Aplicativo mobile
-* [ ] Integração com pagamentos
-* [ ] Integrações externas
-* [ ] Monitoramento avançado
-* [ ] Métricas de negócio
+| Risco | Probabilidade | Impacto | Mitigação |
+|-------|--------------|---------|-----------|
+| Integração WhatsApp | Alta | Alto | Adapter com fallback para e-mail (ADR-006) |
+| Motor de agendamento | Alta | Alto | Validação dupla camada + testes unitários |
+| Falta de tempo | Média | Alto | MVP incremental, funcionalidades priorizadas |
+| JWT / controle de sessão | Média | Alto | Biblioteca jsonwebtoken com boas práticas |
+| Supabase RLS | Média | Médio | Revisão de políticas antes do deploy |
