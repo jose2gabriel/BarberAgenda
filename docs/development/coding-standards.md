@@ -1,43 +1,56 @@
-# Padrões de Código
+# Padrões de Código — Barber Agenda
 
-## Convenções de Nomenclatura
+## Linguagem e Runtime
 
-### Classes
+- **TypeScript** em todo o projeto (frontend e backend)
+- Node.js no backend com Express
+- React no frontend com Vite
 
-Utilizar PascalCase.
+## Organização dos Arquivos
 
-Exemplos:
+Seguir estrutura de **Vertical Slices** — cada módulo contém tudo que precisa:
 
-* UsuarioService
-* AgendamentoController
+```
+modulo/
+├── domain/
+│   └── Entidade.ts
+├── use-cases/
+│   └── CriarAgendamentoUseCase.ts
+├── adapters/
+│   ├── AgendamentoController.ts
+│   └── AgendamentoDTO.ts
+└── infrastructure/
+    └── AgendamentoRepository.ts
+```
 
-### Variáveis e Funções
+## Nomenclatura
 
-Utilizar camelCase.
+| Artefato | Convenção | Exemplo |
+|----------|-----------|---------|
+| Classes | PascalCase | `AgendamentoUseCase` |
+| Interfaces | IPascalCase | `INotificationService` |
+| Arquivos | PascalCase | `AgendamentoController.ts` |
+| Hooks React | camelCase com `use` | `useAgendamento` |
+| Componentes | PascalCase | `AgendaCalendar.tsx` |
+| Variáveis/funções | camelCase | `criarAgendamento()` |
+| Constantes | UPPER_SNAKE_CASE | `JWT_SECRET` |
 
-Exemplos:
+## Regras Gerais
 
-* usuarioLogado
-* criarAgendamento()
+- **Nunca** acesse o banco diretamente de um use case — use repositórios
+- **Nunca** importe de outro módulo diretamente — use interfaces/contratos
+- **Sempre** valide dados de entrada nos controllers (camada de adapters)
+- Senhas **nunca** em texto puro — use bcrypt
+- Segredos **nunca** no código — use variáveis de ambiente (`.env`)
 
-### Constantes
+## TypeScript
 
-Utilizar UPPER_SNAKE_CASE.
+- `strict: true` habilitado no `tsconfig.json`
+- Evite `any` — use tipos genéricos ou `unknown` quando necessário
+- Defina DTOs tipados para request/response de cada endpoint
 
-Exemplos:
+## Testes
 
-* MAX_AGENDAMENTOS_DIA
-
-## Boas Práticas
-
-* Aplicar o princípio da responsabilidade única.
-* Evitar código duplicado.
-* Criar funções pequenas e reutilizáveis.
-* Priorizar legibilidade e simplicidade.
-* Utilizar nomes descritivos para variáveis e métodos.
-
-## Organização
-
-* Cada módulo deve possuir responsabilidades bem definidas.
-* Respeitar a separação entre domínio, casos de uso e infraestrutura.
-* Manter baixo acoplamento entre módulos.
+- Testes unitários no domínio e use cases (sem dependência de banco)
+- Use mocks para interfaces externas (`INotificationService`, repositórios)
+- Nomenclatura: `NomeDoArquivo.spec.ts`

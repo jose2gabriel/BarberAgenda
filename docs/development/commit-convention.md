@@ -1,54 +1,41 @@
 # Convenção de Commits
 
-O projeto segue o padrão Conventional Commits.
+O projeto segue o padrão **Conventional Commits**.
 
-## Tipos de Commit
+## Formato
 
-### feat
+```
+<tipo>(<escopo>): <descrição curta>
 
-Nova funcionalidade.
+[corpo opcional]
 
-Exemplo:
-feat: adicionar cadastro de barbeiros
+[rodapé opcional]
+```
 
-### fix
+## Tipos
 
-Correção de defeitos.
+| Tipo | Uso |
+|------|-----|
+| `feat` | Nova funcionalidade |
+| `fix` | Correção de bug |
+| `refactor` | Refatoração sem nova funcionalidade |
+| `test` | Adição ou correção de testes |
+| `docs` | Alteração em documentação |
+| `chore` | Tarefas de build, config, dependências |
+| `style` | Formatação, sem mudança de lógica |
 
-Exemplo:
-fix: corrigir conflito de horários
+## Exemplos
 
-### docs
+```
+feat(agendamentos): implementar validação de conflito de horários
 
-Alterações na documentação.
+fix(auth): corrigir expiração de token JWT
 
-Exemplo:
-docs: adicionar guia de contribuição
+docs(adr): adicionar ADR-006 sobre padrões GoF
 
-### refactor
+test(agendamentos): adicionar testes unitários para CriarAgendamentoUseCase
+```
 
-Refatoração sem alteração de comportamento.
+## Escopos Sugeridos
 
-Exemplo:
-refactor: reorganizar módulo de agendamentos
-
-### test
-
-Criação ou atualização de testes.
-
-Exemplo:
-test: adicionar testes de autenticação
-
-### style
-
-Alterações de formatação.
-
-Exemplo:
-style: ajustar indentação dos componentes
-
-### chore
-
-Tarefas de manutenção.
-
-Exemplo:
-chore: atualizar dependências
+`auth`, `usuarios`, `barbeiros`, `servicos`, `agendamentos`, `admin`, `infra`, `frontend`
