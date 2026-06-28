@@ -1,43 +1,77 @@
-# Regras de Negócio - Agendamentos
+# Regras de Negócio — Agendamentos
 
-## Criação de Agendamentos
+Módulo: `agendamentos/`  
+Requisitos relacionados: RF006, RF007, RF008, RF009, RF010, RF012, RF013, RF016, RF028, RF029
 
-- O usuário deve selecionar um profissional.
-- O usuário deve selecionar um serviço.
-- O usuário deve selecionar uma data e horário disponíveis.
-- O sistema deve validar a disponibilidade antes da confirmação.
+---
 
-## Disponibilidade
+## Motor de Agendamento
 
-- Não podem existir dois agendamentos para o mesmo profissional no mesmo horário.
-- O sistema deve considerar a duração do serviço ao verificar disponibilidade.
-- Horários ocupados devem ser bloqueados para novos agendamentos.
-- Períodos de indisponibilidade devem impedir novos agendamentos.
+Núcleo central e de maior complexidade técnica do sistema. Integra clientes, profissionais, serviços e disponibilidade de horários.
 
-## Reagendamento
+### Fluxo de Criação
 
-- O usuário pode reagendar um atendimento existente.
-- O novo horário deve respeitar as regras de disponibilidade.
-- O sistema deve validar conflitos antes da confirmação.
+| Etapa | Ação |
+|-------|------|
+| 1 | Cliente se autentica (JWT) |
+| 2 | Escolhe um profissional |
+| 3 | Seleciona um serviço |
+| 4 | Escolhe uma data disponível |
+| 5 | Sistema verifica conflitos de horários (backend) |
+| 6 | Cliente seleciona o horário e confirma |
+| 7 | Sistema valida disponibilidade e registra o agendamento |
+| 8 | Usuário recebe confirmação do agendamento |
 
-## Cancelamento
+---
 
-- O usuário pode cancelar um agendamento existente.
-- O sistema deve registrar o cancelamento.
-- O horário cancelado deve voltar a ficar disponível.
+## Validação de Disponibilidade (RF007)
 
-## Consulta
+- O backend verifica, em **dupla camada** (lógica + banco), se o horário está disponível
+- Um horário é considerado **indisponível** quando:
+  - Já existe agendamento com sobreposição (considerando duração do serviço — RF016)
+  - O profissional registrou indisponibilidade naquele período (RF025)
+  - O horário está fora do funcionamento da barbearia (RF020)
+- Em caso de conflito, retorna `409 SCHEDULE_CONFLICT`
 
-- O usuário pode visualizar seus agendamentos.
-- O profissional pode visualizar sua agenda de atendimentos.
+## Status do Agendamento (RF029)
 
-## Notificações
+| Status | Descrição |
+|--------|-----------|
+| `agendado` | Agendamento confirmado e ativo |
+| `concluido` | Atendimento realizado |
+| `cancelado` | Agendamento cancelado pelo cliente, profissional ou admin |
 
-- O sistema deve notificar o usuário após a confirmação do agendamento.
-- O sistema deve notificar o usuário em caso de cancelamento.
-- As notificações devem conter informações do serviço, profissional, data e horário.
+## Cancelamento (RF008)
 
-## Identificação do Profissional
+- Cliente, profissional e admin podem cancelar agendamentos
+- Ao cancelar, o horário é liberado automaticamente para novos agendamentos
+- O usuário recebe notificação de cancelamento (RF013)
 
-- Todo agendamento deve estar vinculado a um profissional.
-- O sistema deve informar ao usuário qual profissional realizará o atendimento.
+## Reagendamento (RF009)
+
+- O cliente pode alterar a data/horário de um agendamento existente
+- O sistema valida disponibilidade no novo horário antes de confirmar a alteração
+- O horário anterior é liberado após confirmação
+
+## Notificações (RF012, RF013)
+
+Eventos que disparam notificações ao cliente:
+
+| Evento | Notificação |
+|--------|-------------|
+| Confirmação de agendamento | Detalhes do atendimento confirmado (RF012) |
+| Cancelamento de agendamento | Aviso de cancelamento com detalhes (RF013) |
+
+As notificações são enviadas via `INotificationService` (padrão Adapter — ADR-006). O provedor padrão pode ser e-mail, WhatsApp ou notificação interna.
+
+## Histórico de Atendimentos (RF028)
+
+- Clientes e profissionais podem consultar atendimentos realizados anteriormente
+- O histórico inclui: data, horário, profissional, serviço e status final
+- Dados históricos são preservados mesmo após cancelamento de conta (anonimizados — RNF010)
+
+## Consulta de Agendamentos (RF010, RF011)
+
+- **Cliente:** visualiza apenas seus próprios agendamentos
+- **Profissional:** visualiza todos os agendamentos da sua agenda
+- **Admin:** visualiza agendamentos de toda a plataforma
