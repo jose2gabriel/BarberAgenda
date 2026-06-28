@@ -1,16 +1,38 @@
 # Definition of Done (DoD)
 
-Uma tarefa será considerada concluída quando atender aos seguintes critérios:
+Uma tarefa é considerada **concluída** quando todos os critérios abaixo são atendidos:
 
-* [ ] Implementação finalizada.
-* [ ] Código revisado.
-* [ ] Sem erros de compilação.
-* [ ] Testado localmente.
-* [ ] Padrões de código respeitados.
-* [ ] Documentação atualizada quando necessário.
-* [ ] Pull Request aprovado.
-* [ ] Merge realizado para a branch apropriada.
+## Funcionalidade
 
-## Critério Final
+- [ ] Implementação completa do requisito funcional (RF correspondente)
+- [ ] Validações de entrada implementadas no controller
+- [ ] Respostas de erro retornam os códigos e mensagens corretos (ver `error-codes.md`)
 
-Uma funcionalidade somente é considerada concluída quando atende aos requisitos definidos na Issue correspondente e está pronta para integração ao sistema.
+## Qualidade de Código
+
+- [ ] Código segue os [coding standards](./coding-standards.md)
+- [ ] Nenhum `any` sem justificativa documentada
+- [ ] Sem segredos hardcoded (senhas, tokens, URLs de banco)
+
+## Segurança
+
+- [ ] Rotas protegidas verificam JWT (RF017)
+- [ ] Permissões verificadas por `role` (RF027)
+- [ ] Senhas tratadas com bcrypt (RNF001)
+
+## Testes
+
+- [ ] Testes unitários escritos para use cases e domínio
+- [ ] Testes passando (`npm test`)
+
+## Documentação
+
+- [ ] Endpoint documentado em `api/endpoints.md` (se aplicável)
+- [ ] Regra de negócio documentada em `business-rules/` (se aplicável)
+- [ ] ADR criada se houver decisão arquitetural relevante
+
+## Revisão
+
+- [ ] PR aprovado por pelo menos 1 membro do time
+- [ ] Branch atualizada com `develop` sem conflitos
+- [ ] Issue fechada após merge
