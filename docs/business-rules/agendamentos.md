@@ -39,11 +39,11 @@ Núcleo central e de maior complexidade técnica do sistema. Integra clientes, p
 |--------|-----------|
 | `agendado` | Agendamento confirmado e ativo |
 | `concluido` | Atendimento realizado |
-| `cancelado` | Agendamento cancelado pelo cliente, profissional ou admin |
+| `cancelado` | Agendamento cancelado pelo cliente, profissional ou owner |
 
 ## Cancelamento (RF008)
 
-- Cliente, profissional e admin podem cancelar agendamentos
+- Cliente, profissional e owner podem cancelar agendamentos (owner apenas dentro de sua barbearia)
 - Ao cancelar, o horário é liberado automaticamente para novos agendamentos
 - O usuário recebe notificação de cancelamento (RF013)
 
@@ -74,4 +74,4 @@ As notificações são enviadas via `INotificationService` (padrão Adapter — 
 
 - **Cliente:** visualiza apenas seus próprios agendamentos
 - **Profissional:** visualiza todos os agendamentos da sua agenda
-- **Admin:** visualiza agendamentos de toda a plataforma
+- **Owner:** visualiza agendamentos das barbearias que possui (não da plataforma toda — cada owner só vê suas próprias barbearias, ADR-007)

@@ -11,7 +11,8 @@ Requisitos relacionados: RF001, RF002, RF017, RF018, RF019, RF030, RNF001, RNF00
 - **E-mails duplicados são proibidos** (RNF007) — retorna `409 EMAIL_ALREADY_EXISTS`
 - A senha deve ser armazenada com **bcrypt** — nunca em texto puro (RNF001)
 - Todo novo usuário recebe o perfil `cliente` por padrão
-- Perfis `profissional` e `admin` são atribuídos apenas por administradores
+- O perfil `owner` é definido no momento do cadastro, quando o usuário escolhe criar uma barbearia
+- O perfil `profissional` é atribuído pelo owner ao cadastrar o profissional em sua barbearia (ADR-007)
 
 ## Autenticação (RF002)
 
@@ -26,7 +27,7 @@ Requisitos relacionados: RF001, RF002, RF017, RF018, RF019, RF030, RNF001, RNF00
 - O campo `role` no token define o nível de acesso:
   - `cliente` — acesso às próprias funcionalidades de agendamento
   - `profissional` — cliente + gestão de agenda própria
-  - `admin` — acesso completo
+  - `owner` — gestão completa das barbearias que possui (ADR-007)
 
 ## Encerramento de Sessão (RF018)
 

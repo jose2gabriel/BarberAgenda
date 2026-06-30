@@ -155,3 +155,101 @@ erDiagram
 ### `password_resets`
 - Token de uso único com expiração (RF030)
 - Campo `used` impede reuso do mesmo token
+
+
+
+
+## users — Usuários
+| Campo           | Descrição                                                 |
+| --------------- | --------------------------------------------------------- |
+| `id`            | Identificador único do usuário (UUID).                    |
+| `name`          | Nome completo do usuário.                                 |
+| `email`         | E-mail utilizado para login. Deve ser único no sistema.   |
+| `phone`         | Telefone para contato.                                    |
+| `password_hash` | Senha criptografada utilizando algoritmo de hash.         |
+| `role`          | Perfil do usuário (`cliente`, `profissional` ou `owner`). |
+| `created_at`    | Data de criação do cadastro.                              |
+| `updated_at`    | Data da última atualização do cadastro.                   |
+
+## barbershops — Barbearias
+| Campo        | Descrição                                        |
+| ------------ | ------------------------------------------------ |
+| `id`         | Identificador único da barbearia.                |
+| `owner_id`   | Referência ao usuário proprietário da barbearia. |
+| `name`       | Nome da barbearia.                               |
+| `address`    | Endereço da barbearia.                           |
+| `phone`      | Telefone da barbearia.                           |
+| `created_at` | Data de criação do registro.                     |
+| `updated_at` | Data da última atualização.                      |
+
+
+## professionals — Profissionais
+| Campo           | Descrição                                        |
+| --------------- | ------------------------------------------------ |
+| `id`            | Identificador único do profissional.             |
+| `user_id`       | Referência ao usuário associado ao profissional. |
+| `barbershop_id` | Barbearia onde o profissional atua.              |
+| `specialty`     | Especialidade principal do profissional.         |
+| `created_at`    | Data de criação do registro.                     |
+
+
+## services — Serviços
+| Campo              | Descrição                        |
+| ------------------ | -------------------------------- |
+| `id`               | Identificador único do serviço.  |
+| `barbershop_id`    | Barbearia que oferece o serviço. |
+| `name`             | Nome do serviço.                 |
+| `description`      | Descrição detalhada do serviço.  |
+| `duration_minutes` | Duração do serviço em minutos.   |
+| `price`            | Valor cobrado pelo serviço.      |
+| `created_at`       | Data de criação do serviço.      |
+
+## professional_services — Serviços dos Profissionais
+
+| Campo             | Descrição                            |
+| ----------------- | ------------------------------------ |
+| `professional_id` | Profissional que realiza o serviço.  |
+| `service_id`      | Serviço oferecido pelo profissional. |
+
+## business_hours — Horários de Funcionamento
+| Campo           | Descrição                                   |
+| --------------- | ------------------------------------------- |
+| `id`            | Identificador do horário de funcionamento.  |
+| `barbershop_id` | Barbearia associada.                        |
+| `day_of_week`   | Dia da semana (0 = Domingo até 6 = Sábado). |
+| `open_time`     | Horário de abertura.                        |
+| `close_time`    | Horário de fechamento.                      |
+
+## unavailabilities — Indisponibilidades
+| Campo             | Descrição                                    |
+| ----------------- | -------------------------------------------- |
+| `id`              | Identificador da indisponibilidade.          |
+| `professional_id` | Profissional indisponível.                   |
+| `starts_at`       | Data e hora de início da indisponibilidade.  |
+| `ends_at`         | Data e hora de término da indisponibilidade. |
+| `reason`          | Motivo da indisponibilidade.                 |
+| `created_at`      | Data de criação do registro.                 |
+
+## appointments — Agendamentos
+| Campo             | Descrição                                                       |
+| ----------------- | --------------------------------------------------------------- |
+| `id`              | Identificador único do agendamento.                             |
+| `client_id`       | Cliente que realizou o agendamento.                             |
+| `professional_id` | Profissional responsável pelo atendimento.                      |
+| `service_id`      | Serviço selecionado.                                            |
+| `barbershop_id`   | Barbearia onde ocorrerá o atendimento.                          |
+| `date`            | Data do atendimento.                                            |
+| `start_time`      | Horário de início do atendimento.                               |
+| `end_time`        | Horário de término do atendimento.                              |
+| `status`          | Situação do agendamento (`agendado`, `concluido`, `cancelado`). |
+| `created_at`      | Data de criação do agendamento.                                 |
+| `updated_at`      | Data da última atualização.                                     |
+
+## password_resets — Recuperação de Senha
+| Campo        | Descrição                                        |
+| ------------ | ------------------------------------------------ |
+| `id`         | Identificador da solicitação.                    |
+| `user_id`    | Usuário que solicitou a redefinição.             |
+| `token`      | Token único utilizado para recuperação de senha. |
+| `expires_at` | Data e hora de expiração do token.               |
+| `used`       | Indica se o token já foi utilizado.              |

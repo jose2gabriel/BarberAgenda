@@ -10,16 +10,19 @@ José Gabriel de Oliveira Farias · Geovany de Oliveira Silva Batista · Afonso 
 
 ## O que é
 
-O Barber Agenda é uma aplicação web responsiva que substitui o agendamento manual feito por aplicativos de mensagens. Clientes agendam horários online, profissionais gerenciam sua agenda individual e administradores controlam o funcionamento da barbearia.
+O Barber Agenda é uma aplicação web responsiva que substitui o agendamento manual feito por aplicativos de mensagens. Clientes agendam horários em qualquer barbearia cadastrada, profissionais gerenciam sua agenda individual e owners (donos de barbearia) controlam profissionais, serviços e horário de funcionamento das barbearias que possuem (ADR-007).
 
 ## Stack
 
 | Camada | Tecnologia |
 |--------|-----------|
 | Frontend | React + TypeScript + Vite |
-| Backend | Node.js + Express |
+| Formulários | React Hook Form + Zod |
+| Backend | Node.js + Express (padrão services/controllers com injeção de dependência) |
 | Autenticação | JWT (implementado no backend) |
-| Banco de Dados | PostgreSQL via Supabase |
+| Validação de entrada | Zod (backend e frontend) |
+| Rate Limiting | express-rate-limit |
+| Banco de Dados | PostgreSQL via Supabase (`@supabase/supabase-js`, sem ORM) |
 | Hospedagem Frontend | Vercel |
 
 ## Como rodar localmente
@@ -66,7 +69,7 @@ docs/
 │   ├── ADR-004-react-mvvm.md
 │   ├── ADR-005-postgresql.md
 │   ├── ADR-006-adocao-de-padroes-gof.md
-│   └── ADR-007-multi-tenant-barbershops.md
+│   └── ADR-007-multi-tenant-barbershops.md   # owner + barbershops — leia antes de implementar perfis
 │
 ├── api/                   # Contratos da API REST
 │   ├── endpoints.md            # Todas as rotas com RF rastreado
@@ -76,13 +79,15 @@ docs/
 │
 ├── business-rules/        # Regras de negócio por módulo
 │   ├── usuarios.md
+│   ├── barbershops.md     # Regras da entidade barbearia (ADR-007)
 │   ├── barbeiros.md
 │   ├── servicos.md
-│   └── agendamentos.md    # Motor de agendamento — leia primeiro
+│   └── agendamentos.md    # Motor de agendamento — núcleo do sistema
 │
 ├── development/           # Guias para o time
-│   ├── contribution-guide.md
+│   ├── contribution-guide.md   # Ordem de implementação recomendada
 │   ├── coding-standards.md
+│   ├── security-guide.md       # Rate limiting + Zod (obrigatórios no MVP)
 │   ├── commit-convention.md
 │   ├── branching-strategy.md
 │   ├── issue-management.md
@@ -90,7 +95,7 @@ docs/
 │   └── definition-of-done.md
 │
 ├── project-management/
-│   ├── roadmap.md         # Checklist de RFs por fase
+│   ├── roadmap.md         # Checklist de RFs por etapa
 │   ├── workflow.md
 │   └── issue-template.md
 │
@@ -101,23 +106,39 @@ docs/
 │   ├── backup-strategy.md
 │   └── incident-response.md
 │
+├── sql/                   # Scripts SQL para o Supabase
+│   ├── 01_create_tables.sql
+│   ├── 02_indexes.sql
+│   └── 03_test_queries.sql
+│
+├── frontend/              # Documentação exigida pela disciplina de PI1
+│   ├── overview.md         # Stack e estrutura de pastas
+│   ├── custom-hooks.md     # useAuth, useAgendamento, useBarbeiro
+│   ├── forms-validation.md # React Hook Form + Zod
+│   ├── design-system.md    # Cores, tipografia, componentes
+│   └── ai-usage.md         # Metodologia de uso de IA
+│
 └── glossary.md            # Termos do projeto
 ```
 
 ## Por onde começar
 
 1. Leia a [visão geral da arquitetura](./docs/architecture/overview.md)
-2. Veja o [diagrama do banco de dados](./docs/architecture/diagrams/database-diagram.md)
-3. Leia as [regras do motor de agendamento](./docs/business-rules/agendamentos.md) — é o núcleo do sistema
-4. Consulte os [endpoints da API](./docs/api/endpoints.md) antes de implementar qualquer rota
-5. Siga o [guia de contribuição](./docs/development/contribution-guide.md)
+2. Leia a [ADR-007](./docs/adr/ADR-007-multi-tenant-barbershops.md) — define os perfis cliente/profissional/owner
+3. Veja o [diagrama do banco de dados](architecture/diagrams/database-diagram.md)
+4. Execute os [scripts SQL](sql/01_create_tables.sql) no Supabase
+5. Leia o [guia de segurança](./docs/development/security-guide.md) — rate limiting e Zod são obrigatórios desde o início
+6. Leia as [regras do motor de agendamento](./docs/business-rules/agendamentos.md) — é o núcleo do sistema
+7. Consulte os [endpoints da API](./docs/api/endpoints.md) antes de implementar qualquer rota
+8. Siga a [ordem de implementação](./docs/development/contribution-guide.md) no guia de contribuição
 
 ## Documentos acadêmicos
 
-Os documentos entregues na disciplina estão em `docs/academic/`:
+Os documentos entregues nas disciplinas estão referenciados abaixo:
 
 - RVS — Relatório de Viabilidade de Software
 - ERS — Especificação de Requisitos de Software
 - Arquitetura de Software (pesquisa orientada)
 - Status Report 01
 - Atividade Prática — Design Patterns (ADR-006)
+- Modelagem de Banco de Dados (Programação para Internet I)

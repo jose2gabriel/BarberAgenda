@@ -38,4 +38,4 @@ test(agendamentos): adicionar testes unitários para CriarAgendamentoUseCase
 
 ## Escopos Sugeridos
 
-`auth`, `usuarios`, `barbeiros`, `servicos`, `agendamentos`, `admin`, `infra`, `frontend`
+`auth`, `usuarios`, `barbershops`, `barbeiros`, `servicos`, `agendamentos`, `infra`, `frontend`
