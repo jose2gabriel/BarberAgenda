@@ -36,3 +36,10 @@ Uma tarefa é considerada **concluída** quando todos os critérios abaixo são 
 - [ ] PR aprovado por pelo menos 1 membro do time
 - [ ] Branch atualizada com `develop` sem conflitos
 - [ ] Issue fechada após merge
+
+## Segurança (obrigatório em todo endpoint)
+
+- [ ] Input validado com Zod no controller
+- [ ] Rota protegida por middleware JWT (se aplicável)
+- [ ] Nenhum dado sensível em `console.log`
+- [ ] Nenhum segredo hardcoded no código

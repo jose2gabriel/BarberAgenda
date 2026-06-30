@@ -28,7 +28,7 @@ O sistema utiliza **JWT (JSON Web Token)** implementado no backend Node.js/Expre
   "payload": {
     "sub": "user_id",
     "email": "usuario@email.com",
-    "role": "cliente | profissional | admin",
+    "role": "cliente | profissional | owner",
     "iat": 1234567890,
     "exp": 1234567890
   }
@@ -49,8 +49,8 @@ O campo `role` no payload do JWT define as permissões:
 | Role | Acesso |
 |------|--------|
 | `cliente` | Rotas de agendamento e perfil próprio |
-| `profissional` | Rotas de cliente + gerenciamento de agenda |
-| `admin` | Acesso completo ao sistema |
+| `profissional` | Rotas de cliente + gerenciamento de agenda própria |
+| `owner` | Gerenciamento completo das barbearias que possui (não da plataforma toda — ADR-007) |
 
 ## Recuperação de Senha (RF030)
 
