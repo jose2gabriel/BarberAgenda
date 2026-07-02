@@ -39,7 +39,7 @@
 
 ### Botão Primário
 ```tsx
-// src/components/ui/Button.tsx
+// src/shared/ui/Button.tsx
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'danger'
   size?: 'sm' | 'md' | 'lg'
@@ -75,7 +75,7 @@ export function Button({ variant = 'primary', size = 'md', loading, children, ..
 
 ### Input
 ```tsx
-// src/components/ui/Input.tsx
+// src/shared/ui/Input.tsx
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
@@ -102,7 +102,7 @@ export function Input({ label, error, ...props }: InputProps) {
 
 ### Card
 ```tsx
-// src/components/ui/Card.tsx
+// src/shared/ui/Card.tsx
 export function Card({ children, className = '' }: { children: React.ReactNode, className?: string }) {
   return (
     <div className={`bg-[#16213E] border border-[#2A2A4A] rounded-xl p-6 ${className}`}>

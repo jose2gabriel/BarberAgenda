@@ -10,7 +10,7 @@
 **Responsabilidade:** gerencia autenticação do usuário — login, logout, estado da sessão.
 
 ```typescript
-// src/hooks/useAuth.ts
+// src/features/auth/model/useAuth.ts
 import { useState, useEffect } from 'react'
 
 interface User {
@@ -83,7 +83,7 @@ export function useAuth() {
 **Responsabilidade:** gerencia o fluxo completo de agendamento — buscar horários disponíveis, criar, cancelar e reagendar.
 
 ```typescript
-// src/hooks/useAgendamento.ts
+// src/features/agendamento/model/useAgendamento.ts
 import { useState } from 'react'
 
 interface SlotDisponivel {
@@ -205,7 +205,7 @@ export function useAgendamento() {
 **Responsabilidade:** busca e gerencia dados de profissionais e barbearias.
 
 ```typescript
-// src/hooks/useBarbeiro.ts
+// src/features/barbershop/model/useBarbeiro.ts
 import { useState, useEffect } from 'react'
 
 export function useBarbeiro(barbershopId?: string) {
