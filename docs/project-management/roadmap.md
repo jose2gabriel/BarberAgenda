@@ -3,10 +3,10 @@
 ## MVP (Fase 1) — Prazo Acadêmico 2026
 
 ### Etapa 0 — Infraestrutura Base
-- [ ] Executar `sql/01_create_tables.sql` no Supabase
-- [ ] Executar `sql/02_indexes.sql` no Supabase
-- [ ] Configurar Express com rate limiting (`security-guide.md`)
-- [ ] Configurar middleware `validate()` com Zod
+- [x] Executar `sql/01_create_tables.sql` no Supabase
+- [x] Executar `sql/02_indexes.sql` no Supabase
+- [x] Configurar Express com rate limiting (`security-guide.md`)
+- [x] Configurar middleware `validate()` com Zod
 
 ### Módulo 1 — Identidade e Acesso
 - [ ] RF001 — Cadastro de usuário (com validação Zod)
