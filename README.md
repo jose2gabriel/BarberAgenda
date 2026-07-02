@@ -69,7 +69,8 @@ docs/
 │   ├── ADR-004-react-mvvm.md
 │   ├── ADR-005-postgresql.md
 │   ├── ADR-006-adocao-de-padroes-gof.md
-│   └── ADR-007-multi-tenant-barbershops.md   # owner + barbershops — leia antes de implementar perfis
+│   ├── ADR-007-multi-tenant-barbershops.md   # owner + barbershops — leia antes de implementar perfis
+│   └── ADR-008-feature-sliced-design.md      # organização do frontend em FSD
 │
 ├── api/                   # Contratos da API REST
 │   ├── endpoints.md            # Todas as rotas com RF rastreado
@@ -123,14 +124,14 @@ docs/
 
 ## Por onde começar
 
-1. Leia a [visão geral da arquitetura](./docs/architecture/overview.md)
-2. Leia a [ADR-007](./docs/adr/ADR-007-multi-tenant-barbershops.md) — define os perfis cliente/profissional/owner
+1. Leia a [visão geral da arquitetura](architecture/overview.md)
+2. Leia a [ADR-007](adr/ADR-007-multi-tenant-barbershops.md) — define os perfis cliente/profissional/owner
 3. Veja o [diagrama do banco de dados](architecture/diagrams/database-diagram.md)
 4. Execute os [scripts SQL](sql/01_create_tables.sql) no Supabase
-5. Leia o [guia de segurança](./docs/development/security-guide.md) — rate limiting e Zod são obrigatórios desde o início
-6. Leia as [regras do motor de agendamento](./docs/business-rules/agendamentos.md) — é o núcleo do sistema
-7. Consulte os [endpoints da API](./docs/api/endpoints.md) antes de implementar qualquer rota
-8. Siga a [ordem de implementação](./docs/development/contribution-guide.md) no guia de contribuição
+5. Leia o [guia de segurança](development/security-guide.md) — rate limiting e Zod são obrigatórios desde o início
+6. Leia as [regras do motor de agendamento](business-rules/agendamentos.md) — é o núcleo do sistema
+7. Consulte os [endpoints da API](api/endpoints.md) antes de implementar qualquer rota
+8. Siga a [ordem de implementação](development/contribution-guide.md) no guia de contribuição
 
 ## Documentos acadêmicos
 
