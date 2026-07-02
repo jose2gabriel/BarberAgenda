@@ -20,7 +20,7 @@ Todos os formulários do projeto seguem esse padrão:
 ## Formulário de Login
 
 ```tsx
-// src/components/forms/LoginForm.tsx
+// src/features/auth/ui/LoginForm.tsx
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -76,7 +76,7 @@ export function LoginForm() {
 ## Formulário de Cadastro
 
 ```tsx
-// src/components/forms/CadastroForm.tsx
+// src/features/auth/ui/CadastroForm.tsx
 const cadastroSchema = z.object({
   name:            z.string().min(2, 'Nome muito curto'),
   email:           z.string().email('E-mail inválido'),
@@ -94,7 +94,7 @@ const cadastroSchema = z.object({
 ## Formulário de Agendamento
 
 ```tsx
-// src/components/forms/AgendamentoForm.tsx
+// src/features/agendamento/ui/AgendamentoForm.tsx
 const agendamentoSchema = z.object({
   professionalId: z.string().uuid('Selecione um profissional'),
   serviceId:      z.string().uuid('Selecione um serviço'),
