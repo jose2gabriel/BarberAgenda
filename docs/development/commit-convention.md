@@ -1,41 +1,54 @@
 # Convenção de Commits
 
-O projeto segue o padrão **Conventional Commits**.
+O projeto segue o padrão Conventional Commits.
 
-## Formato
+## Tipos de Commit
 
-```
-<tipo>(<escopo>): <descrição curta>
+### feat
 
-[corpo opcional]
+Nova funcionalidade.
 
-[rodapé opcional]
-```
+Exemplo:
+feat: adicionar cadastro de barbeiros
 
-## Tipos
+### fix
 
-| Tipo | Uso |
-|------|-----|
-| `feat` | Nova funcionalidade |
-| `fix` | Correção de bug |
-| `refactor` | Refatoração sem nova funcionalidade |
-| `test` | Adição ou correção de testes |
-| `docs` | Alteração em documentação |
-| `chore` | Tarefas de build, config, dependências |
-| `style` | Formatação, sem mudança de lógica |
+Correção de defeitos.
 
-## Exemplos
+Exemplo:
+fix: corrigir conflito de horários
 
-```
-feat(agendamentos): implementar validação de conflito de horários
+### docs
 
-fix(auth): corrigir expiração de token JWT
+Alterações na documentação.
 
-docs(adr): adicionar ADR-006 sobre padrões GoF
+Exemplo:
+docs: adicionar guia de contribuição
 
-test(agendamentos): adicionar testes unitários para CriarAgendamentoUseCase
-```
+### refactor
 
-## Escopos Sugeridos
+Refatoração sem alteração de comportamento.
 
-`auth`, `usuarios`, `barbershops`, `barbeiros`, `servicos`, `agendamentos`, `infra`, `frontend`
+Exemplo:
+refactor: reorganizar módulo de agendamentos
+
+### test
+
+Criação ou atualização de testes.
+
+Exemplo:
+test: adicionar testes de autenticação
+
+### style
+
+Alterações de formatação.
+
+Exemplo:
+style: ajustar indentação dos componentes
+
+### chore
+
+Tarefas de manutenção.
+
+Exemplo:
+chore: atualizar dependências

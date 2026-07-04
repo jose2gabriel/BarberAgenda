@@ -1,86 +1,43 @@
-# Padrões de Código — Barber Agenda
+# Padrões de Código
 
-## Linguagem e Runtime
+## Convenções de Nomenclatura
 
-- **TypeScript** em todo o projeto (frontend e backend)
-- Node.js no backend com Express
-- React no frontend com Vite
-- `strict: true` habilitado no `tsconfig.json`
+### Classes
 
----
+Utilizar PascalCase.
 
-## Organização dos Arquivos
+Exemplos:
 
-Seguir estrutura de **Vertical Slices** — cada módulo contém tudo que precisa:
+* UsuarioService
+* AgendamentoController
 
-```
-modulo/
-├── domain/
-│   └── Entidade.ts
-├── use-cases/
-│   └── CriarAgendamentoUseCase.ts
-├── adapters/
-│   ├── AgendamentoController.ts
-│   ├── AgendamentoDTO.ts
-│   └── AgendamentoSchema.ts   ← schema Zod de validação
-└── infrastructure/
-    └── AgendamentoRepository.ts
-```
+### Variáveis e Funções
 
----
+Utilizar camelCase.
 
-## Nomenclatura
+Exemplos:
 
-| Artefato | Convenção | Exemplo |
-|----------|-----------|---------|
-| Classes | PascalCase | `AgendamentoUseCase` |
-| Interfaces | IPascalCase | `INotificationService` |
-| Arquivos | PascalCase | `AgendamentoController.ts` |
-| Schemas Zod | camelCase + Schema | `criarAgendamentoSchema` |
-| Hooks React | camelCase com `use` | `useAgendamento` |
-| Componentes | PascalCase | `AgendaCalendar.tsx` |
-| Variáveis/funções | camelCase | `criarAgendamento()` |
-| Constantes | UPPER_SNAKE_CASE | `JWT_SECRET` |
+* usuarioLogado
+* criarAgendamento()
 
----
+### Constantes
 
-## Regras Gerais
+Utilizar UPPER_SNAKE_CASE.
 
-- **Nunca** acesse o banco diretamente de um use case — use repositórios
-- **Nunca** importe de outro módulo diretamente — use interfaces/contratos
-- **Sempre** valide dados de entrada nos controllers com Zod
-- Senhas **nunca** em texto puro — use bcrypt
-- Segredos **nunca** no código — use variáveis de ambiente (`.env`)
-- `.env` **sempre** no `.gitignore` — nunca commitar
+Exemplos:
 
----
+* MAX_AGENDAMENTOS_DIA
 
-## TypeScript
+## Boas Práticas
 
-- `strict: true` no `tsconfig.json`
-- Evite `any` — use tipos genéricos ou `unknown`
-- Defina DTOs tipados para request/response de cada endpoint
-- Os tipos do Zod substituem DTOs manuais — use `z.infer<typeof schema>`
+* Aplicar o princípio da responsabilidade única.
+* Evitar código duplicado.
+* Criar funções pequenas e reutilizáveis.
+* Priorizar legibilidade e simplicidade.
+* Utilizar nomes descritivos para variáveis e métodos.
 
----
+## Organização
 
-## Segurança (obrigatório desde o início)
-
-Veja o guia completo em [security-guide.md](./security-guide.md).
-
-Resumo das obrigações:
-
-| Item | Quando implementar | Lib |
-|------|--------------------|-----|
-| Rate limiting | Primeiro dia, junto com o Express | `express-rate-limit` |
-| Validação de entrada | Em todo endpoint, desde o primeiro | `zod` |
-| RLS no Supabase | Ao criar as tabelas | SQL no painel do Supabase |
-| Refresh token | Após login básico funcionando | `jsonwebtoken` |
-
----
-
-## Testes
-
-- Testes unitários no domínio e use cases (sem dependência de banco)
-- Use mocks para interfaces externas (`INotificationService`, repositórios)
-- Nomenclatura: `NomeDoArquivo.spec.ts`
+* Cada módulo deve possuir responsabilidades bem definidas.
+* Respeitar a separação entre domínio, casos de uso e infraestrutura.
+* Manter baixo acoplamento entre módulos.

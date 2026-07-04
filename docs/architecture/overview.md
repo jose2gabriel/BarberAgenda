@@ -1,59 +1,65 @@
-# Visão Geral da Arquitetura — Barber Agenda
+# Visão Geral da Arquitetura
 
-## Decisão Arquitetural
+## Introdução
 
-O Barber Agenda adota uma combinação de três padrões em níveis distintos de granularidade:
+A arquitetura de software define a estrutura fundamental de um sistema, organizando seus componentes, responsabilidades e formas de comunicação. Uma arquitetura bem definida facilita a manutenção, evolução e escalabilidade da aplicação.
 
-| Nível | Padrão | Justificativa |
-|-------|--------|---------------|
-| Macro | Monolito Modular | Simplicidade operacional, custo baixo, equipe pequena |
-| Médio | Clean Architecture + Vertical Slices | Protege o domínio de agendamento, alta coesão por módulo |
-| Micro | MVVM via React | Interfaces reativas, atualização dinâmica de horários |
+O projeto Barber Agenda tem como objetivo fornecer uma plataforma para gerenciamento de agendamentos em barbearias, permitindo o controle de usuários, barbeiros, serviços e horários.
 
-## Stack Tecnológica
+## Objetivos Arquiteturais
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Frontend | HTML, CSS, TypeScript, Vite |
-| Backend | Node.js + Express |
-| Autenticação | JWT implementado no backend |
-| Banco de Dados | PostgreSQL hospedado no Supabase |
-| Hospedagem | Vercel (frontend) |
-| Controle de Versão | Git + GitHub |
+A arquitetura foi definida visando:
 
-## Módulos do Sistema
+- Facilidade de manutenção
+- Baixo acoplamento entre módulos
+- Alta coesão das funcionalidades
+- Facilidade para testes
+- Escalabilidade futura
+- Organização do código
 
-O sistema é dividido internamente em módulos com isolamento lógico e responsabilidades bem definidas:
+## Tecnologias Utilizadas
 
-| Módulo | Responsabilidade |
-|--------|-----------------|
-| Usuarios | Autenticação, perfil, permissões (JWT) |
-| Barbeiros | Cadastro, agenda, disponibilidade |
-| Servicos | Catálogo, preços, duração |
-| Agendamentos | Criação, validação de conflitos, notificações (Observer) |
-| Administrativo | Relatórios, configurações, painel |
+### Frontend
 
-## Fluxo de Dados
+- React
+- TypeScript
 
-```
-Cliente (React/MVVM)
-       │
-       ▼
-  Express API (Node.js)
-       │
-  ┌────┴────┐
-  │         │
-Clean Arch  JWT Auth
-Use Cases   Middleware
-  │
-  ▼
-PostgreSQL (Supabase)
-```
+### Backend
 
-## Documentos Relacionados
+- ASP.NET Core
 
-- [Monolito Modular](./monolith-modular.md)
-- [Clean Architecture](./clean-architecture.md)
-- [Vertical Slices](./vertical-slices.md)
-- [ADR-001](../adr/ADR-001-monolith-modular.md)
-- [ADR-002](../adr/ADR-002-clean-architecture.md)
+### Banco de Dados
+
+- PostgreSQL
+
+## Padrões Arquiteturais Adotados
+
+O sistema utiliza uma combinação de padrões arquiteturais:
+
+### Monólito Modular
+
+Responsável pela divisão do sistema em módulos de negócio independentes.
+
+### Clean Architecture
+
+Responsável pela separação de responsabilidades e proteção das regras de negócio.
+
+### Vertical Slices
+
+Responsável pela organização do código por funcionalidades.
+
+### MVVM
+
+Utilizado no frontend para separar interface, estado e lógica de apresentação.
+
+## Estrutura Geral
+
+O sistema é dividido nos seguintes módulos:
+
+- Usuários
+- Barbeiros
+- Serviços
+- Agendamentos
+- Administrativo
+
+Cada módulo possui regras de negócio próprias e é desenvolvido de forma independente.

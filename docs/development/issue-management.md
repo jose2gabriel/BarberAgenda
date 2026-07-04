@@ -1,30 +1,84 @@
 # Gerenciamento de Issues
 
-## Criação de Issues
+## Objetivo
 
-Toda tarefa, bug ou melhoria deve ter uma issue no GitHub antes de ser iniciada.
+As Issues representam tarefas, melhorias, correções de bugs e atividades de documentação do projeto.
 
-### Labels
+## Estrutura de uma Issue
 
-| Label | Uso |
-|-------|-----|
-| `feature` | Nova funcionalidade |
-| `bug` | Comportamento incorreto |
-| `refactor` | Melhoria de código sem nova funcionalidade |
-| `docs` | Documentação |
-| `blocked` | Issue bloqueada por dependência |
+### Título
 
-### Atribuição
+O título deve ser curto e objetivo.
 
-- Cada issue deve ter um responsável (`assignee`)
-- Relacione a issue ao módulo correspondente no título: `[agendamentos] Implementar validação de conflitos`
+Exemplos:
 
-## Referência nos Commits
+feat: implementar cadastro de usuários
 
-Use `closes #<numero>` no commit ou PR para fechar a issue automaticamente:
+fix: corrigir conflito de horários
 
-```
-feat(agendamentos): implementar validação de conflitos
+docs: criar documentação de desenvolvimento
 
-closes #42
-```
+### Descrição
+
+Toda Issue deve conter:
+
+#### Contexto
+
+Descrição do problema ou necessidade.
+
+#### Objetivo
+
+Resultado esperado da tarefa.
+
+#### Critérios de Aceitação
+
+Checklist que define quando a tarefa será considerada concluída.
+
+Exemplo:
+
+* [ ] Implementação concluída
+* [ ] Testes realizados
+* [ ] Documentação atualizada
+
+## Tipos de Issue
+
+### Feature
+
+Nova funcionalidade.
+
+### Bug
+
+Correção de defeitos.
+
+### Documentation
+
+Alterações de documentação.
+
+### Refactor
+
+Melhorias internas do código.
+
+### Maintenance
+
+Atividades de manutenção.
+
+## Relacionamento com Branches
+
+Toda branch deve estar associada a uma Issue.
+
+Exemplo:
+
+Issue #12
+
+docs: estabelecer documentação inicial de desenvolvimento
+
+Branch:
+docs/development-standards
+
+## Relacionamento com Pull Requests
+
+Todo Pull Request deve referenciar a Issue correspondente.
+
+Exemplo:
+
+Closes #12

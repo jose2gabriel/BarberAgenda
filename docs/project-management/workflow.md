@@ -1,25 +1,76 @@
 # Workflow do Projeto
 
-## Ciclo de Desenvolvimento
+## Fluxo de Desenvolvimento
 
-```
-Backlog → Em andamento → Em revisão (PR) → Concluído
-```
+Issue
+→ Criação da Branch
+→ Desenvolvimento
+→ Commit
+→ Push
+→ Pull Request
+→ Revisão
+→ Aprovação
+→ Merge para develop
 
-1. **Backlog:** Issues criadas e priorizadas
-2. **Em andamento:** Branch criada, desenvolvimento iniciado
-3. **Em revisão:** PR aberto, aguardando aprovação
-4. **Concluído:** PR aprovado, merge em `develop`, issue fechada
+## Fluxo de Release
 
-## Reuniões
+develop
+→ Validação
+→ Aprovação da Equipe
+→ Merge para main
+→ Produção
 
-- Revisão de progresso: semanal entre os integrantes
-- Decisões arquiteturais relevantes: documentar em ADR antes de implementar
+## Estratégia de Branches
 
-## Priorização
+### main
 
-Seguir ordem do [Roadmap](./roadmap.md):
-1. Identidade e Acesso (pré-requisito para todo o resto)
-2. Profissionais e Serviços
-3. Motor de Agendamento
-4. Notificações
+Contém versões estáveis e prontas para produção.
+
+### develop
+
+Contém a integração das funcionalidades em desenvolvimento.
+
+### feature/<nome>
+
+Utilizada para novas funcionalidades.
+
+### fix/<nome>
+
+Utilizada para correção de defeitos.
+
+### docs/<nome>
+
+Utilizada para documentação.
+
+### hotfix/<nome>
+
+Utilizada para correções urgentes em produção.
+
+## Convenção de Commits
+
+O projeto utiliza o padrão Conventional Commits.
+
+Exemplos:
+
+* feat: adicionar cadastro de usuários
+* fix: corrigir conflito de horários
+* docs: atualizar documentação
+* refactor: reorganizar módulo de agendamentos
+
+## Pull Requests
+
+Todo Pull Request deve:
+
+* Estar associado a uma Issue
+* Seguir os padrões definidos pela equipe
+* Passar por revisão
+* Ser aprovado antes do merge
+
+## Definition of Done
+
+Uma tarefa será considerada concluída quando:
+
+* Os critérios de aceitação forem atendidos
+* A documentação estiver atualizada quando necessário
+* O Pull Request estiver aprovado
+* O merge tiver sido realizado

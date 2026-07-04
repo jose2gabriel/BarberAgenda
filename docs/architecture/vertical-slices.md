@@ -2,52 +2,64 @@
 
 ## Conceito
 
-A organização por Vertical Slices divide o código por **funcionalidades completas** (features), em vez de por tipo técnico (controllers, services, repositories). Cada slice contém tudo que a feature precisa para funcionar de ponta a ponta.
+Vertical Slices é uma abordagem que organiza o sistema por funcionalidades em vez de camadas técnicas.
 
-## Horizontal vs. Vertical
+Cada funcionalidade contém tudo o que precisa para funcionar:
 
-| Critério | Horizontal | Vertical (Slices) |
-|----------|-----------|-------------------|
-| Coesão por módulo | Baixa — tipos misturados | Alta — tudo junto |
-| Acoplamento entre features | Alto — dependência cruzada | Baixo — módulos isolados |
-| Localização de código | Difícil — arquivos espalhados | Fácil — tudo no módulo |
-| Escalabilidade em equipe | Conflitos frequentes | Times por feature independentes |
-| Curva inicial | Simples | Requer planejamento |
+- Casos de uso
+- Regras de negócio
+- Persistência
+- Contratos
 
-## Estrutura no Barber Agenda
+## Organização Tradicional
 
-```
-barber-agenda/
-├── agendamentos/
-│   ├── domain/
-│   ├── use-cases/
-│   ├── adapters/
-│   └── infrastructure/
-├── barbeiros/
-│   ├── domain/
-│   ├── use-cases/
-│   ├── adapters/
-│   └── infrastructure/
-├── servicos/
-│   ├── domain/
-│   ├── use-cases/
-│   ├── adapters/
-│   └── infrastructure/
-└── usuarios/
-    ├── domain/
-    ├── use-cases/
-    ├── adapters/
-    └── infrastructure/
-```
+Controllers/
+Services/
+Repositories/
+Entities/
 
-## Benefícios para o Time
+Essa estrutura tende a espalhar arquivos relacionados por diversas pastas.
 
-- Cada integrante pode trabalhar em um módulo sem conflitos de merge
-- Mudanças em `agendamentos/` não afetam `servicos/` ou `usuarios/`
-- Testes ficam próximos do código que testam
-- Onboarding facilitado: para entender uma feature, basta olhar um único diretório
+Organização por Fatias Verticais
+Usuarios/
+Barbeiros/
+Servicos/
+Agendamentos/
 
-## Referências
+Cada módulo contém sua própria estrutura interna.
 
-- ADR-003: [Decisão de adoção de Vertical Slices](../adr/ADR-003-vertical-slices.md)
-- FOWLER, Martin. *Patterns of Enterprise Application Architecture*. Addison-Wesley, 2002.
+## Exemplo
+Agendamentos/
+├── Domain/
+├── Application/
+├── Infrastructure/
+└── Presentation/
+
+## Benefícios
+
+## Alta Coesão
+
+Todos os arquivos relacionados permanecem próximos.
+
+## Baixo Acoplamento
+
+Mudanças em uma funcionalidade afetam menos partes do sistema.
+
+## Escalabilidade
+
+Novas funcionalidades podem ser adicionadas sem impactar módulos existentes.
+
+## Manutenção
+
+A localização do código torna-se mais simples.
+
+## Aplicação no Barber Agenda
+
+O sistema será organizado pelos módulos:
+
+Usuários
+Barbeiros
+Serviços
+Agendamentos
+
+Cada módulo seguirá os princípios da Clean Architecture, mantendo independência e organização interna.
