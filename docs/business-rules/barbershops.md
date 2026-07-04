@@ -13,7 +13,8 @@ A barbearia é a entidade central do sistema. Todo profissional, serviço, horá
 
 - Qualquer usuário pode se cadastrar como `owner` e criar uma barbearia
 - Um owner pode ter mais de uma barbearia
-- Ao criar a barbearia, o owner define: nome, endereço e telefone
+- Ao criar a barbearia, o owner define: nome, endereço, telefone e foto (opcional)
+- A foto é armazenada no Supabase Storage (bucket `avatars`) e a URL salva no campo `avatar_url`
 
 ## O que o Owner gerencia
 

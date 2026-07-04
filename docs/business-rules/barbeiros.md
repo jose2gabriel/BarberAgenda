@@ -7,7 +7,7 @@ Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF023, RF024, RF025,
 
 ## Cadastro de Profissionais (RF003)
 
-- Apenas administradores podem cadastrar profissionais
+- Apenas o **owner** pode cadastrar profissionais — e somente na(s) barbearia(s) que ele mesmo possui (ADR-007)
 - Informações necessárias: nome, especialidade, serviços associados
 - Ao ser cadastrado, o profissional recebe perfil `profissional` e acesso à área dedicada
 
@@ -37,10 +37,10 @@ Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF023, RF024, RF025,
 
 - Profissionais podem registrar períodos em que não estarão disponíveis (folgas, férias, compromissos)
 - O sistema **impede automaticamente** novos agendamentos em períodos marcados como indisponíveis
-- Agendamentos já existentes nesses períodos devem ser gerenciados manualmente pelo administrador
+- Agendamentos já existentes nesses períodos devem ser gerenciados manualmente pelo **owner** da barbearia
 
 ## Horário de Funcionamento Compartilhado (RF020)
 
 - Existe um horário base de funcionamento da barbearia
 - Agendamentos só podem ser realizados dentro desse horário base
-- O administrador é responsável por configurar e atualizar o horário de funcionamento
+- O **owner** é responsável por configurar e atualizar o horário de funcionamento da(s) barbearia(s) que possui

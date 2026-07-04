@@ -7,7 +7,7 @@ Requisitos relacionados: RF014, RF015, RF016
 
 ## Cadastro de Serviços (RF014)
 
-- Apenas administradores podem cadastrar, editar e remover serviços
+- Apenas o **owner** pode cadastrar, editar e remover serviços — e somente das barbearias que ele mesmo possui (ADR-007)
 - Informações por serviço: nome, descrição, duração (em minutos) e preço
 - A **duração** é obrigatória — ela é usada diretamente pelo motor de agendamento
 
