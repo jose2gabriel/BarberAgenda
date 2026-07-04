@@ -9,7 +9,7 @@
 - [x] Configurar middleware `validate()` com Zod
 
 ### Módulo 1 — Identidade e Acesso
-- [ ] RF001 — Cadastro de usuário (com validação Zod)
+- [x] RF001 — Cadastro de usuário (com validação Zod)
 - [ ] RF002 — Autenticação JWT
 - [ ] RF017 — Autorização por perfil (cliente | profissional | owner)
 - [ ] RF018 — Encerramento de sessão
