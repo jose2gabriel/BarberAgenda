@@ -27,7 +27,7 @@ Authorization: Bearer <token_jwt>
 
 | Método | Rota | Referência | Auth |
 |--------|------|-----------|------|
-| GET | `/users/me` | RF010 — Dados do usuário autenticado | ✅ |
+| GET | `/users/me` | RF019 — Dados do usuário autenticado | ✅ |
 | PATCH | `/users/me` | RF019 — Atualização de dados cadastrais | ✅ |
 | DELETE | `/users/me` | RNF010 — Exclusão de conta (LGPD) | ✅ |
 
@@ -95,6 +95,19 @@ Authorization: Bearer <token_jwt>
 > - `cliente` — vê apenas os seus próprios agendamentos
 > - `profissional` — vê os agendamentos da sua agenda
 > - `owner` — vê todos os agendamentos das suas barbearias
+
+---
+
+## Avatares (Storage)
+
+| Método | Rota | Referência | Auth |
+|--------|------|-----------|------|
+| PATCH | `/users/me/avatar` | Atualiza avatar do usuário — ver `architecture/storage.md` | ✅ |
+| PATCH | `/barbershops/:id/avatar` | Atualiza avatar da barbearia | ✅ Owner (própria) |
+| PATCH | `/barbershops/:barbershopId/professionals/:id/avatar` | Atualiza avatar do profissional | ✅ Owner (própria) ou Profissional (próprio) |
+| PATCH | `/barbershops/:barbershopId/services/:id/avatar` | Atualiza avatar do serviço | ✅ Owner (própria) |
+
+> Todas essas rotas usam o middleware `upload` (Multer) descrito em `architecture/storage.md` e retornam a `avatar_url` pública gerada pelo Supabase Storage.
 
 ---
 
