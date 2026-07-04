@@ -1,49 +1,24 @@
-# Regras de Negócio - Serviços
+# Regras de Negócio — Serviços
 
-## Cadastro
+Módulo: `servicos/`  
+Requisitos relacionados: RF014, RF015, RF016
 
-* O sistema deve permitir o cadastro dos serviços oferecidos pela barbearia.
-* Todo serviço deve possuir nome, duração e valor.
+---
 
-## Seleção
+## Cadastro de Serviços (RF014)
 
-* O usuário deve selecionar um serviço durante o processo de agendamento.
+- Apenas o **owner** pode cadastrar, editar e remover serviços — e somente das barbearias que ele mesmo possui (ADR-007)
+- Informações por serviço: nome, descrição, duração (em minutos) e preço
+- A **duração** é obrigatória — ela é usada diretamente pelo motor de agendamento
 
-## Duração
+## Seleção de Serviço (RF015)
 
-* A duração do serviço deve ser considerada no cálculo da disponibilidade da agenda.
-* Horários ocupados por um serviço não podem ser utilizados por outro atendimento simultaneamente.
+- Durante o agendamento, o cliente deve selecionar um serviço
+- A lista exibe: nome, duração estimada e preço
+- A seleção do serviço é obrigatória antes de escolher horário
 
-# Regras de Negócio - Agendamentos
+## Controle de Duração (RF016)
 
-## Criação
-
-* O usuário deve selecionar um barbeiro.
-* O usuário deve selecionar um serviço.
-* O usuário deve escolher um horário disponível.
-
-## Validação
-
-* Não podem existir dois agendamentos para o mesmo profissional no mesmo horário.
-* O sistema deve impedir agendamentos em horários ocupados.
-* O sistema deve impedir agendamentos em períodos de indisponibilidade.
-
-## Reagendamento
-
-* O usuário pode alterar um agendamento existente.
-* O novo horário deve respeitar todas as regras de disponibilidade.
-
-## Cancelamento
-
-* O usuário pode cancelar um agendamento existente.
-* O sistema deve registrar o cancelamento.
-
-## Notificações
-
-* O sistema deve notificar o usuário após a confirmação do agendamento.
-* O sistema deve notificar o usuário quando ocorrer um cancelamento.
-
-## Consulta
-
-* O usuário pode visualizar seus agendamentos.
-* O barbeiro pode visualizar os atendimentos presentes em sua agenda.
+- A duração do serviço é considerada ao calcular a disponibilidade de horários
+- Exemplo: se um corte dura 60 minutos e o cliente seleciona 14h, o horário de 14h30 também é bloqueado para esse profissional
+- Isso impede sobreposição de atendimentos

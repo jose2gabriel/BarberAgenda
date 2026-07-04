@@ -1,23 +1,34 @@
 # Template de Issue
 
-## Objetivo
+Use este template ao criar novas issues no GitHub.
 
-Descrever claramente a finalidade da atividade.
+---
 
-## Escopo
+## [módulo] Título descritivo da tarefa
 
-Listar arquivos, módulos ou funcionalidades que serão impactados.
+### Tipo
+- [ ] Feature
+- [ ] Bug
+- [ ] Refactor
+- [ ] Docs
 
-## Critérios de Aceitação
+### Descrição
+<!-- O que precisa ser feito e por quê -->
 
-* [ ] Critério 1
-* [ ] Critério 2
-* [ ] Critério 3
+### Requisito relacionado
+<!-- Ex: RF006 — Agendamento de Horário -->
 
-## Resultado Esperado
+### Critérios de Aceite
+<!-- O que precisa ser verdadeiro para esta issue ser concluída -->
+- [ ] 
+- [ ] 
+- [ ] 
 
-Descrever o resultado que deve ser alcançado após a conclusão da atividade.
+### Definition of Done
+- [ ] Implementação completa
+- [ ] Testes escritos e passando
+- [ ] Documentação atualizada
+- [ ] PR revisado e aprovado
 
-## Informações Adicionais
-
-Adicionar observações, dependências ou referências relevantes.
+### Notas / Dependências
+<!-- Alguma issue que precisa ser concluída antes? Alguma decisão arquitetural relevante? -->

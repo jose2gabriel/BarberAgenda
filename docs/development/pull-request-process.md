@@ -1,46 +1,27 @@
 # Processo de Pull Request
 
-## Requisitos
+## Antes de Abrir o PR
 
-Antes de abrir um Pull Request:
+- [ ] Código segue os [coding standards](./coding-standards.md)
+- [ ] Commits seguem a [convenção](./commit-convention.md)
+- [ ] Branch atualizada com `develop`
+- [ ] Testes passando localmente
+- [ ] [Definition of Done](./definition-of-done.md) verificada
 
-* Código funcionando corretamente.
-* Testes executados com sucesso.
-* Commits seguindo o padrão definido.
-* Documentação atualizada quando necessário.
+## Abrindo o PR
 
-## Estrutura do Pull Request
+- **Título:** `[módulo] Descrição curta da mudança`
+- **Descrição:** o que foi feito, por que e como testar
+- **Relacione a issue:** `closes #<numero>`
+- **Assign:** pelo menos 1 revisor do time
 
-### Descrição
+## Revisão
 
-Resumo das alterações realizadas.
+- Mínimo de **1 aprovação** antes do merge
+- Comentários devem ser respondidos ou resolvidos antes do merge
+- O autor do PR é responsável por fazer as alterações solicitadas
 
-### Issue Relacionada
+## Merge
 
-Closes #numero-da-issue
-
-### Checklist
-
-* [ ] Código testado
-* [ ] Sem erros de compilação
-* [ ] Documentação atualizada
-* [ ] Commits padronizados
-
-## Aprovação
-
-O Pull Request deve ser revisado antes do merge.
-
-## Fluxo
-
-feature/*, fix/* ou docs/*
-→ Pull Request para develop
-→ Revisão
-→ Aprovação
-→ Merge para develop
-
-## Release
-
-develop
-→ Validação da equipe
-→ Merge para main
-→ Produção
+- Usar **Squash and Merge** para manter o histórico limpo em `develop`
+- Deletar a branch após o merge
