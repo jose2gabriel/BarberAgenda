@@ -35,7 +35,7 @@ graph LR
 
         subgraph Profissionais["Profissionais"]
             UC4["RF004 Ver profissionais da barbearia"]
-            UC5["RF005 Ver horários disponíveis"]
+            UC5["RF022 Ver horários disponíveis"]
             UC11["RF011 Ver minha agenda"]
             UC24["RF024 Registrar indisponibilidade"]
         end

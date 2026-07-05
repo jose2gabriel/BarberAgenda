@@ -18,11 +18,15 @@ Content-Type: application/json
 **Response 201**
 ```json
 {
-  "id": "uuid-do-usuario",
-  "name": "João da Silva",
-  "email": "joao@email.com",
-  "role": "cliente",
-  "createdAt": "2026-06-01T10:00:00Z"
+  "usuario": {
+    "id": "uuid-do-usuario",
+    "name": "João da Silva",
+    "email": "joao@email.com",
+    "phone": "86912345678",
+    "role": "cliente",
+    "createdAt": "2026-06-01T10:00:00Z",
+    "updatedAt": "2026-06-01T10:00:00Z"
+  }
 }
 ```
 
@@ -45,10 +49,14 @@ Content-Type: application/json
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
+  "usuario": {
     "id": "uuid-do-usuario",
     "name": "João da Silva",
-    "role": "cliente"
+    "email": "joao@email.com",
+    "phone": "86912345678",
+    "role": "cliente",
+    "createdAt": "2026-06-01T10:00:00Z",
+    "updatedAt": "2026-06-01T10:00:00Z"
   }
 }
 ```
@@ -99,7 +107,7 @@ Content-Type: application/json
 
 **Request**
 ```http
-DELETE /api/v1/appointments/:id
+PATCH /api/v1/appointments/:id/cancel
 Authorization: Bearer <token>
 ```
 

@@ -10,7 +10,7 @@ Com 4 integrantes desenvolvendo funcionalidades em paralelo, era necessário uma
 
 ## Decisão
 
-Organizar o backend em **Vertical Slices** — cada módulo (usuarios, barbeiros, servicos, agendamentos, administrativo) contém seus próprios controllers, use cases e repositórios.
+Organizar o backend em **Vertical Slices** — cada módulo (usuarios, barbeiros, servicos, agendamentos, barbershops) contém seus próprios controllers, use cases e repositórios.
 
 ## Justificativa
 

@@ -22,14 +22,15 @@
 
 | Código | Mensagem | Causa |
 |--------|----------|-------|
-| `MISSING_TOKEN` | Token de autenticação não fornecido. | Header Authorization ausente |
+| `UNAUTHORIZED` | Token de autenticação não informado. | Header Authorization ausente |
 | `INVALID_TOKEN` | Token inválido ou expirado. | JWT mal formado ou expirado |
+| `INVALID_CREDENTIALS` | E-mail ou senha inválidos. | Login com e-mail ou senha incorretos (RF002) |
 
 ## HTTP 403 — Forbidden
 
 | Código | Mensagem | Causa |
 |--------|----------|-------|
-| `INSUFFICIENT_PERMISSIONS` | Você não tem permissão para esta ação. | Role do usuário insuficiente (RF027) |
+| `FORBIDDEN` | Você não tem permissão para acessar este recurso. | Role do usuário insuficiente (RF027) |
 
 ## HTTP 404 — Not Found
 
