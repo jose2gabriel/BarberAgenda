@@ -31,7 +31,7 @@ O sistema é dividido internamente em módulos com isolamento lógico e responsa
 | Barbeiros | Cadastro, agenda, disponibilidade |
 | Servicos | Catálogo, preços, duração |
 | Agendamentos | Criação, validação de conflitos, notificações (Observer) |
-| Administrativo | Relatórios, configurações, painel |
+| Barbershops | Multi-tenant, gestão da barbearia pelo owner (ADR-007) |
 
 ## Fluxo de Dados
 

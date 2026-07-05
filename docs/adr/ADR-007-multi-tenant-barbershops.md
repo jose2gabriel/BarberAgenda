@@ -40,11 +40,11 @@ Introduzir a entidade `barbershops` como centro do modelo de dados, tornando o s
 | Agendar em qualquer barbearia | ✅ | — | — |
 | Ver profissionais de uma barbearia | ✅ | ✅ | ✅ |
 | Gerenciar própria agenda | — | ✅ | — |
-| Registrar indisponibilidade | — | ✅ | ✅ |
+| Registrar indisponibilidade | — | ✅ (própria) | ✅ (de profissionais da sua barbearia) |
 | Cadastrar profissionais na barbearia | — | — | ✅ |
 | Cadastrar serviços da barbearia | — | — | ✅ |
 | Definir horário de funcionamento | — | — | ✅ |
-| Criar barbearia | — | — | ✅ |
+| Criar barbearia | ✅ (promove a owner) | ✅ (promove a owner) | ✅ (pode criar outras) |
 
 ## Justificativa
 

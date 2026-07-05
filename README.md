@@ -37,16 +37,11 @@ cd backend
 cp .env.example .env   # preencha as variáveis
 npm install
 npm run dev
-
-# Frontend (em outro terminal)
-cd frontend
-cp .env.example .env   # preencha VITE_API_URL
-npm install
-npm run dev
 ```
 
-Frontend: http://localhost:5173  
 Backend: http://localhost:3000
+
+> ⚠️ O frontend (React + Vite) ainda não foi implementado neste repositório — só existe o backend por enquanto.
 
 ## Estrutura da documentação
 

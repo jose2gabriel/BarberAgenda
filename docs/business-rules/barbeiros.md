@@ -1,7 +1,7 @@
 # Regras de Negócio — Barbeiros (Profissionais)
 
 Módulo: `barbeiros/`  
-Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF023, RF024, RF025, RF026
+Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF024, RF025, RF026
 
 ---
 
@@ -36,6 +36,7 @@ Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF023, RF024, RF025,
 ## Controle de Indisponibilidade (RF024, RF025)
 
 - Profissionais podem registrar períodos em que não estarão disponíveis (folgas, férias, compromissos)
+- O owner da barbearia também pode registrar/remover indisponibilidade em nome de qualquer profissional que trabalhe para ele (ADR-007)
 - O sistema **impede automaticamente** novos agendamentos em períodos marcados como indisponíveis
 - Agendamentos já existentes nesses períodos devem ser gerenciados manualmente pelo **owner** da barbearia
 

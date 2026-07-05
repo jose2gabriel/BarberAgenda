@@ -1,7 +1,8 @@
 # Regras de Negócio — Barbearias
 
 Módulo: `barbershops/`  
-Decisão arquitetural: ADR-007
+Decisão arquitetural: ADR-007  
+Requisitos relacionados: RF031, RF032, RF033
 
 ---
 
@@ -45,3 +46,11 @@ O owner é responsável por tudo dentro da sua barbearia:
 - O cliente vê a lista de barbearias disponíveis no sistema
 - Dentro de uma barbearia, vê os profissionais e serviços disponíveis
 - O cliente pode agendar em qualquer barbearia
+
+## Transição de Perfil (RF031)
+
+- Todo usuário nasce com o perfil `cliente` no cadastro (RF001) — não existe opção de já nascer `owner`
+- Um usuário `cliente` ou `profissional` pode criar uma barbearia (`POST /barbershops`)
+- Ao criar a primeira barbearia, o perfil do usuário é atualizado para `owner`
+- Como o JWT é stateless, a resposta de `POST /barbershops` deve reemitir um token novo,
+  já com `role: owner` — o token antigo permanece válido até expirar, mas com o perfil desatualizado

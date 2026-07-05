@@ -16,7 +16,7 @@ graph TD
             MOD_BAR["barbeiros/\nAgenda, Disponibilidade"]
             MOD_SRV["servicos/\nCatálogo"]
             MOD_AGD["agendamentos/\nMotor de Agendamento"]
-            MOD_ADM["administrativo/\nPainel, Relatórios"]
+            MOD_ADM["barbershops/\nMulti-tenant, Owner"]
         end
 
         subgraph Patterns["Padrões GoF (ADR-006)"]

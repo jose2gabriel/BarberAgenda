@@ -37,10 +37,10 @@ Authorization: Bearer <token_jwt>
 
 | Método | Rota | Referência | Auth |
 |--------|------|-----------|------|
-| GET | `/barbershops` | Lista todas as barbearias do sistema | ✅ |
-| POST | `/barbershops` | Cria uma nova barbearia | ✅ Owner |
-| GET | `/barbershops/:id` | Detalhes de uma barbearia | ✅ |
-| PATCH | `/barbershops/:id` | Atualiza dados da barbearia | ✅ Owner (própria) |
+| GET | `/barbershops` | RF032 — Lista todas as barbearias do sistema | ✅ |
+| POST | `/barbershops` | RF031 — Cria barbearia, promove usuário a owner | ✅ Autenticado (qualquer perfil) |
+| GET | `/barbershops/:id` | RF032 — Detalhes de uma barbearia | ✅ |
+| PATCH | `/barbershops/:id` | RF033 — Atualiza dados da barbearia | ✅ Owner (própria) |
 
 > **Regra:** o owner só pode editar barbearias que ele mesmo criou. O backend valida isso comparando o `owner_id` da barbearia com o `id` do token JWT.
 
@@ -53,9 +53,9 @@ Authorization: Bearer <token_jwt>
 | GET | `/barbershops/:barbershopId/professionals` | RF004 — Lista profissionais da barbearia | ✅ |
 | POST | `/barbershops/:barbershopId/professionals` | RF003 — Cadastra profissional na barbearia | ✅ Owner (própria) |
 | GET | `/barbershops/:barbershopId/professionals/:id` | RF026 — Dados do profissional | ✅ |
-| GET | `/barbershops/:barbershopId/professionals/:id/available-slots` | RF005, RF022 — Horários disponíveis | ✅ |
-| POST | `/barbershops/:barbershopId/professionals/:id/unavailability` | RF024 — Registra indisponibilidade | ✅ Profissional (próprio) |
-| DELETE | `/barbershops/:barbershopId/professionals/:id/unavailability/:uid` | RF024 — Remove indisponibilidade | ✅ Profissional (próprio) |
+| GET | `/barbershops/:barbershopId/professionals/:id/available-slots` | RF022 — Horários disponíveis | ✅ |
+| POST | `/barbershops/:barbershopId/professionals/:id/unavailability` | RF024 — Registra indisponibilidade | ✅ Profissional (próprio) ou Owner (da barbearia) |
+| DELETE | `/barbershops/:barbershopId/professionals/:id/unavailability/:uid` | RF024 — Remove indisponibilidade | ✅ Profissional (próprio) ou Owner (da barbearia) |
 
 > **Nota sobre `/available-slots`:** recebe `?date=YYYY-MM-DD&serviceId=uuid` como query params. O backend calcula os slots livres considerando agendamentos existentes, indisponibilidades, horário de funcionamento da barbearia e duração do serviço (RF007, RF016, RF025).
 

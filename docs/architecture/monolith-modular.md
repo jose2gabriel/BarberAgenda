@@ -31,7 +31,7 @@ barber-agenda/
 ├── barbeiros/       ← Cadastro, agenda, disponibilidade
 ├── servicos/        ← Catálogo, preços, duração
 ├── agendamentos/    ← Criação, validação de conflitos, notificações
-└── administrativo/  ← Relatórios, configurações, painel
+└── barbershops/     ← Multi-tenant, gestão da barbearia pelo owner (ADR-007)
 ```
 
 > **Regra:** módulos se comunicam por interfaces bem definidas, nunca por acesso direto a repositórios ou banco de dados uns dos outros.

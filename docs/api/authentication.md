@@ -26,7 +26,7 @@ O sistema utiliza **JWT (JSON Web Token)** implementado no backend Node.js/Expre
     "typ": "JWT"
   },
   "payload": {
-    "sub": "user_id",
+    "id": "user_id",
     "email": "usuario@email.com",
     "role": "cliente | profissional | owner",
     "iat": 1234567890,
