@@ -1,4 +1,3 @@
-// modules/usuarios/adapters/UsuarioSchema.ts
 import { z } from 'zod'
 
 export const cadastroSchema = z.object({

@@ -1,4 +1,3 @@
-// modules/usuarios/infrastructure/UsuarioRepository.ts
 import { Usuario } from '../entidades/Usuario'
 
 export interface IUsuarioRepository {
