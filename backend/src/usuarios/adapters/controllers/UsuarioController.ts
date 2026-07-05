@@ -5,6 +5,8 @@ import { IAutenticarUsuarioUseCase } from '../../domain/interfaces/IAutenticarUs
 import { IBuscarUsuarioUseCase } from '../../domain/interfaces/IBuscarUsuarioUseCase'
 import { IEncerrarSessaoUseCase } from '../../domain/interfaces/IEncerrarSessaoUseCase'
 import { IAtualizarUsuarioUseCase } from '../../domain/interfaces/IAtualizarUsuarioUseCase'
+import { ISolicitarRecuperacaoSenhaUseCase } from '../../domain/interfaces/ISolicitarRecuperacaoSenhaUseCase'
+import { IRedefinirSenhaUseCase } from '../../domain/interfaces/IRedefinirSenhaUseCase'
 
 export class UsuarioController {
   constructor(
@@ -12,7 +14,9 @@ export class UsuarioController {
     private readonly autenticarUsuarioUseCase: IAutenticarUsuarioUseCase,
     private readonly buscarUsuarioUseCase: IBuscarUsuarioUseCase,
     private readonly encerrarSessaoUseCase: IEncerrarSessaoUseCase,
-    private readonly atualizarUsuarioUseCase: IAtualizarUsuarioUseCase
+    private readonly atualizarUsuarioUseCase: IAtualizarUsuarioUseCase,
+    private readonly solicitarRecuperacaoSenhaUseCase: ISolicitarRecuperacaoSenhaUseCase,
+    private readonly redefinirSenhaUseCase: IRedefinirSenhaUseCase
   ) { }
 
   async cadastrar(req: Request, res: Response, next: NextFunction) {
@@ -57,6 +61,26 @@ export class UsuarioController {
     try {
       const usuario = await this.atualizarUsuarioUseCase.executar(req.usuario!.id, req.body)
       return res.status(200).json({ usuario })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  // RF030 (etapa 1) — Solicitar recuperação de senha
+  async esqueciSenha(req: Request, res: Response, next: NextFunction) {
+    try {
+      const resultado = await this.solicitarRecuperacaoSenhaUseCase.executar(req.body)
+      return res.status(200).json(resultado)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  // RF030 (etapa 2) — Redefinir senha com o token recebido por e-mail
+  async redefinirSenha(req: Request, res: Response, next: NextFunction) {
+    try {
+      const resultado = await this.redefinirSenhaUseCase.executar(req.body)
+      return res.status(200).json(resultado)
     } catch (err) {
       next(err)
     }

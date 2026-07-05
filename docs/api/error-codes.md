@@ -17,6 +17,7 @@
 |--------|----------|-------|
 | `VALIDATION_ERROR` | Dados inválidos na requisição. | Campo obrigatório ausente ou formato incorreto |
 | `INVALID_DATE` | Data ou horário inválido. | Data no passado ou formato incorreto |
+| `INVALID_RESET_TOKEN` | Token inválido ou expirado. | Token de recuperação de senha inexistente, expirado ou já usado (RF030) |
 
 ## HTTP 401 — Unauthorized
 
@@ -25,6 +26,7 @@
 | `UNAUTHORIZED` | Token de autenticação não informado. | Header Authorization ausente |
 | `INVALID_TOKEN` | Token inválido ou expirado. | JWT mal formado ou expirado |
 | `INVALID_CREDENTIALS` | E-mail ou senha inválidos. | Login com e-mail ou senha incorretos (RF002) |
+| `INVALID_CURRENT_PASSWORD` | Senha atual incorreta. | Troca de senha com `currentPassword` errada (RF019) |
 
 ## HTTP 403 — Forbidden
 

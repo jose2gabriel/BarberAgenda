@@ -21,3 +21,12 @@ export const atualizacaoSchema = z.object({
   (data) => !data.newPassword || !!data.currentPassword,
   { message: 'Informe a senha atual para definir uma nova senha.', path: ['currentPassword'] }
 )
+
+export const esqueciSenhaSchema = z.object({
+  email: z.string().email('E-mail inválido'),
+})
+
+export const redefinirSenhaSchema = z.object({
+  token: z.string().min(1, 'Token é obrigatório'),
+  newPassword: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
+})

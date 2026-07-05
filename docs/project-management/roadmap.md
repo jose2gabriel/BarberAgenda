@@ -14,7 +14,7 @@
 - [x] RF017 — Autorização por perfil (cliente | profissional | owner)
 - [x] RF018 — Encerramento de sessão
 - [x] RF019 — Atualização de dados
-- [ ] RF030 — Recuperação de senha
+- [x] RF030 — Recuperação de senha
 - [ ] RNF010 — Exclusão de conta e dados pessoais (LGPD)
 
 ### Módulo 2 — Barbearias, Profissionais e Serviços

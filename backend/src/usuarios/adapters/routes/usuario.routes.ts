@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { UsuarioController } from '../controllers/UsuarioController'
 import { validate } from '../../../shared/middlewares/validate'
 import { autenticar } from '../../../shared/middlewares/autenticar'
-import { cadastroSchema, loginSchema, atualizacaoSchema } from '../schemas/UsuarioSchema'
+import { cadastroSchema, loginSchema, atualizacaoSchema, esqueciSenhaSchema, redefinirSenhaSchema } from '../schemas/UsuarioSchema'
 
 /** Monta-se em app.use('/auth', routerAuth(controller)) */
 export function routerAuth(controller: UsuarioController) {
@@ -21,6 +21,16 @@ export function routerAuth(controller: UsuarioController) {
   // RF018 — Encerramento de sessão (client-side no MVP, ver usuarios.md)
   router.post('/logout', autenticar, (req, res, next) =>
     controller.logout(req, res, next)
+  )
+
+  // RF030 (etapa 1) — Solicitar recuperação de senha (rota pública, sem token)
+  router.post('/recover-password', validate(esqueciSenhaSchema), (req, res, next) =>
+    controller.esqueciSenha(req, res, next)
+  )
+
+  // RF030 (etapa 2) — Redefinir senha com o token recebido por e-mail
+  router.patch('/reset-password', validate(redefinirSenhaSchema), (req, res, next) =>
+    controller.redefinirSenha(req, res, next)
   )
 
   return router
