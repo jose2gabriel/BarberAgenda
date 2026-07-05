@@ -1,3 +1,4 @@
+// shared/middlewares/autenticar.ts
 import { Request, Response, NextFunction } from 'express'
 import { verificarToken, IJwtPayload } from '../utils/jwt'
 import { AppError } from '../errors/AppError'

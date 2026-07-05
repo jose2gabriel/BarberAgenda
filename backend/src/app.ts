@@ -12,6 +12,10 @@ import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuario
 import { BuscarUsuarioUseCase } from './usuarios/use-cases/BuscarUsuarioUseCase'
 import { EncerrarSessaoUseCase } from './usuarios/use-cases/EncerrarSessaoUseCase'
 import { AtualizarUsuarioUseCase } from './usuarios/use-cases/AtualizarUsuarioUseCase'
+import { SolicitarRecuperacaoSenhaUseCase } from './usuarios/use-cases/SolicitarRecuperacaoSenhaUseCase'
+import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCase'
+import { SupabasePasswordResetTokenRepository } from './usuarios/infrastructure/repositories/SupabasePasswordResetTokenRepository'
+import { NodemailerEmailService } from './shared/infrastructure/NodemailerEmailService'
 
 dotenv.config()
 
@@ -29,12 +33,26 @@ const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository)
 const encerrarSessaoUseCase = new EncerrarSessaoUseCase()
 const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository)
 
+// RF030 — Recuperação de senha
+const passwordResetTokenRepository = new SupabasePasswordResetTokenRepository()
+const emailService = new NodemailerEmailService()
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+const solicitarRecuperacaoSenhaUseCase = new SolicitarRecuperacaoSenhaUseCase(
+  usuarioRepository,
+  passwordResetTokenRepository,
+  emailService,
+  frontendUrl
+)
+const redefinirSenhaUseCase = new RedefinirSenhaUseCase(usuarioRepository, passwordResetTokenRepository)
+
 const usuarioController = new UsuarioController(
   cadastrarUsuarioUseCase,
   autenticarUsuarioUseCase,
   buscarUsuarioUseCase,
   encerrarSessaoUseCase,
-  atualizarUsuarioUseCase
+  atualizarUsuarioUseCase,
+  solicitarRecuperacaoSenhaUseCase,
+  redefinirSenhaUseCase
 )
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)
