@@ -44,7 +44,8 @@ Requisitos relacionados: RF001, RF002, RF017, RF018, RF019, RF030, RNF001, RNF00
 
 - Usuário solicita recuperação informando o e-mail cadastrado
 - Sistema envia link com token temporário de redefinição
-- Token de recuperação tem validade limitada
+- Token de recuperação tem validade limitada (30 minutos)
+- Ao gerar um novo token, qualquer token anterior ainda ativo do mesmo usuário é invalidado — só o mais recente funciona
 - Após uso, o token é invalidado
 
 ## Exclusão de Dados — LGPD (RNF010)
