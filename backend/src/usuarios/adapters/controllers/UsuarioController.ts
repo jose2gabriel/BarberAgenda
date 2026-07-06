@@ -7,6 +7,7 @@ import { IEncerrarSessaoUseCase } from '../../domain/interfaces/IEncerrarSessaoU
 import { IAtualizarUsuarioUseCase } from '../../domain/interfaces/IAtualizarUsuarioUseCase'
 import { ISolicitarRecuperacaoSenhaUseCase } from '../../domain/interfaces/ISolicitarRecuperacaoSenhaUseCase'
 import { IRedefinirSenhaUseCase } from '../../domain/interfaces/IRedefinirSenhaUseCase'
+import { IExcluirContaUseCase } from '../../domain/interfaces/IExcluirContaUseCase'
 
 export class UsuarioController {
   constructor(
@@ -16,13 +17,23 @@ export class UsuarioController {
     private readonly encerrarSessaoUseCase: IEncerrarSessaoUseCase,
     private readonly atualizarUsuarioUseCase: IAtualizarUsuarioUseCase,
     private readonly solicitarRecuperacaoSenhaUseCase: ISolicitarRecuperacaoSenhaUseCase,
-    private readonly redefinirSenhaUseCase: IRedefinirSenhaUseCase
+    private readonly redefinirSenhaUseCase: IRedefinirSenhaUseCase,
+    private readonly excluirContaUseCase: IExcluirContaUseCase
   ) { }
 
   async cadastrar(req: Request, res: Response, next: NextFunction) {
     try {
       const usuario = await this.cadastrarUsuarioUseCase.executar(req.body)
       return res.status(201).json({ usuario })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async excluirConta(req: Request, res: Response, next: NextFunction) {
+    try {
+      await this.excluirContaUseCase.execute(req.usuario!.id)
+      return res.status(204).send()
     } catch (err) {
       next(err)
     }

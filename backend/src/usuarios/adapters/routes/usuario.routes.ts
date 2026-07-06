@@ -50,5 +50,10 @@ export function routerUsers(controller: UsuarioController) {
     controller.atualizar(req, res, next)
   )
 
+  // RNF010 — Exclusão de conta
+  router.delete('/me', autenticar, (req, res, next) =>
+    controller.excluirConta(req, res, next)
+  )
+
   return router
 }

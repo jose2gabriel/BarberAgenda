@@ -16,6 +16,7 @@ import { EncerrarSessaoUseCase } from './usuarios/use-cases/EncerrarSessaoUseCas
 import { AtualizarUsuarioUseCase } from './usuarios/use-cases/AtualizarUsuarioUseCase'
 import { SolicitarRecuperacaoSenhaUseCase } from './usuarios/use-cases/SolicitarRecuperacaoSenhaUseCase'
 import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCase'
+import { ExcluirContaUseCase } from './usuarios/use-cases/ExcluirContaUseCase'
 import { SupabasePasswordResetTokenRepository } from './usuarios/infrastructure/repositories/SupabasePasswordResetTokenRepository'
 import { NodemailerEmailService } from './shared/infrastructure/NodemailerEmailService'
 import { SupabaseBarbeariaRepository } from './barbershops/infrastructure/repositories/SupabaseBarbeariaRepository'
@@ -36,6 +37,7 @@ const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(usuarioRepository)
 const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository)
 const encerrarSessaoUseCase = new EncerrarSessaoUseCase()
 const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository)
+const excluirContaUseCase = new ExcluirContaUseCase(usuarioRepository)
 
 // RF030 — Recuperação de senha
 const passwordResetTokenRepository = new SupabasePasswordResetTokenRepository()
@@ -56,7 +58,8 @@ const usuarioController = new UsuarioController(
   encerrarSessaoUseCase,
   atualizarUsuarioUseCase,
   solicitarRecuperacaoSenhaUseCase,
-  redefinirSenhaUseCase
+  redefinirSenhaUseCase,
+  excluirContaUseCase
 )
 
 const barbeariaRepository = new SupabaseBarbeariaRepository()
