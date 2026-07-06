@@ -5,7 +5,9 @@ import dotenv from 'dotenv'
 import { apiLimiter, authLimiter } from './shared/middlewares/rateLimiter'
 import { errorHandler } from './shared/middlewares/errorHandler'
 import { routerAuth, routerUsers } from './usuarios/adapters/routes/usuario.routes'
+import { routerBarbershop } from './barbershops/adapters/routes/barbershop.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
+import { BarbeariaController } from './barbershops/adapters/controllers/BarbeariaController'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
 import { SupabaseUsuarioRepository } from './usuarios/infrastructure/repositories/SupabaseUsuarioRepository'
 import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuarioUseCase'
@@ -16,6 +18,8 @@ import { SolicitarRecuperacaoSenhaUseCase } from './usuarios/use-cases/Solicitar
 import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCase'
 import { SupabasePasswordResetTokenRepository } from './usuarios/infrastructure/repositories/SupabasePasswordResetTokenRepository'
 import { NodemailerEmailService } from './shared/infrastructure/NodemailerEmailService'
+import { SupabaseBarbeariaRepository } from './barbershops/infrastructure/repositories/SupabaseBarbeariaRepository'
+import { CriarBarbeariaUseCase } from './barbershops/use-cases/CriarBarbeariaUseCase'
 
 dotenv.config()
 
@@ -25,7 +29,7 @@ app.use(express.json())
 app.use(cors())
 app.use(apiLimiter)
 
-// Composição das dependências do módulo usuarios (única vez, aqui)
+// Composição das dependências
 const usuarioRepository = new SupabaseUsuarioRepository()
 const cadastrarUsuarioUseCase = new CadastrarUsuarioUseCase(usuarioRepository)
 const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(usuarioRepository)
@@ -55,11 +59,15 @@ const usuarioController = new UsuarioController(
   redefinirSenhaUseCase
 )
 
+const barbeariaRepository = new SupabaseBarbeariaRepository()
+const criarBarbeariaUseCase = new CriarBarbeariaUseCase(barbeariaRepository, usuarioRepository)
+const barbeariaController = new BarbeariaController(criarBarbeariaUseCase)
+
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
 apiV1.use('/users', routerUsers(usuarioController))
-// apiV1.use('/barbershops', routerBarbershop(controllerBarbershop)) // Módulo 2
+apiV1.use('/barbershops', routerBarbershop(barbeariaController))
 
 app.use('/api/v1', apiV1)
 
