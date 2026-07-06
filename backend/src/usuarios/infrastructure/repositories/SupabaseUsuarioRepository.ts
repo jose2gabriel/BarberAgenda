@@ -56,11 +56,12 @@ export class SupabaseUsuarioRepository implements IUsuarioRepository {
     return data ? mapRowParaUsuario(data) : null
   }
 
-  async atualizar(id: string, dados: Partial<Pick<Usuario, 'name' | 'phone' | 'passwordHash'>>): Promise<Usuario> {
+  async atualizar(id: string, dados: Partial<Pick<Usuario, 'name' | 'phone' | 'passwordHash' | 'role'>>): Promise<Usuario> {
     const payload: Record<string, any> = { updated_at: new Date().toISOString() }
     if (dados.name !== undefined) payload.name = dados.name
     if (dados.phone !== undefined) payload.phone = dados.phone
     if (dados.passwordHash !== undefined) payload.password_hash = dados.passwordHash
+    if (dados.role !== undefined) payload.role = dados.role
 
     const { data, error } = await supabase
       .from('users')

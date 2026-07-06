@@ -18,7 +18,7 @@
 - [ ] RNF010 — Exclusão de conta e dados pessoais (LGPD)
 
 ### Módulo 2 — Barbearias, Profissionais e Serviços
-- [ ] RF031 — Criação de barbearia (promove usuário a owner, ADR-007)
+- [x] RF031 — Criação de barbearia (promove usuário a owner, ADR-007)
 - [ ] RF032 — Listagem e detalhes de barbearias
 - [ ] RF033 — Atualização de dados da barbearia (owner)
 - [ ] RF003 — Cadastro de profissionais na barbearia
