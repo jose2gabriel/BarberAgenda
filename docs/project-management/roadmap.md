@@ -21,7 +21,7 @@
 - [x] RF031 — Criação de barbearia (promove usuário a owner, ADR-007)
 - [x] RF032 — Listagem e detalhes de barbearias
 - [x] RF033 — Atualização de dados da barbearia (owner)
-- [ ] RF003 — Cadastro de profissionais na barbearia
+- [x] RF003 — Cadastro de profissionais na barbearia
 - [ ] RF004 — Listagem de profissionais da barbearia
 - [ ] RF026 — Dados do profissional (detalhe)
 - [ ] RF014 — Cadastro de serviços da barbearia
