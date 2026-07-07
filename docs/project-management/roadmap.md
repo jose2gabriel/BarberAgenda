@@ -20,7 +20,7 @@
 ### Módulo 2 — Barbearias, Profissionais e Serviços
 - [x] RF031 — Criação de barbearia (promove usuário a owner, ADR-007)
 - [x] RF032 — Listagem e detalhes de barbearias
-- [ ] RF033 — Atualização de dados da barbearia (owner)
+- [x] RF033 — Atualização de dados da barbearia (owner)
 - [ ] RF003 — Cadastro de profissionais na barbearia
 - [ ] RF004 — Listagem de profissionais da barbearia
 - [ ] RF026 — Dados do profissional (detalhe)

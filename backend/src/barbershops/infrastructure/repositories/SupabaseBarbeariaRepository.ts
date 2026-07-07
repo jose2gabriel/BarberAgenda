@@ -62,4 +62,24 @@ export class SupabaseBarbeariaRepository implements IBarbeariaRepository {
     if (error) throw new Error(`Erro ao buscar barbearia por id: ${error.message}`)
     return data ? mapRowParaBarbearia(data) : null
   }
+
+  async atualizar(
+    id: string,
+    dados: Partial<Pick<Barbearia, 'name' | 'address' | 'phone'>>
+  ): Promise<Barbearia> {
+    const payload: Record<string, any> = { updated_at: new Date().toISOString() }
+    if (dados.name !== undefined) payload.name = dados.name
+    if (dados.address !== undefined) payload.address = dados.address
+    if (dados.phone !== undefined) payload.phone = dados.phone
+
+    const { data, error } = await supabase
+      .from('barbershops')
+      .update(payload)
+      .eq('id', id)
+      .select('*')
+      .single()
+
+    if (error) throw new Error(`Erro ao atualizar barbearia: ${error.message}`)
+    return mapRowParaBarbearia(data)
+  }
 }
