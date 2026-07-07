@@ -12,5 +12,11 @@ export function routerBarbershop(controller: BarbeariaController) {
     controller.criar(req, res, next)
   )
 
+  // RF032 — Listagem de barbearias
+  router.get('/', autenticar, (req, res, next) => controller.listar(req, res, next))
+
+  // RF032 — Detalhes de uma barbearia
+  router.get('/:id', autenticar, (req, res, next) => controller.buscarPorId(req, res, next))
+
   return router
 }

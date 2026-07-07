@@ -21,6 +21,8 @@ import { SupabasePasswordResetTokenRepository } from './usuarios/infrastructure/
 import { NodemailerEmailService } from './shared/infrastructure/NodemailerEmailService'
 import { SupabaseBarbeariaRepository } from './barbershops/infrastructure/repositories/SupabaseBarbeariaRepository'
 import { CriarBarbeariaUseCase } from './barbershops/use-cases/CriarBarbeariaUseCase'
+import { ListarBarbeariasUseCase } from './barbershops/use-cases/ListarBarbeariasUseCase'
+import { BuscarBarbeariaPorIdUseCase } from './barbershops/use-cases/BuscarBarbeariaPorIdUseCase'
 
 dotenv.config()
 
@@ -64,7 +66,13 @@ const usuarioController = new UsuarioController(
 
 const barbeariaRepository = new SupabaseBarbeariaRepository()
 const criarBarbeariaUseCase = new CriarBarbeariaUseCase(barbeariaRepository, usuarioRepository)
-const barbeariaController = new BarbeariaController(criarBarbeariaUseCase)
+const listarBarbeariasUseCase = new ListarBarbeariasUseCase(barbeariaRepository)
+const buscarBarbeariaPorIdUseCase = new BuscarBarbeariaPorIdUseCase(barbeariaRepository)
+const barbeariaController = new BarbeariaController(
+  criarBarbeariaUseCase,
+  listarBarbeariasUseCase,
+  buscarBarbeariaPorIdUseCase
+)
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()

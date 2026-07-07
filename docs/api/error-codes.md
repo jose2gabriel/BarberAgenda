@@ -39,6 +39,7 @@
 | Código | Mensagem | Causa |
 |--------|----------|-------|
 | `USER_NOT_FOUND` | Usuário não encontrado. | ID ou e-mail inexistente |
+| `BARBERSHOP_NOT_FOUND` | Barbearia não encontrada. | ID inexistente (RF032) |
 | `PROFESSIONAL_NOT_FOUND` | Profissional não encontrado. | ID inexistente |
 | `SERVICE_NOT_FOUND` | Serviço não encontrado. | ID inexistente |
 | `APPOINTMENT_NOT_FOUND` | Agendamento não encontrado. | ID inexistente ou não pertence ao usuário |
