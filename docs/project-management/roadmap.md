@@ -24,7 +24,7 @@
 - [x] RF003 — Cadastro de profissionais na barbearia
 - [x] RF004 — Listagem de profissionais da barbearia
 - [x] RF026 — Dados do profissional (detalhe)
-- [ ] RF014 — Cadastro de serviços da barbearia
+- [x] RF014 — Cadastro de serviços da barbearia
 - [ ] RF015 — Seleção de serviço
 - [ ] RF020 — Horário de funcionamento por barbearia
 - [ ] RF021 — Agenda individual por profissional

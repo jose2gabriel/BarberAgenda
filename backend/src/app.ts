@@ -7,9 +7,11 @@ import { errorHandler } from './shared/middlewares/errorHandler'
 import { routerAuth, routerUsers } from './usuarios/adapters/routes/usuario.routes'
 import { routerBarbershop } from './barbershops/adapters/routes/barbershop.routes'
 import { routerProfissional } from './professionals/adapters/routes/professional.routes'
+import { routerServico } from './services/adapters/routes/service.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
 import { BarbeariaController } from './barbershops/adapters/controllers/BarbeariaController'
 import { ProfissionalController } from './professionals/adapters/controllers/ProfissionalController'
+import { ServicoController } from './services/adapters/controllers/ServicoController'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
 import { SupabaseUsuarioRepository } from './usuarios/infrastructure/repositories/SupabaseUsuarioRepository'
 import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuarioUseCase'
@@ -30,6 +32,8 @@ import { SupabaseProfissionalRepository } from './professionals/infrastructure/r
 import { CadastrarProfissionalUseCase } from './professionals/use-cases/CadastrarProfissionalUseCase'
 import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProfissionaisUseCase'
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
+import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
+import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 
 dotenv.config()
 
@@ -97,12 +101,17 @@ const profissionalController = new ProfissionalController(
   buscarProfissionalUseCase
 )
 
+const servicoRepository = new SupabaseServicoRepository()
+const cadastrarServicoUseCase = new CadastrarServicoUseCase(servicoRepository, barbeariaRepository)
+const servicoController = new ServicoController(cadastrarServicoUseCase)
+
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
 apiV1.use('/users', routerUsers(usuarioController))
 apiV1.use('/barbershops', routerBarbershop(barbeariaController))
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
+apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
 
 app.use('/api/v1', apiV1)
 
