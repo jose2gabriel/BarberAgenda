@@ -5,4 +5,5 @@ export interface IBarbeariaRepository {
   buscarPorOwnerId(ownerId: string): Promise<Barbearia | null>
   listar(): Promise<Barbearia[]>
   buscarPorId(id: string): Promise<Barbearia | null>
+  atualizar(id: string, dados: Partial<Pick<Barbearia, 'name' | 'address' | 'phone'>>): Promise<Barbearia>
 }
