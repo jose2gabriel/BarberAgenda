@@ -23,7 +23,7 @@
 - [x] RF033 — Atualização de dados da barbearia (owner)
 - [x] RF003 — Cadastro de profissionais na barbearia
 - [x] RF004 — Listagem de profissionais da barbearia
-- [ ] RF026 — Dados do profissional (detalhe)
+- [x] RF026 — Dados do profissional (detalhe)
 - [ ] RF014 — Cadastro de serviços da barbearia
 - [ ] RF015 — Seleção de serviço
 - [ ] RF020 — Horário de funcionamento por barbearia
