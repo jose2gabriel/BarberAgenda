@@ -44,7 +44,7 @@
 - [ ] RF028 — Histórico de atendimentos (endpoint básico, `GET /appointments/history`)
 
 ### Módulo 4 — Frontend
-- [ ] Design System aplicado (cores, tipografia, componentes base)
+- [x] Design System aplicado (cores, tipografia, componentes base)
 - [ ] `useAuth` implementado e testado
 - [ ] `useAgendamento` implementado e testado
 - [ ] `useBarbeiro` implementado e testado
