@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
 import { ICadastrarServicoUseCase } from '../../domain/interfaces/ICadastrarServicoUseCase'
+import { IListarServicosUseCase } from '../../domain/interfaces/IListarServicosUseCase'
 import { AppError } from '../../../shared/errors/AppError'
 
 export class ServicoController {
-  constructor(private readonly cadastrarServicoUseCase: ICadastrarServicoUseCase) {}
+  constructor(
+    private readonly cadastrarServicoUseCase: ICadastrarServicoUseCase,
+    private readonly listarServicosUseCase: IListarServicosUseCase
+  ) {}
 
   // RF014 — Cadastro de serviços da barbearia (owner)
   async cadastrar(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -24,6 +28,16 @@ export class ServicoController {
       })
 
       res.status(201).json(servico)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // RF015 — Seleção de serviço (listagem)
+  async listar(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const servicos = await this.listarServicosUseCase.executar(req.params.barbershopId as string)
+      res.status(200).json(servicos)
     } catch (error) {
       next(error)
     }

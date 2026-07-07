@@ -34,6 +34,7 @@ import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProf
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
+import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCase'
 
 dotenv.config()
 
@@ -103,7 +104,8 @@ const profissionalController = new ProfissionalController(
 
 const servicoRepository = new SupabaseServicoRepository()
 const cadastrarServicoUseCase = new CadastrarServicoUseCase(servicoRepository, barbeariaRepository)
-const servicoController = new ServicoController(cadastrarServicoUseCase)
+const listarServicosUseCase = new ListarServicosUseCase(servicoRepository, barbeariaRepository)
+const servicoController = new ServicoController(cadastrarServicoUseCase, listarServicosUseCase)
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()

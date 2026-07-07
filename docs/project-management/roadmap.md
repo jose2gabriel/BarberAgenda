@@ -15,7 +15,7 @@
 - [x] RF018 — Encerramento de sessão
 - [x] RF019 — Atualização de dados
 - [x] RF030 — Recuperação de senha
-- [ ] RNF010 — Exclusão de conta e dados pessoais (LGPD)
+- [x] RNF010 — Exclusão de conta e dados pessoais (LGPD)
 
 ### Módulo 2 — Barbearias, Profissionais e Serviços
 - [x] RF031 — Criação de barbearia (promove usuário a owner, ADR-007)
@@ -25,7 +25,7 @@
 - [x] RF004 — Listagem de profissionais da barbearia
 - [x] RF026 — Dados do profissional (detalhe)
 - [x] RF014 — Cadastro de serviços da barbearia
-- [ ] RF015 — Seleção de serviço
+- [x] RF015 — Seleção de serviço
 - [ ] RF020 — Horário de funcionamento por barbearia
 - [ ] RF021 — Agenda individual por profissional
 - [ ] RF022 — Visualização de horários disponíveis do profissional

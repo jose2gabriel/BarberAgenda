@@ -13,5 +13,8 @@ export function routerServico(controller: ServicoController) {
     controller.cadastrar(req, res, next)
   )
 
+  // RF015 — Seleção de serviço (listagem)
+  router.get('/', autenticar, (req, res, next) => controller.listar(req, res, next))
+
   return router
 }
