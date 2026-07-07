@@ -41,4 +41,25 @@ export class SupabaseBarbeariaRepository implements IBarbeariaRepository {
     if (error) throw new Error(`Erro ao buscar barbearia por ownerId: ${error.message}`)
     return data ? mapRowParaBarbearia(data) : null
   }
+
+  async listar(): Promise<Barbearia[]> {
+    const { data, error } = await supabase
+      .from('barbershops')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) throw new Error(`Erro ao listar barbearias: ${error.message}`)
+    return (data ?? []).map(mapRowParaBarbearia)
+  }
+
+  async buscarPorId(id: string): Promise<Barbearia | null> {
+    const { data, error } = await supabase
+      .from('barbershops')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle()
+
+    if (error) throw new Error(`Erro ao buscar barbearia por id: ${error.message}`)
+    return data ? mapRowParaBarbearia(data) : null
+  }
 }
