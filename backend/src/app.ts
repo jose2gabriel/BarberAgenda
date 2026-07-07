@@ -28,6 +28,7 @@ import { BuscarBarbeariaPorIdUseCase } from './barbershops/use-cases/BuscarBarbe
 import { AtualizarBarbeariaUseCase } from './barbershops/use-cases/AtualizarBarbeariaUseCase'
 import { SupabaseProfissionalRepository } from './professionals/infrastructure/repositories/SupabaseProfissionalRepository'
 import { CadastrarProfissionalUseCase } from './professionals/use-cases/CadastrarProfissionalUseCase'
+import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProfissionaisUseCase'
 
 dotenv.config()
 
@@ -87,7 +88,8 @@ const cadastrarProfissionalUseCase = new CadastrarProfissionalUseCase(
   usuarioRepository,
   barbeariaRepository
 )
-const profissionalController = new ProfissionalController(cadastrarProfissionalUseCase)
+const listarProfissionaisUseCase = new ListarProfissionaisUseCase(profissionalRepository, barbeariaRepository)
+const profissionalController = new ProfissionalController(cadastrarProfissionalUseCase, listarProfissionaisUseCase)
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()

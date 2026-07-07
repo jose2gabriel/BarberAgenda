@@ -13,5 +13,8 @@ export function routerProfissional(controller: ProfissionalController) {
     controller.cadastrar(req, res, next)
   )
 
+  // RF004 — Listagem de profissionais da barbearia
+  router.get('/', autenticar, (req, res, next) => controller.listar(req, res, next))
+
   return router
 }
