@@ -5,6 +5,12 @@ export interface CriarBarbeariaDTO {
   ownerId: string
 }
 
+export interface AtualizarBarbeariaDTO {
+  name?: string
+  address?: string
+  phone?: string
+}
+
 export interface BarbeariaResponseDTO {
   id: string
   name: string

@@ -23,6 +23,7 @@ import { SupabaseBarbeariaRepository } from './barbershops/infrastructure/reposi
 import { CriarBarbeariaUseCase } from './barbershops/use-cases/CriarBarbeariaUseCase'
 import { ListarBarbeariasUseCase } from './barbershops/use-cases/ListarBarbeariasUseCase'
 import { BuscarBarbeariaPorIdUseCase } from './barbershops/use-cases/BuscarBarbeariaPorIdUseCase'
+import { AtualizarBarbeariaUseCase } from './barbershops/use-cases/AtualizarBarbeariaUseCase'
 
 dotenv.config()
 
@@ -68,10 +69,12 @@ const barbeariaRepository = new SupabaseBarbeariaRepository()
 const criarBarbeariaUseCase = new CriarBarbeariaUseCase(barbeariaRepository, usuarioRepository)
 const listarBarbeariasUseCase = new ListarBarbeariasUseCase(barbeariaRepository)
 const buscarBarbeariaPorIdUseCase = new BuscarBarbeariaPorIdUseCase(barbeariaRepository)
+const atualizarBarbeariaUseCase = new AtualizarBarbeariaUseCase(barbeariaRepository)
 const barbeariaController = new BarbeariaController(
   criarBarbeariaUseCase,
   listarBarbeariasUseCase,
-  buscarBarbeariaPorIdUseCase
+  buscarBarbeariaPorIdUseCase,
+  atualizarBarbeariaUseCase
 )
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)

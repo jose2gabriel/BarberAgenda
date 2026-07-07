@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { BarbeariaController } from '../controllers/BarbeariaController'
 import { validate } from '../../../shared/middlewares/validate'
 import { autenticar } from '../../../shared/middlewares/autenticar'
-import { criarBarbeariaSchema } from '../schemas/BarbeariaSchema'
+import { criarBarbeariaSchema, atualizarBarbeariaSchema } from '../schemas/BarbeariaSchema'
 
 export function routerBarbershop(controller: BarbeariaController) {
   const router = Router()
@@ -17,6 +17,11 @@ export function routerBarbershop(controller: BarbeariaController) {
 
   // RF032 — Detalhes de uma barbearia
   router.get('/:id', autenticar, (req, res, next) => controller.buscarPorId(req, res, next))
+
+  // RF033 — Atualização de dados da barbearia (owner)
+  router.patch('/:id', autenticar, validate(atualizarBarbeariaSchema), (req, res, next) =>
+    controller.atualizar(req, res, next)
+  )
 
   return router
 }
