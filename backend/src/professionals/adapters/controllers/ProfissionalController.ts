@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
 import { ICadastrarProfissionalUseCase } from '../../domain/interfaces/ICadastrarProfissionalUseCase'
+import { IListarProfissionaisUseCase } from '../../domain/interfaces/IListarProfissionaisUseCase'
 import { AppError } from '../../../shared/errors/AppError'
 
 export class ProfissionalController {
-  constructor(private readonly cadastrarProfissionalUseCase: ICadastrarProfissionalUseCase) {}
+  constructor(
+    private readonly cadastrarProfissionalUseCase: ICadastrarProfissionalUseCase,
+    private readonly listarProfissionaisUseCase: IListarProfissionaisUseCase
+  ) {}
 
   // RF003 — Cadastro de profissionais na barbearia (owner)
   async cadastrar(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -25,6 +29,16 @@ export class ProfissionalController {
       })
 
       res.status(201).json(profissional)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // RF004 — Listagem de profissionais da barbearia
+  async listar(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const profissionais = await this.listarProfissionaisUseCase.executar(req.params.barbershopId as string)
+      res.status(200).json(profissionais)
     } catch (error) {
       next(error)
     }
