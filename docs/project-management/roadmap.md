@@ -47,8 +47,8 @@
 - [x] Criar componentes base: `Button`, `Input`, `Card`, `Avatar`, `StatusBadge`, `LoadingSpinner`, `ErrorMessage`
 
 #### Etapa 2 — Auth (depende de: Módulo 1 ✅)
-- [ ] `useAuth` implementado (`features/auth/model/useAuth.ts`)
-- [ ] Página `/login` com React Hook Form + Zod
+- [x] `useAuth` implementado (`features/auth/model/useAuth.ts`)
+- [x] Página `/login` com React Hook Form + Zod
 - [ ] Página `/register` com React Hook Form + Zod
 - [ ] Página `/recover-password`
 - [ ] Página `/reset-password`
