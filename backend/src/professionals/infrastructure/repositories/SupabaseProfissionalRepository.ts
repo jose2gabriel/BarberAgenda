@@ -62,4 +62,15 @@ export class SupabaseProfissionalRepository implements IProfissionalRepository {
     if (error) throw new Error(`Erro ao buscar profissional por id: ${error.message}`)
     return data ? mapRowParaProfissionalPublico(data) : null
   }
+
+  async buscarPorUserId(userId: string): Promise<Profissional | null> {
+    const { data, error } = await supabase
+      .from('professionals')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    if (error) throw new Error(`Erro ao buscar profissional por userId: ${error.message}`)
+    return data ? mapRowParaProfissional(data) : null
+  }
 }

@@ -8,10 +8,12 @@ import { routerAuth, routerUsers } from './usuarios/adapters/routes/usuario.rout
 import { routerBarbershop } from './barbershops/adapters/routes/barbershop.routes'
 import { routerProfissional } from './professionals/adapters/routes/professional.routes'
 import { routerServico } from './services/adapters/routes/service.routes'
+import { routerAgendamento } from './agendamentos/adapters/routes/agendamento.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
 import { BarbeariaController } from './barbershops/adapters/controllers/BarbeariaController'
 import { ProfissionalController } from './professionals/adapters/controllers/ProfissionalController'
 import { ServicoController } from './services/adapters/controllers/ServicoController'
+import { AgendamentoController } from './agendamentos/adapters/controllers/AgendamentoController'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
 import { SupabaseUsuarioRepository } from './usuarios/infrastructure/repositories/SupabaseUsuarioRepository'
 import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuarioUseCase'
@@ -35,6 +37,8 @@ import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfi
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCase'
+import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/ListarAgendaProfissionalUseCase'
+import { SupabaseAgendamentoRepository } from './agendamentos/infrastructure/repositories/SupabaseAgendamentoRepository'
 
 dotenv.config()
 
@@ -107,6 +111,13 @@ const cadastrarServicoUseCase = new CadastrarServicoUseCase(servicoRepository, b
 const listarServicosUseCase = new ListarServicosUseCase(servicoRepository, barbeariaRepository)
 const servicoController = new ServicoController(cadastrarServicoUseCase, listarServicosUseCase)
 
+const agendamentoRepository = new SupabaseAgendamentoRepository()
+const listarAgendaProfissionalUseCase = new ListarAgendaProfissionalUseCase(agendamentoRepository)
+const agendamentoController = new AgendamentoController(
+  listarAgendaProfissionalUseCase,
+  profissionalRepository
+)
+
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
@@ -114,6 +125,7 @@ apiV1.use('/users', routerUsers(usuarioController))
 apiV1.use('/barbershops', routerBarbershop(barbeariaController))
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
 apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
+apiV1.use('/agendamentos', routerAgendamento(agendamentoController))
 
 app.use('/api/v1', apiV1)
 
