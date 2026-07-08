@@ -92,6 +92,7 @@ import { useAuth } from '../../features/auth/model/useAuth'  ❌ features está 
 
 ## Documentos
 
+- [Páginas do Sistema](./pages.md)
 - [Custom Hooks](./custom-hooks.md)
 - [Design System](./design-system.md)
 - [Formulários e Validação](./forms-validation.md)
