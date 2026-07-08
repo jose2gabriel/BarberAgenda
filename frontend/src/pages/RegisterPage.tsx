@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Card } from '../shared/ui/Card'
-import { LoginForm } from '../features/auth/ui/LoginForm'
+import { RegisterForm } from '../features/auth/ui/RegisterForm'
 
-export function LoginPage() {
+export function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-primary p-4">
       <Card className="w-full max-w-sm flex flex-col gap-6 shadow-xl shadow-black/5">
@@ -11,17 +11,17 @@ export function LoginPage() {
             BA
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-text-primary">Entrar</h1>
-            <p className="text-text-secondary text-sm">Acesse sua conta Barber Agenda</p>
+            <h1 className="text-2xl font-bold text-text-primary">Criar conta</h1>
+            <p className="text-text-secondary text-sm">Cadastre-se na Barber Agenda</p>
           </div>
         </div>
 
-        <LoginForm />
+        <RegisterForm />
 
         <p className="text-center text-sm text-text-secondary">
-          Não tem uma conta?{' '}
-          <Link to="/register" className="text-accent font-semibold hover:underline">
-            Cadastre-se
+          Já tem uma conta?{' '}
+          <Link to="/login" className="text-accent font-semibold hover:underline">
+            Entrar
           </Link>
         </p>
       </Card>

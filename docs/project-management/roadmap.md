@@ -49,7 +49,7 @@
 #### Etapa 2 — Auth (depende de: Módulo 1 ✅)
 - [x] `useAuth` implementado (`features/auth/model/useAuth.ts`)
 - [x] Página `/login` com React Hook Form + Zod
-- [ ] Página `/register` com React Hook Form + Zod
+- [x] Página `/register` com React Hook Form + Zod
 - [ ] Página `/recover-password`
 - [ ] Página `/reset-password`
 - [ ] Proteção de rotas por role (cliente / profissional / owner)

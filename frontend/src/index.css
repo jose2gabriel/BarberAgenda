@@ -4,15 +4,15 @@
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --color-primary: #1a1a2e;
-  --color-secondary: #16213e;
+  --color-primary: #ffffff;
+  --color-secondary: #f9fafb;
   --color-accent: #e94560;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a0a0b0;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
   --color-success: #4caf50;
   --color-warning: #ff9800;
   --color-error: #f44336;
-  --color-border: #2a2a4a;
+  --color-border: #e5e7eb;
 }
 
 body {
