@@ -10,6 +10,10 @@ import { routerProfissional } from './professionals/adapters/routes/professional
 import { routerServico } from './services/adapters/routes/service.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
 import { BarbeariaController } from './barbershops/adapters/controllers/BarbeariaController'
+import { BusinessHoursController } from './barbershops/adapters/controllers/BusinessHoursController'
+import { SupabaseBusinessHoursRepository } from './barbershops/infrastructure/repositories/SupabaseBusinessHoursRepository'
+import { CriarHorarioFuncionamentoUseCase } from './barbershops/use-cases/CriarHorarioFuncionamentoUseCase'
+import { ListarHorariosFuncionamentoUseCase } from './barbershops/use-cases/ListarHorariosFuncionamentoUseCase'
 import { ProfissionalController } from './professionals/adapters/controllers/ProfissionalController'
 import { ServicoController } from './services/adapters/controllers/ServicoController'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
@@ -88,6 +92,14 @@ const barbeariaController = new BarbeariaController(
   atualizarBarbeariaUseCase
 )
 
+const businessHoursRepository = new SupabaseBusinessHoursRepository()
+const criarHorarioFuncionamentoUseCase = new CriarHorarioFuncionamentoUseCase(businessHoursRepository)
+const listarHorariosFuncionamentoUseCase = new ListarHorariosFuncionamentoUseCase(businessHoursRepository)
+const businessHoursController = new BusinessHoursController(
+  criarHorarioFuncionamentoUseCase,
+  listarHorariosFuncionamentoUseCase
+)
+
 const profissionalRepository = new SupabaseProfissionalRepository()
 const cadastrarProfissionalUseCase = new CadastrarProfissionalUseCase(
   profissionalRepository,
@@ -111,7 +123,7 @@ const servicoController = new ServicoController(cadastrarServicoUseCase, listarS
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
 apiV1.use('/users', routerUsers(usuarioController))
-apiV1.use('/barbershops', routerBarbershop(barbeariaController))
+apiV1.use('/barbershops', routerBarbershop(barbeariaController, businessHoursController))
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
 apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
 
