@@ -40,11 +40,11 @@
 ### Módulo 4 — Frontend
 
 #### Etapa 1 — Infraestrutura Frontend
-- [ ] Configurar Vite + React + TypeScript
-- [ ] Configurar Tailwind CSS com Design System (`frontend/design-system.md`)
-- [ ] Configurar React Router
-- [ ] Configurar client HTTP (`src/shared/lib/api.ts`)
-- [ ] Criar componentes base: `Button`, `Input`, `Card`, `Avatar`, `StatusBadge`, `LoadingSpinner`, `ErrorMessage`
+- [x] Configurar Vite + React + TypeScript
+- [x] Configurar Tailwind CSS com Design System (`docs/frontendocs/design-system.md`)
+- [x] Configurar React Router
+- [x] Configurar client HTTP (`src/shared/lib/api.ts`)
+- [x] Criar componentes base: `Button`, `Input`, `Card`, `Avatar`, `StatusBadge`, `LoadingSpinner`, `ErrorMessage`
 
 #### Etapa 2 — Auth (depende de: Módulo 1 ✅)
 - [ ] `useAuth` implementado (`features/auth/model/useAuth.ts`)
