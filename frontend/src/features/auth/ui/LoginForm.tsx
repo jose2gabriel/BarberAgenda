@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../model/useAuth'
 import { Input } from '../../../shared/ui/Input'
 import { Button } from '../../../shared/ui/Button'
@@ -52,6 +52,10 @@ export function LoginForm() {
         error={errors.password?.message}
         {...register('password')}
       />
+
+      <Link to="/recover-password" className="text-sm text-accent font-medium hover:underline self-end -mt-2">
+        Esqueceu a senha?
+      </Link>
 
       {errors.root && <ErrorMessage>{errors.root.message}</ErrorMessage>}
 

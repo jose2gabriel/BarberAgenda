@@ -50,7 +50,7 @@
 - [x] `useAuth` implementado (`features/auth/model/useAuth.ts`)
 - [x] Página `/login` com React Hook Form + Zod
 - [x] Página `/register` com React Hook Form + Zod
-- [ ] Página `/recover-password`
+- [x] Página `/recover-password`
 - [ ] Página `/reset-password`
 - [ ] Proteção de rotas por role (cliente / profissional / owner)
 
