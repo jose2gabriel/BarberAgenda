@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
@@ -19,6 +19,10 @@ export function DashboardPage() {
           <h1 className="text-2xl font-bold text-text-primary">Bem-vindo, {user?.name}</h1>
           <p className="text-text-secondary text-sm">Perfil: {user?.role}</p>
         </div>
+
+        <Link to="/barbershops">
+          <Button className="w-full justify-center">Ver barbearias</Button>
+        </Link>
 
         <Button variant="secondary" onClick={handleLogout} className="w-full justify-center">
           Sair

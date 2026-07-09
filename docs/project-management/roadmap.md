@@ -56,8 +56,8 @@
 
 #### Etapa 3 — Barbearias e Profissionais (depende de: Módulo 2 ✅)
 - [x] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
-- [ ] Página `/barbershops` — listagem de barbearias
-- [ ] Página `/barbershops/:id` — detalhes, profissionais e serviços
+- [x] Página `/barbershops` — listagem de barbearias
+- [x] Página `/barbershops/:id` — detalhes, profissionais e serviços
 - [ ] Página `/owner/barbershops` — gerenciar barbearias (owner)
 - [ ] Página `/owner/barbershops/:id` — editar barbearia
 - [ ] Página `/owner/barbershops/:id/professionals` — gerenciar profissionais
