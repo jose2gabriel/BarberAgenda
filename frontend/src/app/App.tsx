@@ -7,6 +7,8 @@ import { RegisterPage } from '../pages/RegisterPage'
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { DashboardPage } from '../pages/DashboardPage'
+import { BarbershopsPage } from '../pages/BarbershopsPage'
+import { BarbershopDetailPage } from '../pages/BarbershopDetailPage'
 
 function App() {
   return (
@@ -26,6 +28,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/barbershops"
+            element={
+              <ProtectedRoute>
+                <BarbershopsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/barbershops/:id"
+            element={
+              <ProtectedRoute>
+                <BarbershopDetailPage />
               </ProtectedRoute>
             }
           />
