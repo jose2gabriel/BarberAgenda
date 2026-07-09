@@ -43,6 +43,7 @@
 | `PROFESSIONAL_NOT_FOUND` | Profissional não encontrado. | ID inexistente |
 | `SERVICE_NOT_FOUND` | Serviço não encontrado. | ID inexistente |
 | `APPOINTMENT_NOT_FOUND` | Agendamento não encontrado. | ID inexistente ou não pertence ao usuário |
+| `UNAVAILABILITY_NOT_FOUND` | Indisponibilidade não encontrada. | ID inexistente ou não pertence ao profissional (RF024) |
 
 ## HTTP 409 — Conflict
 

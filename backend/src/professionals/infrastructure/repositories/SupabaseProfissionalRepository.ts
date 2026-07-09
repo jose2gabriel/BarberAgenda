@@ -73,4 +73,16 @@ export class SupabaseProfissionalRepository implements IProfissionalRepository {
     if (error) throw new Error(`Erro ao buscar profissional por userId: ${error.message}`)
     return data ? mapRowParaProfissional(data) : null
   }
+
+  async buscarCompletoPorId(id: string, barbershopId: string): Promise<Profissional | null> {
+    const { data, error } = await supabase
+      .from('professionals')
+      .select('*')
+      .eq('id', id)
+      .eq('barbershop_id', barbershopId)
+      .maybeSingle()
+
+    if (error) throw new Error(`Erro ao buscar profissional completo por id: ${error.message}`)
+    return data ? mapRowParaProfissional(data) : null
+  }
 }
