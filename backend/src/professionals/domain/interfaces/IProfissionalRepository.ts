@@ -5,4 +5,5 @@ export interface IProfissionalRepository {
   listarPorBarbershopId(barbershopId: string): Promise<ProfissionalPublico[]>
   buscarPorId(id: string, barbershopId: string): Promise<ProfissionalPublico | null>
   buscarPorUserId(userId: string): Promise<Profissional | null>
+  buscarCompletoPorId(id: string, barbershopId: string): Promise<Profissional | null>
 }

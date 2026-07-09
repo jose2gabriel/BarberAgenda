@@ -24,7 +24,7 @@
 - [x] RF015 — Listagem de serviços
 - [x] RF020 — Horário de funcionamento por barbearia
 - [x] RF021 — Agenda individual por profissional
-- [ ] RF024 — Controle de indisponibilidade
+- [x] RF024 — Controle de indisponibilidade
 - [ ] RF025 — Bloqueio por indisponibilidade
 
 ### Módulo 3 — Motor de Agendamento
