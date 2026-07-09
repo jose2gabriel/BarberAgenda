@@ -29,7 +29,7 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormData) {
     try {
       await login(data.email, data.password)
-      navigate('/')
+      navigate('/dashboard')
     } catch (err) {
       const message = err instanceof ApiError ? err.message : 'Não foi possível entrar. Tente novamente.'
       setError('root', { message })
