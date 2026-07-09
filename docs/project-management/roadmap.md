@@ -28,7 +28,7 @@
 - [x] RF025 — Bloqueio por indisponibilidade (regra pronta, sem rota própria — será consumida pelo RF007/RF022)
 
 ### Módulo 3 — Motor de Agendamento
-- [ ] RF006 — Agendamento de horário
+- [x] RF006 — Agendamento de horário
 - [ ] RF007 — Validação de disponibilidade
 - [ ] RF008 — Cancelamento
 - [ ] RF009 — Reagendamento

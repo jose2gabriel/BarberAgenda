@@ -42,6 +42,7 @@ import { SupabaseServicoRepository } from './services/infrastructure/repositorie
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCase'
 import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/ListarAgendaProfissionalUseCase'
+import { CriarAgendamentoUseCase } from './agendamentos/use-cases/CriarAgendamentoUseCase'
 import { SupabaseAgendamentoRepository } from './agendamentos/infrastructure/repositories/SupabaseAgendamentoRepository'
 import { routerIndisponibilidade } from './unavailabilities/adapters/routes/unavailability.routes'
 import { IndisponibilidadeController } from './unavailabilities/adapters/controllers/IndisponibilidadeController'
@@ -130,9 +131,16 @@ const servicoController = new ServicoController(cadastrarServicoUseCase, listarS
 
 const agendamentoRepository = new SupabaseAgendamentoRepository()
 const listarAgendaProfissionalUseCase = new ListarAgendaProfissionalUseCase(agendamentoRepository)
+const criarAgendamentoUseCase = new CriarAgendamentoUseCase(
+  agendamentoRepository,
+  profissionalRepository,
+  servicoRepository,
+  usuarioRepository
+)
 const agendamentoController = new AgendamentoController(
   listarAgendaProfissionalUseCase,
-  profissionalRepository
+  profissionalRepository,
+  criarAgendamentoUseCase
 )
 
 const indisponibilidadeRepository = new SupabaseIndisponibilidadeRepository()
@@ -159,6 +167,10 @@ apiV1.use('/barbershops', routerBarbershop(barbeariaController, businessHoursCon
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
 apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
 apiV1.use('/agendamentos', routerAgendamento(agendamentoController))
+// /appointments é o nome documentado em endpoints.md — mantido como alias
+// do /agendamentos já usado pelo RF021, mesmo padrão do /redefinir-senha
+// vs /reset-password no frontend.
+apiV1.use('/appointments', routerAgendamento(agendamentoController))
 apiV1.use(
   '/barbershops/:barbershopId/professionals/:professionalId/unavailability',
   routerIndisponibilidade(indisponibilidadeController)

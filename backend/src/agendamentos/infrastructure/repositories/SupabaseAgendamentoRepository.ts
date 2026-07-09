@@ -30,4 +30,24 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     if (error) throw new Error(`Erro ao listar agendamentos do profissional: ${error.message}`)
     return (data ?? []).map(mapRowParaAgendamento)
   }
+
+  async criar(dados: Omit<Agendamento, 'id' | 'createdAt' | 'updatedAt'>): Promise<Agendamento> {
+    const { data, error } = await supabase
+      .from('appointments')
+      .insert({
+        client_id: dados.clientId,
+        professional_id: dados.professionalId,
+        service_id: dados.serviceId,
+        barbershop_id: dados.barbershopId,
+        date: dados.date,
+        start_time: dados.startTime,
+        end_time: dados.endTime,
+        status: dados.status,
+      })
+      .select('*')
+      .single()
+
+    if (error) throw new Error(`Erro ao criar agendamento: ${error.message}`)
+    return mapRowParaAgendamento(data)
+  }
 }
