@@ -22,8 +22,8 @@
 - [x] RF004 — Listagem de profissionais da barbearia
 - [x] RF014 — Cadastro de serviços da barbearia
 - [x] RF015 — Listagem de serviços
-- [ ] RF020 — Horário de funcionamento por barbearia
-- [ ] RF021 — Agenda individual por profissional
+- [x] RF020 — Horário de funcionamento por barbearia
+- [x] RF021 — Agenda individual por profissional
 - [ ] RF024 — Controle de indisponibilidade
 - [ ] RF025 — Bloqueio por indisponibilidade
 
