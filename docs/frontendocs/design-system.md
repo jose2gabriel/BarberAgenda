@@ -11,7 +11,8 @@
 |------|-----|-----|
 | Primary | `#FFFFFF` | Fundo principal |
 | Secondary | `#F9FAFB` | Fundo de cards |
-| Accent | `#E94560` | Botões primários, destaques, links |
+| Accent | `#DC2626` | Botões primários, destaques, links |
+| Dark | `#1A1A1A` | Header/nav — contraste "barbearia" (preto + vermelho + branco) |
 | Text Primary | `#1A1A2E` | Textos principais |
 | Text Secondary | `#6B7280` | Textos secundários, placeholders |
 | Success | `#4CAF50` | Status agendado, confirmações |
@@ -19,7 +20,8 @@
 | Error | `#F44336` | Erros de validação |
 | Border | `#E5E7EB` | Bordas de inputs e cards |
 
-> Tema claro — visual moderno e limpo para navegador, com destaques em vermelho (accent) para ações e links.
+> Tema claro — visual moderno e limpo para navegador. Vermelho mais forte + faixa escura no header
+> remetem à identidade visual clássica de barbearia (preto, vermelho e branco).
 
 ---
 
@@ -130,7 +132,8 @@ em vez de `tailwind.config.ts`:
 
   --color-primary: #ffffff;
   --color-secondary: #f9fafb;
-  --color-accent: #e94560;
+  --color-accent: #dc2626;
+  --color-dark: #1a1a1a;
   --color-text-primary: #1a1a2e;
   --color-text-secondary: #6b7280;
   --color-success: #4caf50;

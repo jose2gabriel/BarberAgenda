@@ -50,9 +50,9 @@
 - [x] `useAuth` implementado (`features/auth/model/useAuth.ts`)
 - [x] Página `/login` com React Hook Form + Zod
 - [x] Página `/register` com React Hook Form + Zod
-- [ ] Página `/recover-password`
-- [ ] Página `/reset-password`
-- [ ] Proteção de rotas por role (cliente / profissional / owner)
+- [x] Página `/recover-password`
+- [x] Página `/reset-password` (link real do e-mail usa `/redefinir-senha`, ambas registradas)
+- [x] Proteção de rotas por role (cliente / profissional / owner)
 
 #### Etapa 3 — Barbearias e Profissionais (depende de: Módulo 2 ✅)
 - [ ] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
