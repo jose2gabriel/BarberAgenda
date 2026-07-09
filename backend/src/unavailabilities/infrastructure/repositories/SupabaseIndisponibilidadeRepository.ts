@@ -51,4 +51,20 @@ export class SupabaseIndisponibilidadeRepository implements IIndisponibilidadeRe
     if (error) throw new Error(`Erro ao buscar indisponibilidade por id: ${error.message}`)
     return data ? mapRowParaIndisponibilidade(data) : null
   }
+
+  async existeConflito(professionalId: string, startsAt: string, endsAt: string): Promise<boolean> {
+    // Sobreposição de intervalos: existe conflito se algum período
+    // registrado começa antes do fim do novo período E termina depois
+    // do início dele.
+    const { data, error } = await supabase
+      .from('unavailabilities')
+      .select('id')
+      .eq('professional_id', professionalId)
+      .lt('starts_at', endsAt)
+      .gt('ends_at', startsAt)
+      .limit(1)
+
+    if (error) throw new Error(`Erro ao verificar conflito de indisponibilidade: ${error.message}`)
+    return (data?.length ?? 0) > 0
+  }
 }
