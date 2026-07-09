@@ -16,5 +16,10 @@ export function routerAgendamento(controller: AgendamentoController) {
     controller.criar(req, res, next)
   )
 
+  // RF008 — Cancelamento
+  router.patch('/:id/cancelar', autenticar, (req, res, next) =>
+    controller.cancelar(req, res, next)
+  )
+
   return router
 }

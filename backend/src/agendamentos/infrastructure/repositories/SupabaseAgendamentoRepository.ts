@@ -72,4 +72,32 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     if (error) throw new Error(`Erro ao verificar conflito de agendamento: ${error.message}`)
     return (data?.length ?? 0) > 0
   }
+
+  async buscarPorId(id: string): Promise<Agendamento | null> {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) {
+      if (error.code === 'PGRST116') return null
+      throw new Error(`Erro ao buscar agendamento por ID: ${error.message}`)
+    }
+    return mapRowParaAgendamento(data)
+  }
+
+  async atualizar(id: string, dados: Partial<Agendamento>): Promise<Agendamento> {
+    const { data, error } = await supabase
+      .from('appointments')
+      .update({
+        status: dados.status,
+      })
+      .eq('id', id)
+      .select('*')
+      .single()
+
+    if (error) throw new Error(`Erro ao atualizar agendamento: ${error.message}`)
+    return mapRowParaAgendamento(data)
+  }
 }

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { IListarAgendaProfissionalUseCase } from '../../domain/interfaces/IListarAgendaProfissionalUseCase'
 import { ICriarAgendamentoUseCase } from '../../domain/interfaces/ICriarAgendamentoUseCase'
+import { ICancelarAgendamentoUseCase } from '../../domain/interfaces/ICancelarAgendamentoUseCase'
 import { IProfissionalRepository } from '../../../professionals/domain/interfaces/IProfissionalRepository'
 import { AppError } from '../../../shared/errors/AppError'
 
@@ -8,7 +9,8 @@ export class AgendamentoController {
   constructor(
     private readonly listarAgendaProfissionalUseCase: IListarAgendaProfissionalUseCase,
     private readonly profissionalRepository: IProfissionalRepository,
-    private readonly criarAgendamentoUseCase: ICriarAgendamentoUseCase
+    private readonly criarAgendamentoUseCase: ICriarAgendamentoUseCase,
+    private readonly cancelarAgendamentoUseCase: ICancelarAgendamentoUseCase
   ) {}
 
   async listarAgenda(req: Request, res: Response, next: NextFunction) {
@@ -39,6 +41,27 @@ export class AgendamentoController {
       })
 
       return res.status(201).json(agendamento)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  // RF008 — Cancelamento
+  async cancelar(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.usuario) {
+        throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
+      }
+
+      const { id } = req.params
+      
+      await this.cancelarAgendamentoUseCase.executar(
+        id,
+        req.usuario.id,
+        req.usuario.role
+      )
+
+      return res.status(204).send()
     } catch (err) {
       next(err)
     }
