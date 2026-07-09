@@ -50,4 +50,26 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     if (error) throw new Error(`Erro ao criar agendamento: ${error.message}`)
     return mapRowParaAgendamento(data)
   }
+
+  async existeConflito(
+    professionalId: string,
+    date: string,
+    startTime: string,
+    endTime: string
+  ): Promise<boolean> {
+    // Só agendamentos ativos ('agendado') bloqueiam — cancelados/concluídos
+    // liberam o horário (RF008).
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('id')
+      .eq('professional_id', professionalId)
+      .eq('date', date)
+      .eq('status', 'agendado')
+      .lt('start_time', endTime)
+      .gt('end_time', startTime)
+      .limit(1)
+
+    if (error) throw new Error(`Erro ao verificar conflito de agendamento: ${error.message}`)
+    return (data?.length ?? 0) > 0
+  }
 }

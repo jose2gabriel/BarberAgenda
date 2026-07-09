@@ -49,6 +49,7 @@ import { IndisponibilidadeController } from './unavailabilities/adapters/control
 import { SupabaseIndisponibilidadeRepository } from './unavailabilities/infrastructure/repositories/SupabaseIndisponibilidadeRepository'
 import { RegistrarIndisponibilidadeUseCase } from './unavailabilities/use-cases/RegistrarIndisponibilidadeUseCase'
 import { RemoverIndisponibilidadeUseCase } from './unavailabilities/use-cases/RemoverIndisponibilidadeUseCase'
+import { VerificarBloqueioUseCase } from './unavailabilities/use-cases/VerificarBloqueioUseCase'
 
 dotenv.config()
 
@@ -129,20 +130,6 @@ const cadastrarServicoUseCase = new CadastrarServicoUseCase(servicoRepository, b
 const listarServicosUseCase = new ListarServicosUseCase(servicoRepository, barbeariaRepository)
 const servicoController = new ServicoController(cadastrarServicoUseCase, listarServicosUseCase)
 
-const agendamentoRepository = new SupabaseAgendamentoRepository()
-const listarAgendaProfissionalUseCase = new ListarAgendaProfissionalUseCase(agendamentoRepository)
-const criarAgendamentoUseCase = new CriarAgendamentoUseCase(
-  agendamentoRepository,
-  profissionalRepository,
-  servicoRepository,
-  usuarioRepository
-)
-const agendamentoController = new AgendamentoController(
-  listarAgendaProfissionalUseCase,
-  profissionalRepository,
-  criarAgendamentoUseCase
-)
-
 const indisponibilidadeRepository = new SupabaseIndisponibilidadeRepository()
 const registrarIndisponibilidadeUseCase = new RegistrarIndisponibilidadeUseCase(
   indisponibilidadeRepository,
@@ -154,9 +141,26 @@ const removerIndisponibilidadeUseCase = new RemoverIndisponibilidadeUseCase(
   profissionalRepository,
   barbeariaRepository
 )
+const verificarBloqueioUseCase = new VerificarBloqueioUseCase(indisponibilidadeRepository)
 const indisponibilidadeController = new IndisponibilidadeController(
   registrarIndisponibilidadeUseCase,
   removerIndisponibilidadeUseCase
+)
+
+const agendamentoRepository = new SupabaseAgendamentoRepository()
+const listarAgendaProfissionalUseCase = new ListarAgendaProfissionalUseCase(agendamentoRepository)
+const criarAgendamentoUseCase = new CriarAgendamentoUseCase(
+  agendamentoRepository,
+  profissionalRepository,
+  servicoRepository,
+  usuarioRepository,
+  businessHoursRepository,
+  verificarBloqueioUseCase
+)
+const agendamentoController = new AgendamentoController(
+  listarAgendaProfissionalUseCase,
+  profissionalRepository,
+  criarAgendamentoUseCase
 )
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)

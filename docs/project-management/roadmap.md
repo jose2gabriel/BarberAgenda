@@ -29,7 +29,7 @@
 
 ### Módulo 3 — Motor de Agendamento
 - [x] RF006 — Agendamento de horário
-- [ ] RF007 — Validação de disponibilidade
+- [x] RF007 — Validação de disponibilidade
 - [ ] RF008 — Cancelamento
 - [ ] RF009 — Reagendamento
 - [ ] RF010 — Consulta de agendamentos (cliente)
