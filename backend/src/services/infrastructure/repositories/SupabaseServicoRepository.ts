@@ -42,4 +42,16 @@ export class SupabaseServicoRepository implements IServicoRepository {
     if (error) throw new Error(`Erro ao listar serviços: ${error.message}`)
     return (data ?? []).map(mapRowParaServico)
   }
+
+  async buscarPorId(id: string, barbershopId: string): Promise<Servico | null> {
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .eq('id', id)
+      .eq('barbershop_id', barbershopId)
+      .maybeSingle()
+
+    if (error) throw new Error(`Erro ao buscar serviço por id: ${error.message}`)
+    return data ? mapRowParaServico(data) : null
+  }
 }

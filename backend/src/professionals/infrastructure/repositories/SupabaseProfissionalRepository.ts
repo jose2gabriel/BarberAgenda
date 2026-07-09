@@ -85,4 +85,11 @@ export class SupabaseProfissionalRepository implements IProfissionalRepository {
     if (error) throw new Error(`Erro ao buscar profissional completo por id: ${error.message}`)
     return data ? mapRowParaProfissional(data) : null
   }
+
+  async buscarPorIdGlobal(id: string): Promise<Profissional | null> {
+    const { data, error } = await supabase.from('professionals').select('*').eq('id', id).maybeSingle()
+
+    if (error) throw new Error(`Erro ao buscar profissional por id: ${error.message}`)
+    return data ? mapRowParaProfissional(data) : null
+  }
 }
