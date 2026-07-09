@@ -9,9 +9,9 @@ export function Input({ label, error, ...props }: InputProps) {
       <label className="text-sm font-medium text-text-secondary">{label}</label>
       <input
         className={`
-          bg-secondary border rounded-lg px-4 py-2.5 text-white
+          bg-white border rounded-lg px-4 py-2.5 text-text-primary
           placeholder-text-secondary outline-none transition-all
-          focus:border-accent
+          focus:border-accent focus:ring-2 focus:ring-accent/20
           ${error ? 'border-error' : 'border-border'}
         `}
         {...props}

@@ -6,9 +6,17 @@ interface ButtonProps {
   onClick?: () => void
   type?: 'button' | 'submit'
   disabled?: boolean
+  className?: string
 }
 
-export function Button({ variant = 'primary', size = 'md', loading, children, ...props }: ButtonProps) {
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  loading,
+  children,
+  className = '',
+  ...props
+}: ButtonProps) {
   const base = 'rounded-lg font-semibold transition-all duration-200 flex items-center gap-2'
 
   const variants = {
@@ -25,7 +33,7 @@ export function Button({ variant = 'primary', size = 'md', loading, children, ..
 
   return (
     <button
-      className={`${base} ${variants[variant]} ${sizes[size]}`}
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={loading || props.disabled}
       {...props}
     >

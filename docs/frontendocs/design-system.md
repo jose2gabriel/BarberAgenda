@@ -9,17 +9,17 @@
 
 | Nome | Hex | Uso |
 |------|-----|-----|
-| Primary | `#1A1A2E` | Fundo principal, headers |
-| Secondary | `#16213E` | Fundo de cards |
-| Accent | `#E94560` | Botões primários, destaques |
-| Text Primary | `#FFFFFF` | Textos principais |
-| Text Secondary | `#A0A0B0` | Textos secundários, placeholders |
+| Primary | `#FFFFFF` | Fundo principal |
+| Secondary | `#F9FAFB` | Fundo de cards |
+| Accent | `#E94560` | Botões primários, destaques, links |
+| Text Primary | `#1A1A2E` | Textos principais |
+| Text Secondary | `#6B7280` | Textos secundários, placeholders |
 | Success | `#4CAF50` | Status agendado, confirmações |
 | Warning | `#FF9800` | Alertas |
 | Error | `#F44336` | Erros de validação |
-| Border | `#2A2A4A` | Bordas de inputs e cards |
+| Border | `#E5E7EB` | Bordas de inputs e cards |
 
-> Tema escuro — transmite modernidade e profissionalismo para o contexto de barbearia.
+> Tema claro — visual moderno e limpo para navegador, com destaques em vermelho (accent) para ações e links.
 
 ---
 
@@ -48,14 +48,15 @@ interface ButtonProps {
   onClick?: () => void
   type?: 'button' | 'submit'
   disabled?: boolean
+  className?: string
 }
 
-export function Button({ variant = 'primary', size = 'md', loading, children, ...props }: ButtonProps) {
+export function Button({ variant = 'primary', size = 'md', loading, children, className = '', ...props }: ButtonProps) {
   const base = 'rounded-lg font-semibold transition-all duration-200 flex items-center gap-2'
 
   const variants = {
-    primary:   'bg-red-500 hover:bg-red-600 text-white',
-    secondary: 'bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white',
+    primary:   'bg-accent hover:bg-accent/90 text-white',
+    secondary: 'bg-transparent border border-accent text-accent hover:bg-accent hover:text-white',
     danger:    'bg-red-800 hover:bg-red-900 text-white',
   }
 
@@ -66,7 +67,7 @@ export function Button({ variant = 'primary', size = 'md', loading, children, ..
   }
 
   return (
-    <button className={`${base} ${variants[variant]} ${sizes[size]}`} disabled={loading || props.disabled} {...props}>
+    <button className={`${base} ${variants[variant]} ${sizes[size]} ${className}`} disabled={loading || props.disabled} {...props}>
       {loading ? 'Carregando...' : children}
     </button>
   )
@@ -84,17 +85,17 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Input({ label, error, ...props }: InputProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-300">{label}</label>
+      <label className="text-sm font-medium text-text-secondary">{label}</label>
       <input
         className={`
-          bg-[#16213E] border rounded-lg px-4 py-2.5 text-white
-          placeholder-gray-500 outline-none transition-all
-          focus:border-red-500
-          ${error ? 'border-red-500' : 'border-[#2A2A4A]'}
+          bg-white border rounded-lg px-4 py-2.5 text-text-primary
+          placeholder-text-secondary outline-none transition-all
+          focus:border-accent focus:ring-2 focus:ring-accent/20
+          ${error ? 'border-error' : 'border-border'}
         `}
         {...props}
       />
-      {error && <span className="text-red-400 text-xs">{error}</span>}
+      {error && <span className="text-error text-xs">{error}</span>}
     </div>
   )
 }
@@ -105,7 +106,7 @@ export function Input({ label, error, ...props }: InputProps) {
 // src/shared/ui/Card.tsx
 export function Card({ children, className = '' }: { children: React.ReactNode, className?: string }) {
   return (
-    <div className={`bg-[#16213E] border border-[#2A2A4A] rounded-xl p-6 ${className}`}>
+    <div className={`bg-secondary border border-border rounded-xl p-6 ${className}`}>
       {children}
     </div>
   )
@@ -114,23 +115,28 @@ export function Card({ children, className = '' }: { children: React.ReactNode, 
 
 ---
 
-## Variáveis Tailwind (tailwind.config.ts)
+## Tokens de Cor (Tailwind v4 — CSS-first)
 
-```typescript
-export default {
-  theme: {
-    extend: {
-      colors: {
-        primary:   '#1A1A2E',
-        secondary: '#16213E',
-        accent:    '#E94560',
-        border:    '#2A2A4A',
-      },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
-    },
-  },
+O projeto usa Tailwind v4, que define tokens via `@theme` diretamente no CSS (`src/index.css`),
+em vez de `tailwind.config.ts`:
+
+```css
+/* src/index.css */
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-primary: #ffffff;
+  --color-secondary: #f9fafb;
+  --color-accent: #e94560;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-error: #f44336;
+  --color-border: #e5e7eb;
 }
 ```
 
