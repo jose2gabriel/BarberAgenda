@@ -55,7 +55,7 @@
 - [x] Proteção de rotas por role (cliente / profissional / owner)
 
 #### Etapa 3 — Barbearias e Profissionais (depende de: Módulo 2 ✅)
-- [ ] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
+- [x] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
 - [ ] Página `/barbershops` — listagem de barbearias
 - [ ] Página `/barbershops/:id` — detalhes, profissionais e serviços
 - [ ] Página `/owner/barbershops` — gerenciar barbearias (owner)
