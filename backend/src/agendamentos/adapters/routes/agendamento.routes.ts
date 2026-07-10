@@ -7,10 +7,6 @@ import { criarAgendamentoSchema, reagendarAgendamentoSchema } from '../schemas/A
 export function routerAgendamento(controller: AgendamentoController) {
   const router = Router()
 
-  router.get('/professional/:professionalId', autenticar, (req, res, next) =>
-    controller.listarAgenda(req, res, next)
-  )
-
   // RF010 — Consulta de agendamentos (cliente)
   router.get('/', autenticar, (req, res, next) =>
     controller.listarMeusAgendamentos(req, res, next)
@@ -25,7 +21,6 @@ export function routerAgendamento(controller: AgendamentoController) {
   router.post('/', autenticar, autorizar('cliente'), validate(criarAgendamentoSchema), (req, res, next) =>
     controller.criar(req, res, next)
   )
-...
 
   // RF008 — Cancelamento
   router.patch('/:id/cancelar', autenticar, (req, res, next) =>
