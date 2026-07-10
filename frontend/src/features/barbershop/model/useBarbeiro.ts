@@ -68,6 +68,13 @@ export function useBarbeiro() {
     }
   }, [])
 
+  const criarBarbearia = useCallback(
+    async (dados: { name: string; address: string; phone: string }) => {
+      return api.post<Barbershop>('/barbershops', dados)
+    },
+    []
+  )
+
   return {
     barbearias,
     barbearia,
@@ -79,5 +86,6 @@ export function useBarbeiro() {
     buscarBarbearia,
     listarProfissionais,
     listarServicos,
+    criarBarbearia,
   }
 }

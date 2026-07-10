@@ -22,7 +22,13 @@ const registerSchema = z
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  // Usado pelo fluxo guiado de cadastro de barbearia (RegisterBarbershopPage) —
+  // sem isso, o comportamento padrão é navegar para /login.
+  onSuccess?: (credentials: { email: string; password: string }) => void
+}
+
+export function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   const navigate = useNavigate()
 
   const {
@@ -40,7 +46,12 @@ export function RegisterForm() {
         phone: data.phone,
         password: data.password,
       })
-      navigate('/login')
+
+      if (onSuccess) {
+        onSuccess({ email: data.email, password: data.password })
+      } else {
+        navigate('/login')
+      }
     } catch (err) {
       const message = err instanceof ApiError ? err.message : 'Não foi possível cadastrar. Tente novamente.'
       setError('root', { message })

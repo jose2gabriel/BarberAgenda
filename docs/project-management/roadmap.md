@@ -58,6 +58,7 @@
 - [x] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
 - [x] Página `/barbershops` — listagem de barbearias
 - [x] Página `/barbershops/:id` — detalhes, profissionais e serviços
+- [x] Página `/register-barbershop` — fluxo guiado (cadastro + criação da barbearia) a partir da Home
 - [ ] Página `/owner/barbershops` — gerenciar barbearias (owner)
 - [ ] Página `/owner/barbershops/:id` — editar barbearia
 - [ ] Página `/owner/barbershops/:id/professionals` — gerenciar profissionais

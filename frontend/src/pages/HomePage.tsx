@@ -46,6 +46,10 @@ export function HomePage() {
             </Button>
           </Link>
         </div>
+
+        <Link to="/register-barbershop" className="text-accent text-sm font-medium hover:underline">
+          É dono de uma barbearia? Cadastre-se aqui
+        </Link>
       </main>
 
       <section className="max-w-6xl mx-auto px-6 pb-24 grid grid-cols-1 md:grid-cols-3 gap-6">
