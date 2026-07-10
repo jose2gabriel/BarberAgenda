@@ -31,6 +31,18 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     return (data ?? []).map(mapRowParaAgendamento)
   }
 
+  async listarPorCliente(clientId: string): Promise<Agendamento[]> {
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('date', { ascending: true })
+      .order('start_time', { ascending: true })
+
+    if (error) throw new Error(`Erro ao listar agendamentos do cliente: ${error.message}`)
+    return (data ?? []).map(mapRowParaAgendamento)
+  }
+
   async criar(dados: Omit<Agendamento, 'id' | 'createdAt' | 'updatedAt'>): Promise<Agendamento> {
     const { data, error } = await supabase
       .from('appointments')

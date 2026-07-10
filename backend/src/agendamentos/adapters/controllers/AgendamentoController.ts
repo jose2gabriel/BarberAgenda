@@ -3,12 +3,14 @@ import { IListarAgendaProfissionalUseCase } from '../../domain/interfaces/ILista
 import { ICriarAgendamentoUseCase } from '../../domain/interfaces/ICriarAgendamentoUseCase'
 import { ICancelarAgendamentoUseCase } from '../../domain/interfaces/ICancelarAgendamentoUseCase'
 import { IReagendarAgendamentoUseCase } from '../../domain/interfaces/IReagendarAgendamentoUseCase'
+import { ListarAgendamentosClienteUseCase } from '../../use-cases/ListarAgendamentosClienteUseCase'
 import { IProfissionalRepository } from '../../../professionals/domain/interfaces/IProfissionalRepository'
 import { AppError } from '../../../shared/errors/AppError'
 
 export class AgendamentoController {
   constructor(
     private readonly listarAgendaProfissionalUseCase: IListarAgendaProfissionalUseCase,
+    private readonly listarAgendamentosClienteUseCase: ListarAgendamentosClienteUseCase,
     private readonly profissionalRepository: IProfissionalRepository,
     private readonly criarAgendamentoUseCase: ICriarAgendamentoUseCase,
     private readonly cancelarAgendamentoUseCase: ICancelarAgendamentoUseCase,
@@ -24,6 +26,21 @@ export class AgendamentoController {
       next(err)
     }
   }
+
+  // RF010 — Consulta de agendamentos (cliente)
+  async listarMeusAgendamentos(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.usuario) {
+        throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
+      }
+
+      const agendamentos = await this.listarAgendamentosClienteUseCase.executar(req.usuario.id)
+      return res.status(200).json({ agendamentos })
+    } catch (err) {
+      next(err)
+    }
+  }
+...
 
   // RF006, RF007 — Cria agendamento com validação de conflito
   async criar(req: Request, res: Response, next: NextFunction) {

@@ -42,6 +42,7 @@ import { SupabaseServicoRepository } from './services/infrastructure/repositorie
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCase'
 import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/ListarAgendaProfissionalUseCase'
+import { ListarAgendamentosClienteUseCase } from './agendamentos/use-cases/ListarAgendamentosClienteUseCase'
 import { CriarAgendamentoUseCase } from './agendamentos/use-cases/CriarAgendamentoUseCase'
 import { CancelarAgendamentoUseCase } from './agendamentos/use-cases/CancelarAgendamentoUseCase'
 import { ReagendarAgendamentoUseCase } from './agendamentos/use-cases/ReagendarAgendamentoUseCase'
@@ -151,6 +152,12 @@ const indisponibilidadeController = new IndisponibilidadeController(
 
 const agendamentoRepository = new SupabaseAgendamentoRepository()
 const listarAgendaProfissionalUseCase = new ListarAgendaProfissionalUseCase(agendamentoRepository)
+const listarAgendamentosClienteUseCase = new ListarAgendamentosClienteUseCase(
+  agendamentoRepository,
+  profissionalRepository,
+  servicoRepository,
+  usuarioRepository
+)
 const criarAgendamentoUseCase = new CriarAgendamentoUseCase(
   agendamentoRepository,
   profissionalRepository,
@@ -173,6 +180,7 @@ const reagendarAgendamentoUseCase = new ReagendarAgendamentoUseCase(
 )
 const agendamentoController = new AgendamentoController(
   listarAgendaProfissionalUseCase,
+  listarAgendamentosClienteUseCase,
   profissionalRepository,
   criarAgendamentoUseCase,
   cancelarAgendamentoUseCase,
