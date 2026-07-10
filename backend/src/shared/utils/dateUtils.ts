@@ -14,3 +14,14 @@ export function dataNoPassado(date: string): boolean {
 export function diaDaSemana(date: string): number {
   return new Date(`${date}T00:00:00Z`).getUTCDay()
 }
+
+export function hhmmParaMinutos(hhmm: string): number {
+  const [h, m] = hhmm.split(':').map(Number)
+  return h * 60 + m
+}
+
+export function minutosParaHHmm(minutos: number): string {
+  const h = Math.floor(minutos / 60)
+  const m = minutos % 60
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+}

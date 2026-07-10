@@ -52,6 +52,17 @@ export class SupabaseIndisponibilidadeRepository implements IIndisponibilidadeRe
     return data ? mapRowParaIndisponibilidade(data) : null
   }
 
+  async listarPorProfissional(professionalId: string): Promise<Indisponibilidade[]> {
+    const { data, error } = await supabase
+      .from('unavailabilities')
+      .select('*')
+      .eq('professional_id', professionalId)
+      .order('starts_at', { ascending: true })
+
+    if (error) throw new Error(`Erro ao listar indisponibilidades do profissional: ${error.message}`)
+    return (data ?? []).map(mapRowParaIndisponibilidade)
+  }
+
   async existeConflito(professionalId: string, startsAt: string, endsAt: string): Promise<boolean> {
     // Sobreposição de intervalos: existe conflito se algum período
     // registrado começa antes do fim do novo período E termina depois

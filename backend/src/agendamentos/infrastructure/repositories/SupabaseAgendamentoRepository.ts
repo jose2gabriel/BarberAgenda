@@ -31,6 +31,20 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     return (data ?? []).map(mapRowParaAgendamento)
   }
 
+  async listarPorProfissionalEData(professionalId: string, date: string): Promise<Agendamento[]> {
+    // Só agendamentos ativos bloqueiam horário (mesma regra de existeConflito).
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('professional_id', professionalId)
+      .eq('date', date)
+      .eq('status', 'agendado')
+      .order('start_time', { ascending: true })
+
+    if (error) throw new Error(`Erro ao listar agendamentos do profissional na data: ${error.message}`)
+    return (data ?? []).map(mapRowParaAgendamento)
+  }
+
   async listarPorCliente(clientId: string): Promise<Agendamento[]> {
     const { data, error } = await supabase
       .from('appointments')

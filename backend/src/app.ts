@@ -19,6 +19,9 @@ import { ListarHorariosFuncionamentoUseCase } from './barbershops/use-cases/List
 import { ProfissionalController } from './professionals/adapters/controllers/ProfissionalController'
 import { ServicoController } from './services/adapters/controllers/ServicoController'
 import { AgendamentoController } from './agendamentos/adapters/controllers/AgendamentoController'
+import { HorariosDisponiveisController } from './agendamentos/adapters/controllers/HorariosDisponiveisController'
+import { routerHorariosDisponiveis } from './agendamentos/adapters/routes/horarios-disponiveis.routes'
+import { ListarHorariosDisponiveisUseCase } from './agendamentos/use-cases/ListarHorariosDisponiveisUseCase'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
 import { SupabaseUsuarioRepository } from './usuarios/infrastructure/repositories/SupabaseUsuarioRepository'
 import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuarioUseCase'
@@ -233,6 +236,15 @@ const agendamentoController = new AgendamentoController(
   reagendarAgendamentoUseCase
 )
 
+const listarHorariosDisponiveisUseCase = new ListarHorariosDisponiveisUseCase(
+  profissionalRepository,
+  servicoRepository,
+  businessHoursRepository,
+  agendamentoRepository,
+  indisponibilidadeRepository
+)
+const horariosDisponiveisController = new HorariosDisponiveisController(listarHorariosDisponiveisUseCase)
+
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
@@ -249,6 +261,10 @@ apiV1.use('/appointments', routerAgendamento(agendamentoController))
 apiV1.use(
   '/barbershops/:barbershopId/professionals/:professionalId/unavailability',
   routerIndisponibilidade(indisponibilidadeController)
+)
+apiV1.use(
+  '/barbershops/:barbershopId/professionals/:professionalId/available-slots',
+  routerHorariosDisponiveis(horariosDisponiveisController)
 )
 
 app.use('/api/v1', apiV1)
