@@ -17,6 +17,7 @@ import { OwnerServicesPage } from '../pages/OwnerServicesPage'
 import { NewAppointmentPage } from '../pages/NewAppointmentPage'
 import { AppointmentsPage } from '../pages/AppointmentsPage'
 import { ProfessionalSchedulePage } from '../pages/ProfessionalSchedulePage'
+import { UnavailabilityPage } from '../pages/UnavailabilityPage'
 
 function App() {
   return (
@@ -109,6 +110,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['profissional']}>
                 <ProfessionalSchedulePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/professional/unavailability"
+            element={
+              <ProtectedRoute allowedRoles={['profissional']}>
+                <UnavailabilityPage />
               </ProtectedRoute>
             }
           />
