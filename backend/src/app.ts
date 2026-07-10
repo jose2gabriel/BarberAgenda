@@ -7,6 +7,7 @@ import { errorHandler } from './shared/middlewares/errorHandler'
 import { routerAuth, routerUsers } from './usuarios/adapters/routes/usuario.routes'
 import { routerBarbershop } from './barbershops/adapters/routes/barbershop.routes'
 import { routerProfissional } from './professionals/adapters/routes/professional.routes'
+import { routerProfissionalMe } from './professionals/adapters/routes/professional-me.routes'
 import { routerServico } from './services/adapters/routes/service.routes'
 import { routerAgendamento } from './agendamentos/adapters/routes/agendamento.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
@@ -42,6 +43,7 @@ import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfi
 import { AtualizarProfissionalUseCase } from './professionals/use-cases/AtualizarProfissionalUseCase'
 import { RemoverProfissionalUseCase } from './professionals/use-cases/RemoverProfissionalUseCase'
 import { TornarSeProfissionalUseCase } from './professionals/use-cases/TornarSeProfissionalUseCase'
+import { BuscarMeuProfissionalUseCase } from './professionals/use-cases/BuscarMeuProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { AtualizarServicoUseCase } from './services/use-cases/AtualizarServicoUseCase'
@@ -150,13 +152,15 @@ const tornarSeProfissionalUseCase = new TornarSeProfissionalUseCase(
   usuarioRepository,
   barbeariaRepository
 )
+const buscarMeuProfissionalUseCase = new BuscarMeuProfissionalUseCase(profissionalRepository)
 const profissionalController = new ProfissionalController(
   cadastrarProfissionalUseCase,
   listarProfissionaisUseCase,
   buscarProfissionalUseCase,
   atualizarProfissionalUseCase,
   removerProfissionalUseCase,
-  tornarSeProfissionalUseCase
+  tornarSeProfissionalUseCase,
+  buscarMeuProfissionalUseCase
 )
 
 const servicoRepository = new SupabaseServicoRepository()
@@ -235,6 +239,7 @@ apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
 apiV1.use('/users', routerUsers(usuarioController))
 apiV1.use('/barbershops', routerBarbershop(barbeariaController, businessHoursController))
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
+apiV1.use('/professionals', routerProfissionalMe(profissionalController))
 apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
 apiV1.use('/agendamentos', routerAgendamento(agendamentoController))
 // /appointments é o nome documentado em endpoints.md — mantido como alias
