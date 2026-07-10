@@ -14,7 +14,7 @@ import type { Professional } from '../entities/professional/types'
 export function OwnerProfessionalsPage() {
   const { id } = useParams<{ id: string }>()
   const barbershopId = id as string
-  const { user, logout } = useAuth()
+  const { user, logout, refreshUser } = useAuth()
   const navigate = useNavigate()
   const {
     barbearia,
@@ -26,6 +26,7 @@ export function OwnerProfessionalsPage() {
     criarProfissional,
     atualizarProfissional,
     removerProfissional,
+    tornarSeProfissional,
   } = useBarbeiro()
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [editandoId, setEditandoId] = useState<string | null>(null)
@@ -48,7 +49,14 @@ export function OwnerProfessionalsPage() {
     await listarProfissionais(barbershopId)
   }
 
+  async function handleTornarSeProfissional() {
+    await tornarSeProfissional(barbershopId, {})
+    await refreshUser()
+    await listarProfissionais(barbershopId)
+  }
+
   const ehDono = !!barbearia && !!user && barbearia.ownerId === user.id
+  const jaEhProfissional = !!user?.roles.includes('profissional')
 
   return (
     <div className="min-h-screen bg-primary">
@@ -93,11 +101,18 @@ export function OwnerProfessionalsPage() {
           <>
             <div className="flex items-center justify-between mt-4 mb-8 gap-4 flex-wrap">
               <h1 className="text-3xl font-bold text-text-primary">Profissionais</h1>
-              {!mostrarFormulario && (
-                <Button size="sm" onClick={() => setMostrarFormulario(true)}>
-                  + Adicionar profissional
-                </Button>
-              )}
+              <div className="flex gap-2">
+                {!jaEhProfissional && (
+                  <Button variant="secondary" size="sm" onClick={handleTornarSeProfissional}>
+                    Também sou profissional aqui
+                  </Button>
+                )}
+                {!mostrarFormulario && (
+                  <Button size="sm" onClick={() => setMostrarFormulario(true)}>
+                    + Adicionar profissional
+                  </Button>
+                )}
+              </div>
             </div>
 
             {mostrarFormulario && (

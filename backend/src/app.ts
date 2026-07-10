@@ -24,6 +24,7 @@ import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuario
 import { BuscarUsuarioUseCase } from './usuarios/use-cases/BuscarUsuarioUseCase'
 import { EncerrarSessaoUseCase } from './usuarios/use-cases/EncerrarSessaoUseCase'
 import { AtualizarUsuarioUseCase } from './usuarios/use-cases/AtualizarUsuarioUseCase'
+import { RenovarTokenUseCase } from './usuarios/use-cases/RenovarTokenUseCase'
 import { SolicitarRecuperacaoSenhaUseCase } from './usuarios/use-cases/SolicitarRecuperacaoSenhaUseCase'
 import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCase'
 import { ExcluirContaUseCase } from './usuarios/use-cases/ExcluirContaUseCase'
@@ -40,6 +41,7 @@ import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProf
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
 import { AtualizarProfissionalUseCase } from './professionals/use-cases/AtualizarProfissionalUseCase'
 import { RemoverProfissionalUseCase } from './professionals/use-cases/RemoverProfissionalUseCase'
+import { TornarSeProfissionalUseCase } from './professionals/use-cases/TornarSeProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { AtualizarServicoUseCase } from './services/use-cases/AtualizarServicoUseCase'
@@ -68,12 +70,24 @@ app.use(apiLimiter)
 
 // Composição das dependências
 const usuarioRepository = new SupabaseUsuarioRepository()
+// Instanciados aqui (antes do uso "natural" mais abaixo) porque
+// AutenticarUsuarioUseCase/BuscarUsuarioUseCase/RenovarTokenUseCase
+// precisam deles para calcular os papéis (roles) do usuário — ver
+// construirRolesUsuario.ts.
+const barbeariaRepository = new SupabaseBarbeariaRepository()
+const profissionalRepository = new SupabaseProfissionalRepository()
+
 const cadastrarUsuarioUseCase = new CadastrarUsuarioUseCase(usuarioRepository)
-const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(usuarioRepository)
-const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository)
+const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(
+  usuarioRepository,
+  barbeariaRepository,
+  profissionalRepository
+)
+const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 const encerrarSessaoUseCase = new EncerrarSessaoUseCase()
 const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository)
 const excluirContaUseCase = new ExcluirContaUseCase(usuarioRepository)
+const renovarTokenUseCase = new RenovarTokenUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 
 // RF030 — Recuperação de senha
 const passwordResetTokenRepository = new SupabasePasswordResetTokenRepository()
@@ -95,10 +109,10 @@ const usuarioController = new UsuarioController(
   atualizarUsuarioUseCase,
   solicitarRecuperacaoSenhaUseCase,
   redefinirSenhaUseCase,
-  excluirContaUseCase
+  excluirContaUseCase,
+  renovarTokenUseCase
 )
 
-const barbeariaRepository = new SupabaseBarbeariaRepository()
 const criarBarbeariaUseCase = new CriarBarbeariaUseCase(barbeariaRepository, usuarioRepository)
 const listarBarbeariasUseCase = new ListarBarbeariasUseCase(barbeariaRepository)
 const buscarBarbeariaPorIdUseCase = new BuscarBarbeariaPorIdUseCase(barbeariaRepository)
@@ -118,7 +132,6 @@ const businessHoursController = new BusinessHoursController(
   listarHorariosFuncionamentoUseCase
 )
 
-const profissionalRepository = new SupabaseProfissionalRepository()
 const cadastrarProfissionalUseCase = new CadastrarProfissionalUseCase(
   profissionalRepository,
   usuarioRepository,
@@ -131,7 +144,8 @@ const atualizarProfissionalUseCase = new AtualizarProfissionalUseCase(
   usuarioRepository,
   barbeariaRepository
 )
-const removerProfissionalUseCase = new RemoverProfissionalUseCase(
+const removerProfissionalUseCase = new RemoverProfissionalUseCase(profissionalRepository, barbeariaRepository)
+const tornarSeProfissionalUseCase = new TornarSeProfissionalUseCase(
   profissionalRepository,
   usuarioRepository,
   barbeariaRepository
@@ -141,7 +155,8 @@ const profissionalController = new ProfissionalController(
   listarProfissionaisUseCase,
   buscarProfissionalUseCase,
   atualizarProfissionalUseCase,
-  removerProfissionalUseCase
+  removerProfissionalUseCase,
+  tornarSeProfissionalUseCase
 )
 
 const servicoRepository = new SupabaseServicoRepository()

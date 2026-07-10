@@ -1,5 +1,5 @@
-import { UsuarioPublico } from '../entidades/Usuario'
+import { UsuarioResponseDTO } from '../../adapters/dtos/UsuarioDTO'
 
 export interface IBuscarUsuarioUseCase {
-  executar(id: string): Promise<UsuarioPublico>
+  executar(id: string): Promise<UsuarioResponseDTO>
 }

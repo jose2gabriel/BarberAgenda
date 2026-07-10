@@ -17,14 +17,14 @@ export function DashboardPage() {
       <Card className="w-full max-w-sm flex flex-col gap-6 text-center shadow-xl shadow-black/5">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Bem-vindo, {user?.name}</h1>
-          <p className="text-text-secondary text-sm">Perfil: {user?.role}</p>
+          <p className="text-text-secondary text-sm">Perfil: {user?.roles.join(', ')}</p>
         </div>
 
         <Link to="/barbershops">
           <Button className="w-full justify-center">Ver barbearias</Button>
         </Link>
 
-        {user?.role === 'owner' && (
+        {user?.roles.includes('owner') && (
           <Link to="/owner/barbershops">
             <Button variant="secondary" className="w-full justify-center">
               Gerenciar minhas barbearias

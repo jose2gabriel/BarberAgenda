@@ -8,6 +8,7 @@ import { IAtualizarUsuarioUseCase } from '../../domain/interfaces/IAtualizarUsua
 import { ISolicitarRecuperacaoSenhaUseCase } from '../../domain/interfaces/ISolicitarRecuperacaoSenhaUseCase'
 import { IRedefinirSenhaUseCase } from '../../domain/interfaces/IRedefinirSenhaUseCase'
 import { IExcluirContaUseCase } from '../../domain/interfaces/IExcluirContaUseCase'
+import { IRenovarTokenUseCase } from '../../domain/interfaces/IRenovarTokenUseCase'
 
 export class UsuarioController {
   constructor(
@@ -18,7 +19,8 @@ export class UsuarioController {
     private readonly atualizarUsuarioUseCase: IAtualizarUsuarioUseCase,
     private readonly solicitarRecuperacaoSenhaUseCase: ISolicitarRecuperacaoSenhaUseCase,
     private readonly redefinirSenhaUseCase: IRedefinirSenhaUseCase,
-    private readonly excluirContaUseCase: IExcluirContaUseCase
+    private readonly excluirContaUseCase: IExcluirContaUseCase,
+    private readonly renovarTokenUseCase: IRenovarTokenUseCase
   ) { }
 
   async cadastrar(req: Request, res: Response, next: NextFunction) {
@@ -42,6 +44,16 @@ export class UsuarioController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const resultado = await this.autenticarUsuarioUseCase.executar(req.body)
+      return res.status(200).json(resultado)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  // Reemite o token com os papéis (roles) recalculados — ver RenovarTokenUseCase
+  async renovarToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const resultado = await this.renovarTokenUseCase.executar(req.usuario!.id)
       return res.status(200).json(resultado)
     } catch (err) {
       next(err)

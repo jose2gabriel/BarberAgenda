@@ -58,11 +58,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  // Recarrega os dados do usuário — necessário depois de criar uma barbearia
-  // (RF031), já que o role muda pra "owner" no backend sem o token/sessão
-  // atual saber disso automaticamente.
+  // Reemite o token com os papéis (roles) recalculados — necessário depois
+  // de criar uma barbearia (RF031) ou virar profissional, já que o token
+  // emitido no login carrega um retrato desatualizado dos papéis do
+  // usuário. Um GET /users/me simples não resolveria isso: o token em si
+  // (usado pelo middleware autorizar) continuaria antigo.
   async function refreshUser() {
-    const { usuario } = await api.get<{ usuario: Usuario }>('/users/me')
+    const { token, usuario } = await api.post<LoginResponse>('/auth/refresh-token')
+    localStorage.setItem('token', token)
     setUser(usuario)
   }
 

@@ -105,6 +105,10 @@ export function useBarbeiro() {
     await api.delete(`/barbershops/${barbershopId}/professionals/${professionalId}`)
   }, [])
 
+  const tornarSeProfissional = useCallback(async (barbershopId: string, dados: { specialty?: string }) => {
+    return api.post(`/barbershops/${barbershopId}/professionals/me`, dados)
+  }, [])
+
   const criarServico = useCallback(
     async (
       barbershopId: string,
@@ -142,6 +146,7 @@ export function useBarbeiro() {
     criarProfissional,
     atualizarProfissional,
     removerProfissional,
+    tornarSeProfissional,
     criarServico,
     atualizarServico,
   }

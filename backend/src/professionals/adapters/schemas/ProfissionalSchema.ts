@@ -13,3 +13,7 @@ export const atualizarProfissionalSchema = z.object({
   phone: z.string().min(10, 'Telefone inválido').max(20).optional(),
   specialty: z.string().max(100).optional(),
 })
+
+export const tornarSeProfissionalSchema = z.object({
+  specialty: z.string().max(100).optional(),
+})

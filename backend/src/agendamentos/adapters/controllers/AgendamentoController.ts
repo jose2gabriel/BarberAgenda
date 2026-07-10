@@ -25,7 +25,7 @@ export class AgendamentoController {
       if (!req.usuario) {
         throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
       }
-      if (req.usuario.role !== 'profissional') {
+      if (!req.usuario.roles.includes('profissional')) {
         throw new AppError('Acesso não autorizado.', 403, 'FORBIDDEN')
       }
 

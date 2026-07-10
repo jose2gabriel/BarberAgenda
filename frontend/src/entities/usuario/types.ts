@@ -6,6 +6,7 @@ export interface Usuario {
   email: string
   phone: string
   role: Role
+  roles: Role[]
   createdAt: string
   updatedAt: string
 }
