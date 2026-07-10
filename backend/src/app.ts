@@ -46,6 +46,7 @@ import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/Listar
 import { ListarAgendamentosClienteUseCase } from './agendamentos/use-cases/ListarAgendamentosClienteUseCase'
 import { CriarAgendamentoUseCase } from './agendamentos/use-cases/CriarAgendamentoUseCase'
 import { CancelarAgendamentoUseCase } from './agendamentos/use-cases/CancelarAgendamentoUseCase'
+import { ConcluirAgendamentoUseCase } from './agendamentos/use-cases/ConcluirAgendamentoUseCase'
 import { ReagendarAgendamentoUseCase } from './agendamentos/use-cases/ReagendarAgendamentoUseCase'
 import { SupabaseAgendamentoRepository } from './agendamentos/infrastructure/repositories/SupabaseAgendamentoRepository'
 import { routerIndisponibilidade } from './unavailabilities/adapters/routes/unavailability.routes'
@@ -177,6 +178,10 @@ const cancelarAgendamentoUseCase = new CancelarAgendamentoUseCase(
   agendamentoRepository,
   profissionalRepository
 )
+const concluirAgendamentoUseCase = new ConcluirAgendamentoUseCase(
+  agendamentoRepository,
+  profissionalRepository
+)
 const reagendarAgendamentoUseCase = new ReagendarAgendamentoUseCase(
   agendamentoRepository,
   profissionalRepository,
@@ -191,6 +196,7 @@ const agendamentoController = new AgendamentoController(
   profissionalRepository,
   criarAgendamentoUseCase,
   cancelarAgendamentoUseCase,
+  concluirAgendamentoUseCase,
   reagendarAgendamentoUseCase
 )
 
