@@ -8,6 +8,7 @@ import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { StatusBadge } from '../shared/ui/StatusBadge'
+import { Logo } from '../shared/ui/Logo'
 import { ApiError } from '../shared/lib/api'
 import type { Appointment } from '../entities/appointment/types'
 
@@ -68,9 +69,7 @@ export function AppointmentsPage() {
       <header className="bg-dark">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-white font-bold">
-              BA
-            </div>
+            <Logo size="sm" />
             <span className="font-bold text-lg text-white">Barber Agenda</span>
           </div>
           <Button variant="secondary" size="sm" onClick={handleLogout}>
