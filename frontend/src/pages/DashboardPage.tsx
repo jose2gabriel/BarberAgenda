@@ -24,6 +24,14 @@ export function DashboardPage() {
           <Button className="w-full justify-center">Ver barbearias</Button>
         </Link>
 
+        {user?.role === 'owner' && (
+          <Link to="/owner/barbershops">
+            <Button variant="secondary" className="w-full justify-center">
+              Gerenciar minhas barbearias
+            </Button>
+          </Link>
+        )}
+
         <Button variant="secondary" onClick={handleLogout} className="w-full justify-center">
           Sair
         </Button>

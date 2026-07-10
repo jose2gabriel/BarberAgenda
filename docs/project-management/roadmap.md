@@ -58,10 +58,11 @@
 - [x] `useBarbeiro` implementado (`features/barbershop/model/useBarbeiro.ts`)
 - [x] Página `/barbershops` — listagem de barbearias
 - [x] Página `/barbershops/:id` — detalhes, profissionais e serviços
-- [ ] Página `/owner/barbershops` — gerenciar barbearias (owner)
-- [ ] Página `/owner/barbershops/:id` — editar barbearia
-- [ ] Página `/owner/barbershops/:id/professionals` — gerenciar profissionais
-- [ ] Página `/owner/barbershops/:id/services` — gerenciar serviços
+- [x] Página `/register-barbershop` — fluxo guiado (cadastro + criação da barbearia) a partir da Home
+- [x] Página `/owner/barbershops` — gerenciar barbearias (owner)
+- [x] Página `/owner/barbershops/:id` — editar barbearia
+- [x] Página `/owner/barbershops/:id/professionals` — gerenciar profissionais
+- [x] Página `/owner/barbershops/:id/services` — gerenciar serviços
 
 #### Etapa 4 — Agendamentos (depende de: Módulo 3 🔄)
 - [ ] `useAgendamento` implementado (`features/agendamento/model/useAgendamento.ts`)

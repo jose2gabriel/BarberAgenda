@@ -7,3 +7,9 @@ export const cadastrarProfissionalSchema = z.object({
   password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
   specialty: z.string().max(100).optional(),
 })
+
+export const atualizarProfissionalSchema = z.object({
+  name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres').max(150).optional(),
+  phone: z.string().min(10, 'Telefone inválido').max(20).optional(),
+  specialty: z.string().max(100).optional(),
+})

@@ -13,6 +13,7 @@ export interface AuthContextValue {
   isAuthenticated: boolean
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
+  refreshUser: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
@@ -57,8 +58,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Recarrega os dados do usuário — necessário depois de criar uma barbearia
+  // (RF031), já que o role muda pra "owner" no backend sem o token/sessão
+  // atual saber disso automaticamente.
+  async function refreshUser() {
+    const { usuario } = await api.get<{ usuario: Usuario }>('/users/me')
+    setUser(usuario)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated: !!user, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated: !!user, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   )

@@ -68,6 +68,64 @@ export function useBarbeiro() {
     }
   }, [])
 
+  const criarBarbearia = useCallback(
+    async (dados: { name: string; address: string; phone: string }) => {
+      return api.post<Barbershop>('/barbershops', dados)
+    },
+    []
+  )
+
+  const atualizarBarbearia = useCallback(
+    async (barbershopId: string, dados: Partial<{ name: string; address: string; phone: string }>) => {
+      const atualizada = await api.patch<Barbershop>(`/barbershops/${barbershopId}`, dados)
+      setBarbearia(atualizada)
+      return atualizada
+    },
+    []
+  )
+
+  const criarProfissional = useCallback(
+    async (
+      barbershopId: string,
+      dados: { name: string; email: string; phone: string; password: string; specialty?: string }
+    ) => {
+      return api.post(`/barbershops/${barbershopId}/professionals`, dados)
+    },
+    []
+  )
+
+  const atualizarProfissional = useCallback(
+    async (barbershopId: string, professionalId: string, dados: { name?: string; specialty?: string }) => {
+      return api.patch(`/barbershops/${barbershopId}/professionals/${professionalId}`, dados)
+    },
+    []
+  )
+
+  const removerProfissional = useCallback(async (barbershopId: string, professionalId: string) => {
+    await api.delete(`/barbershops/${barbershopId}/professionals/${professionalId}`)
+  }, [])
+
+  const criarServico = useCallback(
+    async (
+      barbershopId: string,
+      dados: { name: string; description?: string; durationMinutes: number; price: number }
+    ) => {
+      return api.post(`/barbershops/${barbershopId}/services`, dados)
+    },
+    []
+  )
+
+  const atualizarServico = useCallback(
+    async (
+      barbershopId: string,
+      serviceId: string,
+      dados: Partial<{ name: string; description?: string; durationMinutes: number; price: number }>
+    ) => {
+      return api.patch(`/barbershops/${barbershopId}/services/${serviceId}`, dados)
+    },
+    []
+  )
+
   return {
     barbearias,
     barbearia,
@@ -79,5 +137,12 @@ export function useBarbeiro() {
     buscarBarbearia,
     listarProfissionais,
     listarServicos,
+    criarBarbearia,
+    atualizarBarbearia,
+    criarProfissional,
+    atualizarProfissional,
+    removerProfissional,
+    criarServico,
+    atualizarServico,
   }
 }

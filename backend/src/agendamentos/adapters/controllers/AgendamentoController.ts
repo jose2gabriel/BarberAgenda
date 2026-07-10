@@ -55,7 +55,6 @@ export class AgendamentoController {
       next(err)
     }
   }
-...
 
   // RF006, RF007 — Cria agendamento com validação de conflito
   async criar(req: Request, res: Response, next: NextFunction) {
@@ -87,8 +86,8 @@ export class AgendamentoController {
         throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
       }
 
-      const { id } = req.params
-      
+      const id = req.params.id as string
+
       await this.cancelarAgendamentoUseCase.executar(
         id,
         req.usuario.id,
@@ -108,8 +107,8 @@ export class AgendamentoController {
         throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
       }
 
-      const { id } = req.params
-      
+      const id = req.params.id as string
+
       await this.concluirAgendamentoUseCase.executar(
         id,
         req.usuario.id,
@@ -129,7 +128,7 @@ export class AgendamentoController {
         throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
       }
 
-      const { id } = req.params
+      const id = req.params.id as string
       const { date, time } = req.body
 
       const agendamento = await this.reagendarAgendamentoUseCase.executar(id, {

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { ProfissionalController } from '../controllers/ProfissionalController'
 import { validate } from '../../../shared/middlewares/validate'
 import { autenticar } from '../../../shared/middlewares/autenticar'
-import { cadastrarProfissionalSchema } from '../schemas/ProfissionalSchema'
+import { cadastrarProfissionalSchema, atualizarProfissionalSchema } from '../schemas/ProfissionalSchema'
 
 /** Monta-se em app.use('/barbershops/:barbershopId/professionals', routerProfissional(controller)) */
 export function routerProfissional(controller: ProfissionalController) {
@@ -18,6 +18,14 @@ export function routerProfissional(controller: ProfissionalController) {
 
   // RF026 — Dados do profissional (detalhe)
   router.get('/:id', autenticar, (req, res, next) => controller.buscarPorId(req, res, next))
+
+  // Edição de profissional (owner)
+  router.patch('/:id', autenticar, validate(atualizarProfissionalSchema), (req, res, next) =>
+    controller.atualizar(req, res, next)
+  )
+
+  // Remoção de profissional (owner)
+  router.delete('/:id', autenticar, (req, res, next) => controller.remover(req, res, next))
 
   return router
 }

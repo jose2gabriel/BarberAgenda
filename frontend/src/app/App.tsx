@@ -4,11 +4,16 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage'
 import { RegisterPage } from '../pages/RegisterPage'
+import { RegisterBarbershopPage } from '../pages/RegisterBarbershopPage'
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { DashboardPage } from '../pages/DashboardPage'
 import { BarbershopsPage } from '../pages/BarbershopsPage'
 import { BarbershopDetailPage } from '../pages/BarbershopDetailPage'
+import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
+import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
+import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
+import { OwnerServicesPage } from '../pages/OwnerServicesPage'
 
 function App() {
   return (
@@ -18,6 +23,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register-barbershop" element={<RegisterBarbershopPage />} />
           <Route path="/recover-password" element={<RecoverPasswordPage />} />
           {/* /redefinir-senha é o link real enviado por e-mail (SolicitarRecuperacaoSenhaUseCase);
               /reset-password fica como alias por consistência com o roadmap. */}
@@ -44,6 +50,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <BarbershopDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops"
+            element={
+              <ProtectedRoute>
+                <OwnerBarbershopsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id"
+            element={
+              <ProtectedRoute>
+                <OwnerBarbershopDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id/professionals"
+            element={
+              <ProtectedRoute>
+                <OwnerProfessionalsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id/services"
+            element={
+              <ProtectedRoute>
+                <OwnerServicesPage />
               </ProtectedRoute>
             }
           />

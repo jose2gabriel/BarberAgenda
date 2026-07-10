@@ -38,6 +38,8 @@ import { SupabaseProfissionalRepository } from './professionals/infrastructure/r
 import { CadastrarProfissionalUseCase } from './professionals/use-cases/CadastrarProfissionalUseCase'
 import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProfissionaisUseCase'
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
+import { AtualizarProfissionalUseCase } from './professionals/use-cases/AtualizarProfissionalUseCase'
+import { RemoverProfissionalUseCase } from './professionals/use-cases/RemoverProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { AtualizarServicoUseCase } from './services/use-cases/AtualizarServicoUseCase'
@@ -124,10 +126,22 @@ const cadastrarProfissionalUseCase = new CadastrarProfissionalUseCase(
 )
 const listarProfissionaisUseCase = new ListarProfissionaisUseCase(profissionalRepository, barbeariaRepository)
 const buscarProfissionalUseCase = new BuscarProfissionalUseCase(profissionalRepository, barbeariaRepository)
+const atualizarProfissionalUseCase = new AtualizarProfissionalUseCase(
+  profissionalRepository,
+  usuarioRepository,
+  barbeariaRepository
+)
+const removerProfissionalUseCase = new RemoverProfissionalUseCase(
+  profissionalRepository,
+  usuarioRepository,
+  barbeariaRepository
+)
 const profissionalController = new ProfissionalController(
   cadastrarProfissionalUseCase,
   listarProfissionaisUseCase,
-  buscarProfissionalUseCase
+  buscarProfissionalUseCase,
+  atualizarProfissionalUseCase,
+  removerProfissionalUseCase
 )
 
 const servicoRepository = new SupabaseServicoRepository()
