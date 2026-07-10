@@ -15,7 +15,7 @@ import type { Barbershop } from '../entities/barbershop/types'
  */
 export function RegisterBarbershopPage() {
   const [step, setStep] = useState<1 | 2>(1)
-  const { login } = useAuth()
+  const { login, refreshUser } = useAuth()
   const { criarBarbearia } = useBarbeiro()
   const navigate = useNavigate()
 
@@ -24,7 +24,10 @@ export function RegisterBarbershopPage() {
     setStep(2)
   }
 
-  function handleBarbeariaCriada(barbershop: Barbershop) {
+  async function handleBarbeariaCriada(barbershop: Barbershop) {
+    // O role vira "owner" no backend (RF031) — recarrega a sessão antes
+    // de navegar, senão a página seguinte ainda veria o usuário como cliente.
+    await refreshUser()
     navigate(`/owner/barbershops/${barbershop.id}`)
   }
 

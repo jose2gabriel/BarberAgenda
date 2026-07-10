@@ -2,8 +2,13 @@ import { IBarbeariaRepository } from '../domain/interfaces/IBarbeariaRepository'
 import { ICriarBarbeariaUseCase } from '../domain/interfaces/ICriarBarbeariaUseCase'
 import { CriarBarbeariaDTO, BarbeariaResponseDTO } from '../adapters/dtos/BarbeariaDTO'
 import { IUsuarioRepository } from '../../usuarios/domain/interfaces/IUsuarioRepository'
-import { AppError } from '../../shared/errors/AppError'
 
+/**
+ * RF031 — Criação de barbearia.
+ * Um owner pode ter mais de uma barbearia (barbershops.md) — diferente
+ * do profissional, que pertence a uma única barbearia no MVP. Por isso
+ * não há checagem de "já possui barbearia" aqui.
+ */
 export class CriarBarbeariaUseCase implements ICriarBarbeariaUseCase {
   constructor(
     private readonly barbeariaRepository: IBarbeariaRepository,
@@ -11,12 +16,6 @@ export class CriarBarbeariaUseCase implements ICriarBarbeariaUseCase {
   ) {}
 
   async executar(dados: CriarBarbeariaDTO): Promise<BarbeariaResponseDTO> {
-    const barbeariaExistente = await this.barbeariaRepository.buscarPorOwnerId(dados.ownerId)
-
-    if (barbeariaExistente) {
-      throw new AppError('Usuário já possui uma barbearia.', 409, 'USER_ALREADY_HAS_BARBERSHOP')
-    }
-
     const barbeariaCriada = await this.barbeariaRepository.criar({
       name: dados.name,
       address: dados.address,

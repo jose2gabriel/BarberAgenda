@@ -10,6 +10,7 @@ import { ResetPasswordPage } from '../pages/ResetPasswordPage'
 import { DashboardPage } from '../pages/DashboardPage'
 import { BarbershopsPage } from '../pages/BarbershopsPage'
 import { BarbershopDetailPage } from '../pages/BarbershopDetailPage'
+import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
 
 function App() {
   return (
@@ -46,6 +47,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <BarbershopDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops"
+            element={
+              <ProtectedRoute>
+                <OwnerBarbershopsPage />
               </ProtectedRoute>
             }
           />
