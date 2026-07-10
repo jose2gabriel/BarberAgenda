@@ -33,7 +33,7 @@
 - [x] RF008 — Cancelamento
 - [x] RF009 — Reagendamento
 - [x] RF010 — Consulta de agendamentos (cliente)
-- [ ] RF011 — Consulta de agenda (profissional)
+- [x] RF011 — Consulta de agenda (profissional)
 - [ ] RF016 — Controle de duração do serviço
 - [ ] RF029 — Controle de status
 

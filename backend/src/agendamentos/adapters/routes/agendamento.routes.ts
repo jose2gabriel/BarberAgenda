@@ -16,6 +16,11 @@ export function routerAgendamento(controller: AgendamentoController) {
     controller.listarMeusAgendamentos(req, res, next)
   )
 
+  // RF011 — Consulta de agenda (profissional)
+  router.get('/minha-agenda', autenticar, autorizar('profissional'), (req, res, next) =>
+    controller.listarMinhaAgenda(req, res, next)
+  )
+
   // RF006, RF007 — Cria agendamento (só cliente pode agendar, ADR-007)
   router.post('/', autenticar, autorizar('cliente'), validate(criarAgendamentoSchema), (req, res, next) =>
     controller.criar(req, res, next)
