@@ -54,4 +54,23 @@ export class SupabaseServicoRepository implements IServicoRepository {
     if (error) throw new Error(`Erro ao buscar serviço por id: ${error.message}`)
     return data ? mapRowParaServico(data) : null
   }
+
+  async atualizar(id: string, barbershopId: string, dados: Partial<Omit<Servico, 'id' | 'createdAt'>>): Promise<Servico> {
+    const updateData: any = {}
+    if (dados.name) updateData.name = dados.name
+    if (dados.description !== undefined) updateData.description = dados.description
+    if (dados.durationMinutes) updateData.duration_minutes = dados.durationMinutes
+    if (dados.price) updateData.price = dados.price
+
+    const { data, error } = await supabase
+      .from('services')
+      .update(updateData)
+      .eq('id', id)
+      .eq('barbershop_id', barbershopId)
+      .select('*')
+      .single()
+
+    if (error) throw new Error(`Erro ao atualizar serviço: ${error.message}`)
+    return mapRowParaServico(data)
+  }
 }

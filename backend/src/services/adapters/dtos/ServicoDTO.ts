@@ -7,6 +7,14 @@ export interface CadastrarServicoDTO {
   ownerId: string
 }
 
+export interface AtualizarServicoDTO {
+  name?: string
+  description?: string
+  durationMinutes?: number
+  price?: number
+  barbershopId: string
+}
+
 export interface ServicoResponseDTO {
   id: string
   barbershopId: string

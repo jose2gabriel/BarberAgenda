@@ -40,6 +40,7 @@ import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProf
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
+import { AtualizarServicoUseCase } from './services/use-cases/AtualizarServicoUseCase'
 import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCase'
 import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/ListarAgendaProfissionalUseCase'
 import { ListarAgendamentosClienteUseCase } from './agendamentos/use-cases/ListarAgendamentosClienteUseCase'
@@ -130,8 +131,14 @@ const profissionalController = new ProfissionalController(
 
 const servicoRepository = new SupabaseServicoRepository()
 const cadastrarServicoUseCase = new CadastrarServicoUseCase(servicoRepository, barbeariaRepository)
+const atualizarServicoUseCase = new AtualizarServicoUseCase(servicoRepository, barbeariaRepository)
 const listarServicosUseCase = new ListarServicosUseCase(servicoRepository, barbeariaRepository)
-const servicoController = new ServicoController(cadastrarServicoUseCase, listarServicosUseCase)
+const servicoController = new ServicoController(
+  cadastrarServicoUseCase,
+  atualizarServicoUseCase,
+  listarServicosUseCase
+)
+
 
 const indisponibilidadeRepository = new SupabaseIndisponibilidadeRepository()
 const registrarIndisponibilidadeUseCase = new RegistrarIndisponibilidadeUseCase(
