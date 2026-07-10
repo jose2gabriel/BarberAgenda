@@ -17,10 +17,23 @@ export class AgendamentoController {
     private readonly reagendarAgendamentoUseCase: IReagendarAgendamentoUseCase
   ) {}
 
-  async listarAgenda(req: Request, res: Response, next: NextFunction) {
+  // RF011 — Consulta de agenda (profissional)
+  async listarMinhaAgenda(req: Request, res: Response, next: NextFunction) {
     try {
-      const professionalId = req.params.professionalId as string
-      const agendamentos = await this.listarAgendaProfissionalUseCase.executar(professionalId)
+      if (!req.usuario) {
+        throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
+      }
+      if (req.usuario.role !== 'profissional') {
+        throw new AppError('Acesso não autorizado.', 403, 'FORBIDDEN')
+      }
+
+      // Precisamos buscar o ID do profissional associado ao usuário
+      const profissional = await this.profissionalRepository.buscarPorUserId(req.usuario.id)
+      if (!profissional) {
+        throw new AppError('Profissional não encontrado para este usuário.', 404, 'PROFESSIONAL_NOT_FOUND')
+      }
+
+      const agendamentos = await this.listarAgendaProfissionalUseCase.executar(profissional.id)
       return res.status(200).json({ agendamentos })
     } catch (err) {
       next(err)
