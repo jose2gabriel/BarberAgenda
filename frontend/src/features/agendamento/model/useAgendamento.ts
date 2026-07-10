@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { api, ApiError } from '../../../shared/lib/api'
 import type { Appointment, RawAppointment, Unavailability, MeuProfissional } from '../../../entities/appointment/types'
 
@@ -14,6 +14,10 @@ export function useAgendamento() {
   const [meuProfissional, setMeuProfissional] = useState<MeuProfissional | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Guarda a chave da última busca de horários pedida — evita que uma
+  // resposta antiga (ex.: data trocada rápido) sobrescreva o resultado
+  // mais recente se chegar depois dele.
+  const ultimaBuscaSlotsRef = useRef<string | null>(null)
 
   const listarMeusAgendamentos = useCallback(async () => {
     setLoading(true)
@@ -58,17 +62,25 @@ export function useAgendamento() {
 
   const buscarHorariosDisponiveis = useCallback(
     async (barbershopId: string, professionalId: string, date: string, serviceId: string) => {
+      const chaveBusca = `${barbershopId}:${professionalId}:${date}:${serviceId}`
+      ultimaBuscaSlotsRef.current = chaveBusca
       setLoading(true)
       setError(null)
       try {
         const { slots } = await api.get<{ slots: string[] }>(
           `/barbershops/${barbershopId}/professionals/${professionalId}/available-slots?date=${date}&serviceId=${serviceId}`
         )
-        setHorariosDisponiveis(slots)
+        if (ultimaBuscaSlotsRef.current === chaveBusca) {
+          setHorariosDisponiveis(slots)
+        }
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : 'Erro ao buscar horários disponíveis.')
+        if (ultimaBuscaSlotsRef.current === chaveBusca) {
+          setError(err instanceof ApiError ? err.message : 'Erro ao buscar horários disponíveis.')
+        }
       } finally {
-        setLoading(false)
+        if (ultimaBuscaSlotsRef.current === chaveBusca) {
+          setLoading(false)
+        }
       }
     },
     []
