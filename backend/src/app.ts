@@ -44,6 +44,7 @@ import { ListarServicosUseCase } from './services/use-cases/ListarServicosUseCas
 import { ListarAgendaProfissionalUseCase } from './agendamentos/use-cases/ListarAgendaProfissionalUseCase'
 import { CriarAgendamentoUseCase } from './agendamentos/use-cases/CriarAgendamentoUseCase'
 import { CancelarAgendamentoUseCase } from './agendamentos/use-cases/CancelarAgendamentoUseCase'
+import { ReagendarAgendamentoUseCase } from './agendamentos/use-cases/ReagendarAgendamentoUseCase'
 import { SupabaseAgendamentoRepository } from './agendamentos/infrastructure/repositories/SupabaseAgendamentoRepository'
 import { routerIndisponibilidade } from './unavailabilities/adapters/routes/unavailability.routes'
 import { IndisponibilidadeController } from './unavailabilities/adapters/controllers/IndisponibilidadeController'
@@ -162,11 +163,20 @@ const cancelarAgendamentoUseCase = new CancelarAgendamentoUseCase(
   agendamentoRepository,
   profissionalRepository
 )
+const reagendarAgendamentoUseCase = new ReagendarAgendamentoUseCase(
+  agendamentoRepository,
+  profissionalRepository,
+  servicoRepository,
+  usuarioRepository,
+  businessHoursRepository,
+  verificarBloqueioUseCase
+)
 const agendamentoController = new AgendamentoController(
   listarAgendaProfissionalUseCase,
   profissionalRepository,
   criarAgendamentoUseCase,
-  cancelarAgendamentoUseCase
+  cancelarAgendamentoUseCase,
+  reagendarAgendamentoUseCase
 )
 
 // Rotas — versionadas sob /api/v1 (endpoints.md)
