@@ -32,6 +32,11 @@ export function routerAgendamento(controller: AgendamentoController) {
     controller.cancelar(req, res, next)
   )
 
+  // RF029 — Conclusão
+  router.patch('/:id/concluir', autenticar, (req, res, next) =>
+    controller.concluir(req, res, next)
+  )
+
   // RF009 — Reagendamento
   router.patch('/:id/reschedule', autenticar, validate(reagendarAgendamentoSchema), (req, res, next) =>
     controller.reagendar(req, res, next)

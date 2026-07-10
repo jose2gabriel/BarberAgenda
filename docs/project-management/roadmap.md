@@ -34,8 +34,8 @@
 - [x] RF009 — Reagendamento
 - [x] RF010 — Consulta de agendamentos (cliente)
 - [x] RF011 — Consulta de agenda (profissional)
-- [ ] RF016 — Controle de duração do serviço
-- [ ] RF029 — Controle de status
+- [x] RF016 — Controle de duração do serviço
+- [x] RF029 — Controle de status
 
 ### Módulo 4 — Frontend
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { IListarAgendaProfissionalUseCase } from '../../domain/interfaces/IListarAgendaProfissionalUseCase'
 import { ICriarAgendamentoUseCase } from '../../domain/interfaces/ICriarAgendamentoUseCase'
 import { ICancelarAgendamentoUseCase } from '../../domain/interfaces/ICancelarAgendamentoUseCase'
+import { IConcluirAgendamentoUseCase } from '../../use-cases/ConcluirAgendamentoUseCase'
 import { IReagendarAgendamentoUseCase } from '../../domain/interfaces/IReagendarAgendamentoUseCase'
 import { ListarAgendamentosClienteUseCase } from '../../use-cases/ListarAgendamentosClienteUseCase'
 import { IProfissionalRepository } from '../../../professionals/domain/interfaces/IProfissionalRepository'
@@ -14,6 +15,7 @@ export class AgendamentoController {
     private readonly profissionalRepository: IProfissionalRepository,
     private readonly criarAgendamentoUseCase: ICriarAgendamentoUseCase,
     private readonly cancelarAgendamentoUseCase: ICancelarAgendamentoUseCase,
+    private readonly concluirAgendamentoUseCase: IConcluirAgendamentoUseCase,
     private readonly reagendarAgendamentoUseCase: IReagendarAgendamentoUseCase
   ) {}
 
@@ -88,6 +90,27 @@ export class AgendamentoController {
       const { id } = req.params
       
       await this.cancelarAgendamentoUseCase.executar(
+        id,
+        req.usuario.id,
+        req.usuario.role
+      )
+
+      return res.status(204).send()
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  // RF029 — Conclusão
+  async concluir(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.usuario) {
+        throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
+      }
+
+      const { id } = req.params
+      
+      await this.concluirAgendamentoUseCase.executar(
         id,
         req.usuario.id,
         req.usuario.role
