@@ -7,4 +7,6 @@ export interface IProfissionalRepository {
   buscarPorUserId(userId: string): Promise<Profissional | null>
   buscarCompletoPorId(id: string, barbershopId: string): Promise<Profissional | null>
   buscarPorIdGlobal(id: string): Promise<Profissional | null>
+  atualizar(id: string, dados: Partial<Pick<Profissional, 'specialty'>>): Promise<Profissional>
+  remover(id: string): Promise<void>
 }

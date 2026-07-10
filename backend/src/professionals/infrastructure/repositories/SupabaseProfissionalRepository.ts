@@ -92,4 +92,25 @@ export class SupabaseProfissionalRepository implements IProfissionalRepository {
     if (error) throw new Error(`Erro ao buscar profissional por id: ${error.message}`)
     return data ? mapRowParaProfissional(data) : null
   }
+
+  async atualizar(id: string, dados: Partial<Pick<Profissional, 'specialty'>>): Promise<Profissional> {
+    const payload: Record<string, any> = {}
+    if (dados.specialty !== undefined) payload.specialty = dados.specialty
+
+    const { data, error } = await supabase
+      .from('professionals')
+      .update(payload)
+      .eq('id', id)
+      .select('*')
+      .single()
+
+    if (error) throw new Error(`Erro ao atualizar profissional: ${error.message}`)
+    return mapRowParaProfissional(data)
+  }
+
+  async remover(id: string): Promise<void> {
+    const { error } = await supabase.from('professionals').delete().eq('id', id)
+
+    if (error) throw new Error(`Erro ao remover profissional: ${error.message}`)
+  }
 }

@@ -8,6 +8,21 @@ export interface CadastrarProfissionalDTO {
   ownerId: string
 }
 
+export interface AtualizarProfissionalDTO {
+  barbershopId: string
+  professionalId: string
+  ownerId: string
+  name?: string
+  phone?: string
+  specialty?: string
+}
+
+export interface RemoverProfissionalDTO {
+  barbershopId: string
+  professionalId: string
+  ownerId: string
+}
+
 export interface ProfissionalResponseDTO {
   id: string
   barbershopId: string
