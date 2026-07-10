@@ -95,6 +95,11 @@ export function OwnerBarbershopDetailPage() {
                     Gerenciar serviços
                   </Button>
                 </Link>
+                <Link to={`/owner/barbershops/${barbearia.id}/hours`}>
+                  <Button variant="secondary" className="w-full justify-center">
+                    Horário de funcionamento
+                  </Button>
+                </Link>
               </div>
             </div>
           </>

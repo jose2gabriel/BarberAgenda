@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { CriarHorarioFuncionamentoUseCase } from '../../use-cases/CriarHorarioFuncionamentoUseCase'
 import { ListarHorariosFuncionamentoUseCase } from '../../use-cases/ListarHorariosFuncionamentoUseCase'
+import { AppError } from '../../../shared/errors/AppError'
 
 export class BusinessHoursController {
   constructor(
@@ -10,7 +11,11 @@ export class BusinessHoursController {
 
   async criar(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
-      const horario = await this.criarHorarioUseCase.executar(req.body)
+      if (!req.usuario) {
+        throw new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED')
+      }
+
+      const horario = await this.criarHorarioUseCase.executar({ ...req.body, ownerId: req.usuario.id })
       return res.status(201).json(horario)
     } catch (err) {
       next(err)

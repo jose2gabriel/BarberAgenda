@@ -131,7 +131,7 @@ const barbeariaController = new BarbeariaController(
 )
 
 const businessHoursRepository = new SupabaseBusinessHoursRepository()
-const criarHorarioFuncionamentoUseCase = new CriarHorarioFuncionamentoUseCase(businessHoursRepository)
+const criarHorarioFuncionamentoUseCase = new CriarHorarioFuncionamentoUseCase(businessHoursRepository, barbeariaRepository)
 const listarHorariosFuncionamentoUseCase = new ListarHorariosFuncionamentoUseCase(businessHoursRepository)
 const businessHoursController = new BusinessHoursController(
   criarHorarioFuncionamentoUseCase,

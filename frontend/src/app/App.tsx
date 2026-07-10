@@ -14,6 +14,7 @@ import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
 import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
 import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
 import { OwnerServicesPage } from '../pages/OwnerServicesPage'
+import { OwnerBusinessHoursPage } from '../pages/OwnerBusinessHoursPage'
 import { NewAppointmentPage } from '../pages/NewAppointmentPage'
 import { AppointmentsPage } from '../pages/AppointmentsPage'
 import { ProfessionalSchedulePage } from '../pages/ProfessionalSchedulePage'
@@ -86,6 +87,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OwnerServicesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id/hours"
+            element={
+              <ProtectedRoute>
+                <OwnerBusinessHoursPage />
               </ProtectedRoute>
             }
           />
