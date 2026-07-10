@@ -27,7 +27,7 @@
 - [x] RF024 — Controle de indisponibilidade
 - [x] RF025 — Bloqueio por indisponibilidade (regra pronta, sem rota própria — será consumida pelo RF007/RF022)
 
-### Módulo 3 — Motor de Agendamento
+### Módulo 3 — Motor de Agendamento ✅
 - [x] RF006 — Agendamento de horário
 - [x] RF007 — Validação de disponibilidade
 - [x] RF008 — Cancelamento
@@ -64,12 +64,12 @@
 - [x] Página `/owner/barbershops/:id/professionals` — gerenciar profissionais
 - [x] Página `/owner/barbershops/:id/services` — gerenciar serviços
 
-#### Etapa 4 — Agendamentos (depende de: Módulo 3 🔄)
-- [ ] `useAgendamento` implementado (`features/agendamento/model/useAgendamento.ts`)
-- [ ] Página `/appointments/new` — novo agendamento
-- [ ] Página `/appointments` — meus agendamentos com cancelar/reagendar
-- [ ] Página `/professional/schedule` — agenda do profissional
-- [ ] Página `/professional/unavailability` — registrar indisponibilidade
+#### Etapa 4 — Agendamentos (depende de: Módulo 3 ✅)
+- [x] `useAgendamento` implementado (`features/agendamento/model/useAgendamento.ts`)
+- [x] Página `/appointments/new` — novo agendamento
+- [x] Página `/appointments` — meus agendamentos com cancelar/reagendar
+- [x] Página `/professional/schedule` — agenda do profissional
+- [x] Página `/professional/unavailability` — registrar indisponibilidade
 
 #### Etapa 5 — Perfil
 - [ ] Página `/profile` — ver e editar dados, excluir conta
