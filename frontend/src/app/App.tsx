@@ -14,6 +14,7 @@ import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
 import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
 import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
 import { OwnerServicesPage } from '../pages/OwnerServicesPage'
+import { NewAppointmentPage } from '../pages/NewAppointmentPage'
 
 function App() {
   return (
@@ -82,6 +83,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OwnerServicesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/appointments/new"
+            element={
+              <ProtectedRoute>
+                <NewAppointmentPage />
               </ProtectedRoute>
             }
           />

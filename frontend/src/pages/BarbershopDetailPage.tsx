@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
@@ -26,6 +26,8 @@ export function BarbershopDetailPage() {
     listarProfissionais,
     listarServicos,
   } = useBarbeiro()
+  const [professionalId, setProfessionalId] = useState<string | null>(null)
+  const [serviceId, setServiceId] = useState<string | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -33,6 +35,10 @@ export function BarbershopDetailPage() {
     listarProfissionais(id)
     listarServicos(id)
   }, [id, buscarBarbearia, listarProfissionais, listarServicos])
+
+  function handleContinuar() {
+    navigate(`/appointments/new?barbershopId=${id}&professionalId=${professionalId}&serviceId=${serviceId}`)
+  }
 
   async function handleLogout() {
     await logout()
@@ -87,15 +93,26 @@ export function BarbershopDetailPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {profissionais.map((profissional) => (
-                    <Card key={profissional.id} className="flex items-center gap-3">
-                      <Avatar name={profissional.name} />
-                      <div>
-                        <p className="font-medium text-text-primary">{profissional.name}</p>
-                        {profissional.specialty && (
-                          <p className="text-text-secondary text-sm">{profissional.specialty}</p>
-                        )}
-                      </div>
-                    </Card>
+                    <button
+                      key={profissional.id}
+                      type="button"
+                      onClick={() => setProfessionalId(profissional.id)}
+                      className="text-left"
+                    >
+                      <Card
+                        className={`flex items-center gap-3 ${
+                          professionalId === profissional.id ? 'border-2 border-accent' : ''
+                        }`}
+                      >
+                        <Avatar name={profissional.name} />
+                        <div>
+                          <p className="font-medium text-text-primary">{profissional.name}</p>
+                          {profissional.specialty && (
+                            <p className="text-text-secondary text-sm">{profissional.specialty}</p>
+                          )}
+                        </div>
+                      </Card>
+                    </button>
                   ))}
                 </div>
               )}
@@ -108,20 +125,28 @@ export function BarbershopDetailPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {servicos.map((servico) => (
-                    <Card key={servico.id}>
-                      <p className="font-medium text-text-primary">{servico.name}</p>
-                      {servico.description && (
-                        <p className="text-text-secondary text-sm mb-2">{servico.description}</p>
-                      )}
-                      <div className="flex items-center justify-between text-sm text-text-secondary">
-                        <span>{servico.durationMinutes} min</span>
-                        <span className="font-semibold text-accent">{formatPrice(servico.price)}</span>
-                      </div>
-                    </Card>
+                    <button key={servico.id} type="button" onClick={() => setServiceId(servico.id)} className="text-left">
+                      <Card className={serviceId === servico.id ? 'border-2 border-accent' : ''}>
+                        <p className="font-medium text-text-primary">{servico.name}</p>
+                        {servico.description && (
+                          <p className="text-text-secondary text-sm mb-2">{servico.description}</p>
+                        )}
+                        <div className="flex items-center justify-between text-sm text-text-secondary">
+                          <span>{servico.durationMinutes} min</span>
+                          <span className="font-semibold text-accent">{formatPrice(servico.price)}</span>
+                        </div>
+                      </Card>
+                    </button>
                   ))}
                 </div>
               )}
             </section>
+
+            <div className="mt-10 flex justify-end">
+              <Button disabled={!professionalId || !serviceId} onClick={handleContinuar}>
+                Continuar para agendamento
+              </Button>
+            </div>
           </>
         )}
       </main>
