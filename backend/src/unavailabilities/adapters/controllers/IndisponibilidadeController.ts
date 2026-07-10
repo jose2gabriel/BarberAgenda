@@ -1,13 +1,25 @@
 import { Request, Response, NextFunction } from 'express'
 import { IRegistrarIndisponibilidadeUseCase } from '../../domain/interfaces/IRegistrarIndisponibilidadeUseCase'
 import { IRemoverIndisponibilidadeUseCase } from '../../domain/interfaces/IRemoverIndisponibilidadeUseCase'
+import { IListarIndisponibilidadesUseCase } from '../../domain/interfaces/IListarIndisponibilidadesUseCase'
 import { AppError } from '../../../shared/errors/AppError'
 
 export class IndisponibilidadeController {
   constructor(
     private readonly registrarIndisponibilidadeUseCase: IRegistrarIndisponibilidadeUseCase,
-    private readonly removerIndisponibilidadeUseCase: IRemoverIndisponibilidadeUseCase
+    private readonly removerIndisponibilidadeUseCase: IRemoverIndisponibilidadeUseCase,
+    private readonly listarIndisponibilidadesUseCase: IListarIndisponibilidadesUseCase
   ) {}
+
+  // Lista indisponibilidades registradas do profissional
+  async listar(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const lista = await this.listarIndisponibilidadesUseCase.executar(req.params.professionalId as string)
+      res.status(200).json(lista)
+    } catch (error) {
+      next(error)
+    }
+  }
 
   // RF024 — Registra indisponibilidade
   async registrar(req: Request, res: Response, next: NextFunction): Promise<void> {

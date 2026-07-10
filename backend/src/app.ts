@@ -63,6 +63,7 @@ import { IndisponibilidadeController } from './unavailabilities/adapters/control
 import { SupabaseIndisponibilidadeRepository } from './unavailabilities/infrastructure/repositories/SupabaseIndisponibilidadeRepository'
 import { RegistrarIndisponibilidadeUseCase } from './unavailabilities/use-cases/RegistrarIndisponibilidadeUseCase'
 import { RemoverIndisponibilidadeUseCase } from './unavailabilities/use-cases/RemoverIndisponibilidadeUseCase'
+import { ListarIndisponibilidadesUseCase } from './unavailabilities/use-cases/ListarIndisponibilidadesUseCase'
 import { VerificarBloqueioUseCase } from './unavailabilities/use-cases/VerificarBloqueioUseCase'
 
 dotenv.config()
@@ -189,9 +190,11 @@ const removerIndisponibilidadeUseCase = new RemoverIndisponibilidadeUseCase(
   barbeariaRepository
 )
 const verificarBloqueioUseCase = new VerificarBloqueioUseCase(indisponibilidadeRepository)
+const listarIndisponibilidadesUseCase = new ListarIndisponibilidadesUseCase(indisponibilidadeRepository)
 const indisponibilidadeController = new IndisponibilidadeController(
   registrarIndisponibilidadeUseCase,
-  removerIndisponibilidadeUseCase
+  removerIndisponibilidadeUseCase,
+  listarIndisponibilidadesUseCase
 )
 
 const agendamentoRepository = new SupabaseAgendamentoRepository()
