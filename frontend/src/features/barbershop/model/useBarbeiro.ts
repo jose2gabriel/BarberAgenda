@@ -75,6 +75,15 @@ export function useBarbeiro() {
     []
   )
 
+  const atualizarBarbearia = useCallback(
+    async (barbershopId: string, dados: Partial<{ name: string; address: string; phone: string }>) => {
+      const atualizada = await api.patch<Barbershop>(`/barbershops/${barbershopId}`, dados)
+      setBarbearia(atualizada)
+      return atualizada
+    },
+    []
+  )
+
   return {
     barbearias,
     barbearia,
@@ -87,5 +96,6 @@ export function useBarbeiro() {
     listarProfissionais,
     listarServicos,
     criarBarbearia,
+    atualizarBarbearia,
   }
 }
