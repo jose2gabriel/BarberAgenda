@@ -55,11 +55,12 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
     professionalId: string,
     date: string,
     startTime: string,
-    endTime: string
+    endTime: string,
+    excludedId?: string
   ): Promise<boolean> {
     // Só agendamentos ativos ('agendado') bloqueiam — cancelados/concluídos
     // liberam o horário (RF008).
-    const { data, error } = await supabase
+    let query = supabase
       .from('appointments')
       .select('id')
       .eq('professional_id', professionalId)
@@ -67,7 +68,12 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
       .eq('status', 'agendado')
       .lt('start_time', endTime)
       .gt('end_time', startTime)
-      .limit(1)
+
+    if (excludedId) {
+      query = query.neq('id', excludedId)
+    }
+
+    const { data, error } = await query.limit(1)
 
     if (error) throw new Error(`Erro ao verificar conflito de agendamento: ${error.message}`)
     return (data?.length ?? 0) > 0
@@ -88,11 +94,15 @@ export class SupabaseAgendamentoRepository implements IAgendamentoRepository {
   }
 
   async atualizar(id: string, dados: Partial<Agendamento>): Promise<Agendamento> {
+    const updateData: any = {}
+    if (dados.status) updateData.status = dados.status
+    if (dados.date) updateData.date = dados.date
+    if (dados.startTime) updateData.start_time = dados.startTime
+    if (dados.endTime) updateData.end_time = dados.endTime
+
     const { data, error } = await supabase
       .from('appointments')
-      .update({
-        status: dados.status,
-      })
+      .update(updateData)
       .eq('id', id)
       .select('*')
       .single()

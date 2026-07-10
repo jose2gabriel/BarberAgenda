@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { AgendamentoController } from '../controllers/AgendamentoController'
 import { autenticar, autorizar } from '../../../shared/middlewares/autenticar'
 import { validate } from '../../../shared/middlewares/validate'
-import { criarAgendamentoSchema } from '../schemas/AgendamentoSchema'
+import { criarAgendamentoSchema, reagendarAgendamentoSchema } from '../schemas/AgendamentoSchema'
 
 export function routerAgendamento(controller: AgendamentoController) {
   const router = Router()
@@ -19,6 +19,11 @@ export function routerAgendamento(controller: AgendamentoController) {
   // RF008 — Cancelamento
   router.patch('/:id/cancelar', autenticar, (req, res, next) =>
     controller.cancelar(req, res, next)
+  )
+
+  // RF009 — Reagendamento
+  router.patch('/:id/reschedule', autenticar, validate(reagendarAgendamentoSchema), (req, res, next) =>
+    controller.reagendar(req, res, next)
   )
 
   return router

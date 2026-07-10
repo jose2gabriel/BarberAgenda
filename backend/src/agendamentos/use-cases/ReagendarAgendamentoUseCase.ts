@@ -1,6 +1,6 @@
 import { IAgendamentoRepository } from '../domain/interfaces/IAgendamentoRepository'
-import { ICriarAgendamentoUseCase } from '../domain/interfaces/ICriarAgendamentoUseCase'
-import { CriarAgendamentoDTO, AgendamentoResponseDTO } from '../adapters/dtos/AgendamentoDTO'
+import { IReagendarAgendamentoUseCase } from '../domain/interfaces/IReagendarAgendamentoUseCase'
+import { ReagendarAgendamentoDTO, AgendamentoResponseDTO } from '../adapters/dtos/AgendamentoDTO'
 import { IProfissionalRepository } from '../../professionals/domain/interfaces/IProfissionalRepository'
 import { IServicoRepository } from '../../services/domain/interfaces/IServicoRepository'
 import { IUsuarioRepository } from '../../usuarios/domain/interfaces/IUsuarioRepository'
@@ -9,18 +9,7 @@ import { IVerificarBloqueioUseCase } from '../../unavailabilities/domain/interfa
 import { AppError } from '../../shared/errors/AppError'
 import { somarMinutos, dataNoPassado, diaDaSemana } from '../../shared/utils/dateUtils'
 
-/**
- * RF006 — Agendamento de horário + RF007 — Validação de disponibilidade.
- *
- * Cliente escolhe profissional + serviço + data + horário; o backend
- * calcula o horário final a partir da duração do serviço (RF016) e
- * valida disponibilidade em três frentes antes de criar o agendamento
- * (agendamentos.md):
- *   1. Horário de funcionamento da barbearia (RF020)
- *   2. Conflito com outro agendamento ativo do mesmo profissional
- *   3. Indisponibilidade registrada do profissional (RF024/RF025)
- */
-export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
+export class ReagendarAgendamentoUseCase implements IReagendarAgendamentoUseCase {
   constructor(
     private readonly agendamentoRepository: IAgendamentoRepository,
     private readonly profissionalRepository: IProfissionalRepository,
@@ -30,18 +19,28 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
     private readonly verificarBloqueioUseCase: IVerificarBloqueioUseCase
   ) {}
 
-  async executar(dados: CriarAgendamentoDTO): Promise<AgendamentoResponseDTO> {
+  async executar(id: string, dados: ReagendarAgendamentoDTO): Promise<AgendamentoResponseDTO> {
+    const agendamento = await this.agendamentoRepository.buscarPorId(id)
+
+    if (!agendamento) {
+      throw new AppError('Agendamento não encontrado.', 404, 'APPOINTMENT_NOT_FOUND')
+    }
+
+    if (agendamento.status === 'cancelado' || agendamento.status === 'concluido') {
+        throw new AppError('Não é possível reagendar um agendamento cancelado ou concluído.', 400, 'INVALID_STATUS')
+    }
+
     if (dataNoPassado(dados.date)) {
       throw new AppError('Data ou horário inválido.', 400, 'INVALID_DATE')
     }
 
-    const profissional = await this.profissionalRepository.buscarPorIdGlobal(dados.professionalId)
+    const profissional = await this.profissionalRepository.buscarPorIdGlobal(agendamento.professionalId)
 
     if (!profissional) {
       throw new AppError('Profissional não encontrado.', 404, 'PROFESSIONAL_NOT_FOUND')
     }
 
-    const servico = await this.servicoRepository.buscarPorId(dados.serviceId, profissional.barbershopId)
+    const servico = await this.servicoRepository.buscarPorId(agendamento.serviceId, profissional.barbershopId)
 
     if (!servico) {
       throw new AppError('Serviço não encontrado.', 404, 'SERVICE_NOT_FOUND')
@@ -62,12 +61,13 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
       throw new AppError('Horário indisponível para este profissional.', 409, 'SCHEDULE_CONFLICT')
     }
 
-    // 2. Conflito com outro agendamento ativo
+    // 2. Conflito com outro agendamento ativo (excluindo o próprio agendamento)
     const temConflitoDeAgendamento = await this.agendamentoRepository.existeConflito(
-      dados.professionalId,
+      agendamento.professionalId,
       dados.date,
       dados.time,
-      endTime
+      endTime,
+      id
     )
 
     if (temConflitoDeAgendamento) {
@@ -76,7 +76,7 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
 
     // 3. Indisponibilidade registrada do profissional (RF025)
     const estaIndisponivel = await this.verificarBloqueioUseCase.executar(
-      dados.professionalId,
+      agendamento.professionalId,
       `${dados.date}T${dados.time}:00.000Z`,
       `${dados.date}T${endTime}:00.000Z`
     )
@@ -85,30 +85,23 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
       throw new AppError('Profissional indisponível neste período.', 409, 'PROFESSIONAL_UNAVAILABLE')
     }
 
-    const agendamentoCriado = await this.agendamentoRepository.criar({
-      clientId: dados.clientId,
-      professionalId: dados.professionalId,
-      serviceId: dados.serviceId,
-      barbershopId: profissional.barbershopId,
+    const agendamentoAtualizado = await this.agendamentoRepository.atualizar(id, {
       date: dados.date,
       startTime: dados.time,
       endTime,
-      status: 'agendado',
     })
 
     const usuarioProfissional = await this.usuarioRepository.buscarPorId(profissional.userId)
 
     return {
-      id: agendamentoCriado.id,
-      status: agendamentoCriado.status,
+      id: agendamentoAtualizado.id,
+      status: agendamentoAtualizado.status,
       professional: { id: profissional.id, name: usuarioProfissional?.name ?? '' },
       service: { id: servico.id, name: servico.name, duration: servico.durationMinutes },
-      date: agendamentoCriado.date,
-      // Postgres retorna TIME como HH:MM:SS — normaliza pro contrato HH:mm
-      // documentado (request-response-examples.md).
-      startTime: agendamentoCriado.startTime.slice(0, 5),
-      endTime: agendamentoCriado.endTime.slice(0, 5),
-      createdAt: agendamentoCriado.createdAt,
+      date: agendamentoAtualizado.date,
+      startTime: agendamentoAtualizado.startTime.slice(0, 5),
+      endTime: agendamentoAtualizado.endTime.slice(0, 5),
+      createdAt: agendamentoAtualizado.createdAt,
     }
   }
 }

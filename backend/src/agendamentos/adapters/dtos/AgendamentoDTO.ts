@@ -6,6 +6,11 @@ export interface CriarAgendamentoDTO {
   time: string
 }
 
+export interface ReagendarAgendamentoDTO {
+  date: string
+  time: string
+}
+
 export interface AgendamentoResponseDTO {
   id: string
   status: 'agendado' | 'concluido' | 'cancelado'
