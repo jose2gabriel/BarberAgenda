@@ -84,6 +84,27 @@ export function useBarbeiro() {
     []
   )
 
+  const criarProfissional = useCallback(
+    async (
+      barbershopId: string,
+      dados: { name: string; email: string; phone: string; password: string; specialty?: string }
+    ) => {
+      return api.post(`/barbershops/${barbershopId}/professionals`, dados)
+    },
+    []
+  )
+
+  const atualizarProfissional = useCallback(
+    async (barbershopId: string, professionalId: string, dados: { name?: string; specialty?: string }) => {
+      return api.patch(`/barbershops/${barbershopId}/professionals/${professionalId}`, dados)
+    },
+    []
+  )
+
+  const removerProfissional = useCallback(async (barbershopId: string, professionalId: string) => {
+    await api.delete(`/barbershops/${barbershopId}/professionals/${professionalId}`)
+  }, [])
+
   return {
     barbearias,
     barbearia,
@@ -97,5 +118,8 @@ export function useBarbeiro() {
     listarServicos,
     criarBarbearia,
     atualizarBarbearia,
+    criarProfissional,
+    atualizarProfissional,
+    removerProfissional,
   }
 }

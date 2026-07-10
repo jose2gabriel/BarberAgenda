@@ -12,6 +12,7 @@ import { BarbershopsPage } from '../pages/BarbershopsPage'
 import { BarbershopDetailPage } from '../pages/BarbershopDetailPage'
 import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
 import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
+import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
 
 function App() {
   return (
@@ -64,6 +65,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <OwnerBarbershopDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id/professionals"
+            element={
+              <ProtectedRoute>
+                <OwnerProfessionalsPage />
               </ProtectedRoute>
             }
           />
