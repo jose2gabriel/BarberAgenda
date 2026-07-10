@@ -15,6 +15,7 @@ import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
 import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
 import { OwnerServicesPage } from '../pages/OwnerServicesPage'
 import { NewAppointmentPage } from '../pages/NewAppointmentPage'
+import { AppointmentsPage } from '../pages/AppointmentsPage'
 
 function App() {
   return (
@@ -91,6 +92,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <NewAppointmentPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/appointments"
+            element={
+              <ProtectedRoute>
+                <AppointmentsPage />
               </ProtectedRoute>
             }
           />
