@@ -1,6 +1,5 @@
-import { AtualizacaoDTO } from '../../adapters/dtos/UsuarioDTO'
-import { UsuarioPublico } from '../entidades/Usuario'
+import { AtualizacaoDTO, UsuarioResponseDTO } from '../../adapters/dtos/UsuarioDTO'
 
 export interface IAtualizarUsuarioUseCase {
-  executar(id: string, dados: AtualizacaoDTO): Promise<UsuarioPublico>
+  executar(id: string, dados: AtualizacaoDTO): Promise<UsuarioResponseDTO>
 }

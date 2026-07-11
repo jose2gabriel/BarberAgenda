@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card } from '../shared/ui/Card'
+import { Logo } from '../shared/ui/Logo'
 import { RegisterForm } from '../features/auth/ui/RegisterForm'
 import { CreateBarbershopForm } from '../features/barbershop/ui/CreateBarbershopForm'
 import { useAuth } from '../features/auth/model/useAuth'
@@ -35,9 +36,7 @@ export function RegisterBarbershopPage() {
     <div className="min-h-screen flex items-center justify-center bg-primary p-4">
       <Card className="w-full max-w-sm flex flex-col gap-6 shadow-xl shadow-black/5">
         <div className="flex flex-col items-center text-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center text-white font-bold text-lg">
-            BA
-          </div>
+          <Logo size="lg" />
           <div>
             <h1 className="text-2xl font-bold text-text-primary">
               {step === 1 ? 'Cadastre sua barbearia' : 'Configure sua barbearia'}

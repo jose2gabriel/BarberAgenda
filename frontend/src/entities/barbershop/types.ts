@@ -7,3 +7,11 @@ export interface Barbershop {
   createdAt: string
   updatedAt: string
 }
+
+export interface BusinessHours {
+  id: string
+  barbershopId: string
+  dayOfWeek: number
+  openTime: string
+  closeTime: string
+}

@@ -8,6 +8,7 @@ import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
+import { Logo } from '../shared/ui/Logo'
 
 function formatPrice(price: number): string {
   return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
@@ -48,9 +49,7 @@ export function OwnerServicesPage() {
       <header className="bg-dark">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-white font-bold">
-              BA
-            </div>
+            <Logo size="sm" />
             <span className="font-bold text-lg text-white">Barber Agenda</span>
           </div>
           <Button variant="secondary" size="sm" onClick={handleLogout}>

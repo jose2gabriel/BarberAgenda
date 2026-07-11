@@ -23,6 +23,11 @@ export function routerAuth(controller: UsuarioController) {
     controller.logout(req, res, next)
   )
 
+  // Reemite o token com roles atualizados (ex.: após criar barbearia ou virar profissional)
+  router.post('/refresh-token', autenticar, (req, res, next) =>
+    controller.renovarToken(req, res, next)
+  )
+
   // RF030 (etapa 1) — Solicitar recuperação de senha (rota pública, sem token)
   router.post('/recover-password', validate(esqueciSenhaSchema), (req, res, next) =>
     controller.esqueciSenha(req, res, next)

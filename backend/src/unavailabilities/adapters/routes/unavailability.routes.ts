@@ -8,6 +8,9 @@ import { registrarIndisponibilidadeSchema } from '../schemas/IndisponibilidadeSc
 export function routerIndisponibilidade(controller: IndisponibilidadeController) {
   const router = Router({ mergeParams: true })
 
+  // Lista indisponibilidades do profissional
+  router.get('/', autenticar, (req, res, next) => controller.listar(req, res, next))
+
   // RF024 — Registra indisponibilidade (profissional próprio ou owner da barbearia)
   router.post('/', autenticar, validate(registrarIndisponibilidadeSchema), (req, res, next) =>
     controller.registrar(req, res, next)

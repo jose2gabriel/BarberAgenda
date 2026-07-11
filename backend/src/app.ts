@@ -7,6 +7,7 @@ import { errorHandler } from './shared/middlewares/errorHandler'
 import { routerAuth, routerUsers } from './usuarios/adapters/routes/usuario.routes'
 import { routerBarbershop } from './barbershops/adapters/routes/barbershop.routes'
 import { routerProfissional } from './professionals/adapters/routes/professional.routes'
+import { routerProfissionalMe } from './professionals/adapters/routes/professional-me.routes'
 import { routerServico } from './services/adapters/routes/service.routes'
 import { routerAgendamento } from './agendamentos/adapters/routes/agendamento.routes'
 import { UsuarioController } from './usuarios/adapters/controllers/UsuarioController'
@@ -18,12 +19,16 @@ import { ListarHorariosFuncionamentoUseCase } from './barbershops/use-cases/List
 import { ProfissionalController } from './professionals/adapters/controllers/ProfissionalController'
 import { ServicoController } from './services/adapters/controllers/ServicoController'
 import { AgendamentoController } from './agendamentos/adapters/controllers/AgendamentoController'
+import { HorariosDisponiveisController } from './agendamentos/adapters/controllers/HorariosDisponiveisController'
+import { routerHorariosDisponiveis } from './agendamentos/adapters/routes/horarios-disponiveis.routes'
+import { ListarHorariosDisponiveisUseCase } from './agendamentos/use-cases/ListarHorariosDisponiveisUseCase'
 import { CadastrarUsuarioUseCase } from './usuarios/use-cases/CadastrarUsuarioUseCase'
 import { SupabaseUsuarioRepository } from './usuarios/infrastructure/repositories/SupabaseUsuarioRepository'
 import { AutenticarUsuarioUseCase } from './usuarios/use-cases/AutenticarUsuarioUseCase'
 import { BuscarUsuarioUseCase } from './usuarios/use-cases/BuscarUsuarioUseCase'
 import { EncerrarSessaoUseCase } from './usuarios/use-cases/EncerrarSessaoUseCase'
 import { AtualizarUsuarioUseCase } from './usuarios/use-cases/AtualizarUsuarioUseCase'
+import { RenovarTokenUseCase } from './usuarios/use-cases/RenovarTokenUseCase'
 import { SolicitarRecuperacaoSenhaUseCase } from './usuarios/use-cases/SolicitarRecuperacaoSenhaUseCase'
 import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCase'
 import { ExcluirContaUseCase } from './usuarios/use-cases/ExcluirContaUseCase'
@@ -40,6 +45,8 @@ import { ListarProfissionaisUseCase } from './professionals/use-cases/ListarProf
 import { BuscarProfissionalUseCase } from './professionals/use-cases/BuscarProfissionalUseCase'
 import { AtualizarProfissionalUseCase } from './professionals/use-cases/AtualizarProfissionalUseCase'
 import { RemoverProfissionalUseCase } from './professionals/use-cases/RemoverProfissionalUseCase'
+import { TornarSeProfissionalUseCase } from './professionals/use-cases/TornarSeProfissionalUseCase'
+import { BuscarMeuProfissionalUseCase } from './professionals/use-cases/BuscarMeuProfissionalUseCase'
 import { SupabaseServicoRepository } from './services/infrastructure/repositories/SupabaseServicoRepository'
 import { CadastrarServicoUseCase } from './services/use-cases/CadastrarServicoUseCase'
 import { AtualizarServicoUseCase } from './services/use-cases/AtualizarServicoUseCase'
@@ -56,6 +63,7 @@ import { IndisponibilidadeController } from './unavailabilities/adapters/control
 import { SupabaseIndisponibilidadeRepository } from './unavailabilities/infrastructure/repositories/SupabaseIndisponibilidadeRepository'
 import { RegistrarIndisponibilidadeUseCase } from './unavailabilities/use-cases/RegistrarIndisponibilidadeUseCase'
 import { RemoverIndisponibilidadeUseCase } from './unavailabilities/use-cases/RemoverIndisponibilidadeUseCase'
+import { ListarIndisponibilidadesUseCase } from './unavailabilities/use-cases/ListarIndisponibilidadesUseCase'
 import { VerificarBloqueioUseCase } from './unavailabilities/use-cases/VerificarBloqueioUseCase'
 
 dotenv.config()
@@ -68,12 +76,24 @@ app.use(apiLimiter)
 
 // Composição das dependências
 const usuarioRepository = new SupabaseUsuarioRepository()
+// Instanciados aqui (antes do uso "natural" mais abaixo) porque
+// AutenticarUsuarioUseCase/BuscarUsuarioUseCase/RenovarTokenUseCase
+// precisam deles para calcular os papéis (roles) do usuário — ver
+// construirRolesUsuario.ts.
+const barbeariaRepository = new SupabaseBarbeariaRepository()
+const profissionalRepository = new SupabaseProfissionalRepository()
+
 const cadastrarUsuarioUseCase = new CadastrarUsuarioUseCase(usuarioRepository)
-const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(usuarioRepository)
-const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository)
+const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(
+  usuarioRepository,
+  barbeariaRepository,
+  profissionalRepository
+)
+const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 const encerrarSessaoUseCase = new EncerrarSessaoUseCase()
-const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository)
+const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 const excluirContaUseCase = new ExcluirContaUseCase(usuarioRepository)
+const renovarTokenUseCase = new RenovarTokenUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 
 // RF030 — Recuperação de senha
 const passwordResetTokenRepository = new SupabasePasswordResetTokenRepository()
@@ -95,10 +115,10 @@ const usuarioController = new UsuarioController(
   atualizarUsuarioUseCase,
   solicitarRecuperacaoSenhaUseCase,
   redefinirSenhaUseCase,
-  excluirContaUseCase
+  excluirContaUseCase,
+  renovarTokenUseCase
 )
 
-const barbeariaRepository = new SupabaseBarbeariaRepository()
 const criarBarbeariaUseCase = new CriarBarbeariaUseCase(barbeariaRepository, usuarioRepository)
 const listarBarbeariasUseCase = new ListarBarbeariasUseCase(barbeariaRepository)
 const buscarBarbeariaPorIdUseCase = new BuscarBarbeariaPorIdUseCase(barbeariaRepository)
@@ -111,14 +131,13 @@ const barbeariaController = new BarbeariaController(
 )
 
 const businessHoursRepository = new SupabaseBusinessHoursRepository()
-const criarHorarioFuncionamentoUseCase = new CriarHorarioFuncionamentoUseCase(businessHoursRepository)
+const criarHorarioFuncionamentoUseCase = new CriarHorarioFuncionamentoUseCase(businessHoursRepository, barbeariaRepository)
 const listarHorariosFuncionamentoUseCase = new ListarHorariosFuncionamentoUseCase(businessHoursRepository)
 const businessHoursController = new BusinessHoursController(
   criarHorarioFuncionamentoUseCase,
   listarHorariosFuncionamentoUseCase
 )
 
-const profissionalRepository = new SupabaseProfissionalRepository()
 const cadastrarProfissionalUseCase = new CadastrarProfissionalUseCase(
   profissionalRepository,
   usuarioRepository,
@@ -131,17 +150,21 @@ const atualizarProfissionalUseCase = new AtualizarProfissionalUseCase(
   usuarioRepository,
   barbeariaRepository
 )
-const removerProfissionalUseCase = new RemoverProfissionalUseCase(
+const removerProfissionalUseCase = new RemoverProfissionalUseCase(profissionalRepository, barbeariaRepository)
+const tornarSeProfissionalUseCase = new TornarSeProfissionalUseCase(
   profissionalRepository,
   usuarioRepository,
   barbeariaRepository
 )
+const buscarMeuProfissionalUseCase = new BuscarMeuProfissionalUseCase(profissionalRepository)
 const profissionalController = new ProfissionalController(
   cadastrarProfissionalUseCase,
   listarProfissionaisUseCase,
   buscarProfissionalUseCase,
   atualizarProfissionalUseCase,
-  removerProfissionalUseCase
+  removerProfissionalUseCase,
+  tornarSeProfissionalUseCase,
+  buscarMeuProfissionalUseCase
 )
 
 const servicoRepository = new SupabaseServicoRepository()
@@ -167,9 +190,11 @@ const removerIndisponibilidadeUseCase = new RemoverIndisponibilidadeUseCase(
   barbeariaRepository
 )
 const verificarBloqueioUseCase = new VerificarBloqueioUseCase(indisponibilidadeRepository)
+const listarIndisponibilidadesUseCase = new ListarIndisponibilidadesUseCase(indisponibilidadeRepository)
 const indisponibilidadeController = new IndisponibilidadeController(
   registrarIndisponibilidadeUseCase,
-  removerIndisponibilidadeUseCase
+  removerIndisponibilidadeUseCase,
+  listarIndisponibilidadesUseCase
 )
 
 const agendamentoRepository = new SupabaseAgendamentoRepository()
@@ -214,12 +239,22 @@ const agendamentoController = new AgendamentoController(
   reagendarAgendamentoUseCase
 )
 
+const listarHorariosDisponiveisUseCase = new ListarHorariosDisponiveisUseCase(
+  profissionalRepository,
+  servicoRepository,
+  businessHoursRepository,
+  agendamentoRepository,
+  indisponibilidadeRepository
+)
+const horariosDisponiveisController = new HorariosDisponiveisController(listarHorariosDisponiveisUseCase)
+
 // Rotas — versionadas sob /api/v1 (endpoints.md)
 const apiV1 = Router()
 apiV1.use('/auth', authLimiter, routerAuth(usuarioController))
 apiV1.use('/users', routerUsers(usuarioController))
 apiV1.use('/barbershops', routerBarbershop(barbeariaController, businessHoursController))
 apiV1.use('/barbershops/:barbershopId/professionals', routerProfissional(profissionalController))
+apiV1.use('/professionals', routerProfissionalMe(profissionalController))
 apiV1.use('/barbershops/:barbershopId/services', routerServico(servicoController))
 apiV1.use('/agendamentos', routerAgendamento(agendamentoController))
 // /appointments é o nome documentado em endpoints.md — mantido como alias
@@ -229,6 +264,10 @@ apiV1.use('/appointments', routerAgendamento(agendamentoController))
 apiV1.use(
   '/barbershops/:barbershopId/professionals/:professionalId/unavailability',
   routerIndisponibilidade(indisponibilidadeController)
+)
+apiV1.use(
+  '/barbershops/:barbershopId/professionals/:professionalId/available-slots',
+  routerHorariosDisponiveis(horariosDisponiveisController)
 )
 
 app.use('/api/v1', apiV1)

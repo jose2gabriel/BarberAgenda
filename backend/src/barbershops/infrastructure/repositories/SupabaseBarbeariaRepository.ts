@@ -42,6 +42,16 @@ export class SupabaseBarbeariaRepository implements IBarbeariaRepository {
     return data ? mapRowParaBarbearia(data) : null
   }
 
+  async existePorOwnerId(ownerId: string): Promise<boolean> {
+    const { count, error } = await supabase
+      .from('barbershops')
+      .select('id', { count: 'exact', head: true })
+      .eq('owner_id', ownerId)
+
+    if (error) throw new Error(`Erro ao checar barbearias do owner: ${error.message}`)
+    return (count ?? 0) > 0
+  }
+
   async listar(): Promise<Barbearia[]> {
     const { data, error } = await supabase
       .from('barbershops')

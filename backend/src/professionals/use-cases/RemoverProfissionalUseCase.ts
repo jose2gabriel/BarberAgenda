@@ -1,20 +1,19 @@
 import { IProfissionalRepository } from '../domain/interfaces/IProfissionalRepository'
 import { IRemoverProfissionalUseCase } from '../domain/interfaces/IRemoverProfissionalUseCase'
 import { RemoverProfissionalDTO } from '../adapters/dtos/ProfissionalDTO'
-import { IUsuarioRepository } from '../../usuarios/domain/interfaces/IUsuarioRepository'
 import { IBarbeariaRepository } from '../../barbershops/domain/interfaces/IBarbeariaRepository'
 import { AppError } from '../../shared/errors/AppError'
 
 /**
  * Remove o profissional da barbearia (owner). Um profissional pertence a
- * uma única barbearia no MVP (barbershops.md) — ao remover, o perfil do
- * usuário volta a ser "cliente" (não fica um profissional órfão sem
- * barbearia). A conta de usuário em si não é excluída.
+ * uma única barbearia no MVP (barbershops.md). A conta de usuário em si
+ * não é excluída, e seus papéis (roles) são recalculados dinamicamente a
+ * partir do banco a cada login/refresh-token — não há mais um campo
+ * `role` fixo para "resetar" aqui (ver construirRolesUsuario).
  */
 export class RemoverProfissionalUseCase implements IRemoverProfissionalUseCase {
   constructor(
     private readonly profissionalRepository: IProfissionalRepository,
-    private readonly usuarioRepository: IUsuarioRepository,
     private readonly barbeariaRepository: IBarbeariaRepository
   ) {}
 
@@ -35,6 +34,5 @@ export class RemoverProfissionalUseCase implements IRemoverProfissionalUseCase {
     }
 
     await this.profissionalRepository.remover(dados.professionalId)
-    await this.usuarioRepository.atualizar(profissional.userId, { role: 'cliente' })
   }
 }

@@ -2,7 +2,11 @@ import { Router } from 'express'
 import { ProfissionalController } from '../controllers/ProfissionalController'
 import { validate } from '../../../shared/middlewares/validate'
 import { autenticar } from '../../../shared/middlewares/autenticar'
-import { cadastrarProfissionalSchema, atualizarProfissionalSchema } from '../schemas/ProfissionalSchema'
+import {
+  cadastrarProfissionalSchema,
+  atualizarProfissionalSchema,
+  tornarSeProfissionalSchema,
+} from '../schemas/ProfissionalSchema'
 
 /** Monta-se em app.use('/barbershops/:barbershopId/professionals', routerProfissional(controller)) */
 export function routerProfissional(controller: ProfissionalController) {
@@ -11,6 +15,11 @@ export function routerProfissional(controller: ProfissionalController) {
   // RF003 — Cadastro de profissionais na barbearia (owner)
   router.post('/', autenticar, validate(cadastrarProfissionalSchema), (req, res, next) =>
     controller.cadastrar(req, res, next)
+  )
+
+  // Owner se auto-cadastra como profissional na própria barbearia
+  router.post('/me', autenticar, validate(tornarSeProfissionalSchema), (req, res, next) =>
+    controller.tornarSeProfissional(req, res, next)
   )
 
   // RF004 — Listagem de profissionais da barbearia

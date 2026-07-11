@@ -38,7 +38,9 @@ export function autorizar(...perfisPermitidos: import('../utils/jwt').Role[]) {
       return next(new AppError('Usuário não autenticado.', 401, 'UNAUTHORIZED'))
     }
 
-    if (!perfisPermitidos.includes(req.usuario.role)) {
+    const temAlgumPerfil = perfisPermitidos.some((perfil) => (req.usuario!.roles ?? []).includes(perfil))
+
+    if (!temAlgumPerfil) {
       return next(new AppError('Você não tem permissão para acessar este recurso.', 403, 'FORBIDDEN'))
     }
 

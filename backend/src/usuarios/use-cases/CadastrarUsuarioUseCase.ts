@@ -35,6 +35,8 @@ export class CadastrarUsuarioUseCase implements ICadastrarUsuarioUseCase {
       role: 'cliente',
     })
 
-    return paraUsuarioPublico(usuarioCriado)
+    // Usuário recém-criado nunca é owner nem profissional ainda — sem
+    // necessidade de consultar barbershops/professionals aqui.
+    return { ...paraUsuarioPublico(usuarioCriado), roles: ['cliente'] }
   }
 }

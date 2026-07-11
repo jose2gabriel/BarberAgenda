@@ -14,6 +14,12 @@ import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
 import { OwnerBarbershopDetailPage } from '../pages/OwnerBarbershopDetailPage'
 import { OwnerProfessionalsPage } from '../pages/OwnerProfessionalsPage'
 import { OwnerServicesPage } from '../pages/OwnerServicesPage'
+import { OwnerBusinessHoursPage } from '../pages/OwnerBusinessHoursPage'
+import { NewAppointmentPage } from '../pages/NewAppointmentPage'
+import { AppointmentsPage } from '../pages/AppointmentsPage'
+import { ProfessionalSchedulePage } from '../pages/ProfessionalSchedulePage'
+import { UnavailabilityPage } from '../pages/UnavailabilityPage'
+import { ProfilePage } from '../pages/ProfilePage'
 
 function App() {
   return (
@@ -82,6 +88,54 @@ function App() {
             element={
               <ProtectedRoute>
                 <OwnerServicesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner/barbershops/:id/hours"
+            element={
+              <ProtectedRoute>
+                <OwnerBusinessHoursPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/appointments/new"
+            element={
+              <ProtectedRoute>
+                <NewAppointmentPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/appointments"
+            element={
+              <ProtectedRoute>
+                <AppointmentsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/professional/schedule"
+            element={
+              <ProtectedRoute allowedRoles={['profissional']}>
+                <ProfessionalSchedulePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/professional/unavailability"
+            element={
+              <ProtectedRoute allowedRoles={['profissional']}>
+                <UnavailabilityPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

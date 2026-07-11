@@ -6,6 +6,7 @@ export interface IJwtPayload {
   id: string
   email: string
   role: Role
+  roles: Role[]
 }
 
 const JWT_SECRET = process.env.JWT_SECRET!

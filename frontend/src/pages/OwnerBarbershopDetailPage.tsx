@@ -7,6 +7,7 @@ import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
+import { Logo } from '../shared/ui/Logo'
 
 /**
  * Hub de gerenciamento da barbearia: editar dados próprios e navegar
@@ -37,9 +38,7 @@ export function OwnerBarbershopDetailPage() {
       <header className="bg-dark">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center text-white font-bold">
-              BA
-            </div>
+            <Logo size="sm" />
             <span className="font-bold text-lg text-white">Barber Agenda</span>
           </div>
           <Button variant="secondary" size="sm" onClick={handleLogout}>
@@ -93,6 +92,11 @@ export function OwnerBarbershopDetailPage() {
                 <Link to={`/owner/barbershops/${barbearia.id}/services`}>
                   <Button variant="secondary" className="w-full justify-center">
                     Gerenciar serviços
+                  </Button>
+                </Link>
+                <Link to={`/owner/barbershops/${barbearia.id}/hours`}>
+                  <Button variant="secondary" className="w-full justify-center">
+                    Horário de funcionamento
                   </Button>
                 </Link>
               </div>
