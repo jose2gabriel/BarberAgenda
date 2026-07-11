@@ -7,6 +7,13 @@ interface LoginResponse {
   usuario: Usuario
 }
 
+interface AtualizarUsuarioDados {
+  name?: string
+  phone?: string
+  currentPassword?: string
+  newPassword?: string
+}
+
 export interface AuthContextValue {
   user: Usuario | null
   loading: boolean
@@ -14,6 +21,8 @@ export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
   refreshUser: () => Promise<void>
+  atualizarUsuario: (dados: AtualizarUsuarioDados) => Promise<void>
+  excluirConta: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
@@ -69,8 +78,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(usuario)
   }
 
+  // RF019 — Atualização de dados (nome, telefone e/ou senha)
+  async function atualizarUsuario(dados: AtualizarUsuarioDados) {
+    const { usuario } = await api.patch<{ usuario: Usuario }>('/users/me', dados)
+    setUser(usuario)
+  }
+
+  // RNF010 — Exclusão de conta
+  async function excluirConta() {
+    await api.delete('/users/me')
+    localStorage.removeItem('token')
+    setUser(null)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated: !!user, login, logout, refreshUser }}>
+    <AuthContext.Provider
+      value={{ user, loading, isAuthenticated: !!user, login, logout, refreshUser, atualizarUsuario, excluirConta }}
+    >
       {children}
     </AuthContext.Provider>
   )

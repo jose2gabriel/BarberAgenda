@@ -14,6 +14,16 @@ export class ExcluirContaUseCase implements IExcluirContaUseCase {
 
     // TODO: Cancelar agendamentos futuros (Módulo 3)
 
-    await this.usuarioRepository.deletar(id)
+    try {
+      await this.usuarioRepository.deletar(id)
+    } catch {
+      // Falha aqui quase sempre é FK (agendamentos, barbearias, vínculo de
+      // profissional) — não expõe o erro de banco cru pro usuário final.
+      throw new AppError(
+        'Não foi possível excluir sua conta agora porque existem barbearias, agendamentos ou vínculos associados a ela.',
+        409,
+        'ACCOUNT_HAS_DEPENDENCIES'
+      )
+    }
   }
 }

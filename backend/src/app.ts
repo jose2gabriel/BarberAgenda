@@ -91,7 +91,7 @@ const autenticarUsuarioUseCase = new AutenticarUsuarioUseCase(
 )
 const buscarUsuarioUseCase = new BuscarUsuarioUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 const encerrarSessaoUseCase = new EncerrarSessaoUseCase()
-const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository)
+const atualizarUsuarioUseCase = new AtualizarUsuarioUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 const excluirContaUseCase = new ExcluirContaUseCase(usuarioRepository)
 const renovarTokenUseCase = new RenovarTokenUseCase(usuarioRepository, barbeariaRepository, profissionalRepository)
 

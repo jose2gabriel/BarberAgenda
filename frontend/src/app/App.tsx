@@ -19,6 +19,7 @@ import { NewAppointmentPage } from '../pages/NewAppointmentPage'
 import { AppointmentsPage } from '../pages/AppointmentsPage'
 import { ProfessionalSchedulePage } from '../pages/ProfessionalSchedulePage'
 import { UnavailabilityPage } from '../pages/UnavailabilityPage'
+import { ProfilePage } from '../pages/ProfilePage'
 
 function App() {
   return (
@@ -127,6 +128,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['profissional']}>
                 <UnavailabilityPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

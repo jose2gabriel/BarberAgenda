@@ -1,8 +1,11 @@
 import bcrypt from 'bcrypt'
 import { IUsuarioRepository } from '../domain/interfaces/IUsuarioRepository'
 import { IAtualizarUsuarioUseCase } from '../domain/interfaces/IAtualizarUsuarioUseCase'
-import { AtualizacaoDTO } from '../adapters/dtos/UsuarioDTO'
-import { UsuarioPublico, paraUsuarioPublico } from '../domain/entidades/Usuario'
+import { IBarbeariaRepository } from '../../barbershops/domain/interfaces/IBarbeariaRepository'
+import { IProfissionalRepository } from '../../professionals/domain/interfaces/IProfissionalRepository'
+import { AtualizacaoDTO, UsuarioResponseDTO } from '../adapters/dtos/UsuarioDTO'
+import { paraUsuarioPublico } from '../domain/entidades/Usuario'
+import { construirRolesUsuario } from './shared/construirRolesUsuario'
 import { AppError } from '../../shared/errors/AppError'
 
 /**
@@ -13,9 +16,13 @@ import { AppError } from '../../shared/errors/AppError'
  * que o campo foi enviado, não que a senha bate).
  */
 export class AtualizarUsuarioUseCase implements IAtualizarUsuarioUseCase {
-  constructor(private readonly usuarioRepository: IUsuarioRepository) {}
+  constructor(
+    private readonly usuarioRepository: IUsuarioRepository,
+    private readonly barbeariaRepository: IBarbeariaRepository,
+    private readonly profissionalRepository: IProfissionalRepository
+  ) {}
 
-  async executar(id: string, dados: AtualizacaoDTO): Promise<UsuarioPublico> {
+  async executar(id: string, dados: AtualizacaoDTO): Promise<UsuarioResponseDTO> {
     const usuario = await this.usuarioRepository.buscarPorId(id)
 
     if (!usuario) {
@@ -39,13 +46,13 @@ export class AtualizarUsuarioUseCase implements IAtualizarUsuarioUseCase {
       payload.passwordHash = await bcrypt.hash(dados.newPassword, 10)
     }
 
-    if (Object.keys(payload).length === 0) {
-      // Nada para atualizar — devolve o usuário como está, sem tocar no banco.
-      return paraUsuarioPublico(usuario)
-    }
+    const usuarioFinal =
+      Object.keys(payload).length === 0
+        ? usuario // Nada para atualizar — devolve o usuário como está, sem tocar no banco.
+        : await this.usuarioRepository.atualizar(id, payload)
 
-    const usuarioAtualizado = await this.usuarioRepository.atualizar(id, payload)
+    const roles = await construirRolesUsuario(usuarioFinal, this.barbeariaRepository, this.profissionalRepository)
 
-    return paraUsuarioPublico(usuarioAtualizado)
+    return { ...paraUsuarioPublico(usuarioFinal), roles }
   }
 }

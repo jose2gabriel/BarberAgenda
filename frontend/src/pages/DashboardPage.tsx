@@ -32,6 +32,12 @@ export function DashboardPage() {
           </Link>
         )}
 
+        <Link to="/profile">
+          <Button variant="secondary" className="w-full justify-center">
+            Meu perfil
+          </Button>
+        </Link>
+
         <Button variant="secondary" onClick={handleLogout} className="w-full justify-center">
           Sair
         </Button>

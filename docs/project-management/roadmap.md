@@ -72,7 +72,7 @@
 - [x] Página `/professional/unavailability` — registrar indisponibilidade
 
 #### Etapa 5 — Perfil
-- [ ] Página `/profile` — ver e editar dados, excluir conta
+- [x] Página `/profile` — ver e editar dados, excluir conta
 
 ### Módulo 5 — Notificações (se houver tempo)
 - [ ] RF012 — Notificação de agendamento
