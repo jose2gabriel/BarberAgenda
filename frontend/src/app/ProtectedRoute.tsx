@@ -4,7 +4,6 @@ import { useAuth } from '../features/auth/model/useAuth'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { Sidebar } from '../widgets/sidebar/Sidebar'
 import { SidebarProvider } from '../widgets/sidebar/SidebarContext'
-import { TopBar } from '../widgets/topbar/TopBar'
 import { ActiveBarbershopProvider } from '../features/barbershop/model/ActiveBarbershopContext'
 import type { Role } from '../entities/usuario/types'
 
@@ -42,10 +41,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
       <SidebarProvider>
         <div className="min-h-screen flex bg-primary">
           <Sidebar />
-          <div className="flex-1 min-w-0 flex flex-col">
-            <TopBar />
-            <div className="flex-1">{children}</div>
-          </div>
+          <div className="flex-1 min-w-0">{children}</div>
         </div>
       </SidebarProvider>
     </ActiveBarbershopProvider>

@@ -11,6 +11,8 @@ import {
   CalendarClock,
   Ban,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
   type LucideIcon,
 } from 'lucide-react'
 import { useAuth } from '../../features/auth/model/useAuth'
@@ -65,7 +67,8 @@ export function Sidebar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const { activeBarbershopId } = useActiveBarbershop()
-  const { collapsed } = useSidebarState()
+  const { collapsed, toggle } = useSidebarState()
+  const ToggleIcon = collapsed ? PanelLeftOpen : PanelLeftClose
 
   async function handleLogout() {
     await logout()
@@ -79,9 +82,23 @@ export function Sidebar() {
     <aside
       className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 bg-dark min-h-screen flex flex-col transition-all duration-200`}
     >
-      <div className={`py-6 flex items-center gap-2 border-b border-white/10 ${collapsed ? 'justify-center px-0' : 'px-5'}`}>
-        <Logo size="sm" />
-        {!collapsed && <span className="font-bold text-lg text-white truncate">Barber Agenda</span>}
+      <div
+        className={`py-6 flex items-center border-b border-white/10 ${
+          collapsed ? 'flex-col gap-3 px-0' : 'justify-between px-5'
+        }`}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <Logo size="sm" />
+          {!collapsed && <span className="font-bold text-lg text-white truncate">Barber Agenda</span>}
+        </div>
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}
+          className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-white/50 hover:bg-white/10 hover:text-white transition-colors"
+        >
+          <ToggleIcon size={16} strokeWidth={1.75} />
+        </button>
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 px-3 py-6 overflow-y-auto">

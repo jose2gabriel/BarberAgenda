@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { CalendarX2 } from 'lucide-react'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
@@ -73,7 +74,12 @@ export function AppointmentsPage() {
         )}
 
         {!loading && !error && agendamentos.length === 0 && (
-          <p className="text-text-secondary">Nenhum agendamento ainda.</p>
+          <div className="flex flex-col items-center text-center gap-3 py-16">
+            <div className="w-14 h-14 rounded-full bg-secondary text-text-secondary flex items-center justify-center">
+              <CalendarX2 size={24} strokeWidth={1.75} />
+            </div>
+            <p className="text-text-secondary">Nenhum agendamento ainda.</p>
+          </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
