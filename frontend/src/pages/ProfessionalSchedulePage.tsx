@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
@@ -59,7 +59,11 @@ export function ProfessionalSchedulePage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-text-primary mb-8">Minha agenda</h1>
+        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar para o painel
+        </Link>
+
+        <h1 className="text-3xl font-bold text-text-primary mt-4 mb-8">Minha agenda</h1>
 
         <div className="max-w-xs mb-8">
           <Input label="Dia" type="date" value={date} onChange={(e) => setDate(e.target.value)} />

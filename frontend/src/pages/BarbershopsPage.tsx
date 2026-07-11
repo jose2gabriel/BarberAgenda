@@ -37,7 +37,11 @@ export function BarbershopsPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-text-primary mb-8">Barbearias</h1>
+        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar para o painel
+        </Link>
+
+        <h1 className="text-3xl font-bold text-text-primary mt-4 mb-8">Barbearias</h1>
 
         {loading && (
           <div className="flex justify-center py-12">

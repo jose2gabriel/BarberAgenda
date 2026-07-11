@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { UpdateProfileForm } from '../features/auth/ui/UpdateProfileForm'
 import { ChangePasswordForm } from '../features/auth/ui/ChangePasswordForm'
@@ -55,7 +55,11 @@ export function ProfilePage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-text-primary mb-8">Meu perfil</h1>
+        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar para o painel
+        </Link>
+
+        <h1 className="text-3xl font-bold text-text-primary mt-4 mb-8">Meu perfil</h1>
 
         <div className="flex flex-col gap-8">
           <Card className="flex flex-col gap-4">

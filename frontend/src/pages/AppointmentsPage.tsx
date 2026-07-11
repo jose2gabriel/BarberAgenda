@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { Card } from '../shared/ui/Card'
@@ -79,7 +79,11 @@ export function AppointmentsPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-text-primary mb-8">Meus agendamentos</h1>
+        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar para o painel
+        </Link>
+
+        <h1 className="text-3xl font-bold text-text-primary mt-4 mb-8">Meus agendamentos</h1>
 
         {loading && (
           <div className="flex justify-center py-12">

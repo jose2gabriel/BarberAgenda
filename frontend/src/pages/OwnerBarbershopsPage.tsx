@@ -54,7 +54,11 @@ export function OwnerBarbershopsPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-12">
-        <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
+        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar para o painel
+        </Link>
+
+        <div className="flex items-center justify-between mt-4 mb-8 gap-4 flex-wrap">
           <h1 className="text-3xl font-bold text-text-primary">Minhas barbearias</h1>
           {!mostrarFormulario && (
             <Button size="sm" onClick={() => setMostrarFormulario(true)}>
