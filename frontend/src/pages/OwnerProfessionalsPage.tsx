@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
+import { useActiveBarbershop } from '../features/barbershop/model/ActiveBarbershopContext'
 import { CreateProfessionalForm } from '../features/professional/ui/CreateProfessionalForm'
 import { EditProfessionalForm } from '../features/professional/ui/EditProfessionalForm'
 import { Card } from '../shared/ui/Card'
@@ -9,14 +10,12 @@ import { Button } from '../shared/ui/Button'
 import { Avatar } from '../shared/ui/Avatar'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 import type { Professional } from '../entities/professional/types'
 
 export function OwnerProfessionalsPage() {
   const { id } = useParams<{ id: string }>()
   const barbershopId = id as string
-  const { user, logout, refreshUser } = useAuth()
-  const navigate = useNavigate()
+  const { user, refreshUser } = useAuth()
   const {
     barbearia,
     profissionais,
@@ -29,18 +28,15 @@ export function OwnerProfessionalsPage() {
     removerProfissional,
     tornarSeProfissional,
   } = useBarbeiro()
+  const { selecionarBarbearia } = useActiveBarbershop()
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [editandoId, setEditandoId] = useState<string | null>(null)
 
   useEffect(() => {
     buscarBarbearia(barbershopId)
     listarProfissionais(barbershopId)
-  }, [barbershopId, buscarBarbearia, listarProfissionais])
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
+    selecionarBarbearia(barbershopId)
+  }, [barbershopId, buscarBarbearia, listarProfissionais, selecionarBarbearia])
 
   async function handleRemover(profissional: Professional) {
     const confirmado = window.confirm(`Remover ${profissional.name} desta barbearia?`)
@@ -61,18 +57,6 @@ export function OwnerProfessionalsPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-6 py-12">
         <Link to={`/owner/barbershops/${barbershopId}`} className="text-accent text-sm font-medium hover:underline">
           ← Voltar para {barbearia?.name ?? 'a barbearia'}

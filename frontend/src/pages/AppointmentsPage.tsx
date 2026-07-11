@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../features/auth/model/useAuth'
+import { CalendarX2 } from 'lucide-react'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
@@ -8,13 +7,10 @@ import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { StatusBadge } from '../shared/ui/StatusBadge'
-import { Logo } from '../shared/ui/Logo'
 import { ApiError } from '../shared/lib/api'
 import type { Appointment } from '../entities/appointment/types'
 
 export function AppointmentsPage() {
-  const { logout } = useAuth()
-  const navigate = useNavigate()
   const { agendamentos, loading, error, listarMeusAgendamentos, cancelarAgendamento, reagendarAgendamento } =
     useAgendamento()
   const [reagendandoId, setReagendandoId] = useState<string | null>(null)
@@ -25,11 +21,6 @@ export function AppointmentsPage() {
   useEffect(() => {
     listarMeusAgendamentos()
   }, [listarMeusAgendamentos])
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
 
   async function handleCancelar(agendamento: Appointment) {
     const confirmado = window.confirm(
@@ -66,18 +57,6 @@ export function AppointmentsPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-text-primary mb-8">Meus agendamentos</h1>
 
@@ -95,7 +74,12 @@ export function AppointmentsPage() {
         )}
 
         {!loading && !error && agendamentos.length === 0 && (
-          <p className="text-text-secondary">Nenhum agendamento ainda.</p>
+          <div className="flex flex-col items-center text-center gap-3 py-16">
+            <div className="w-14 h-14 rounded-full bg-secondary text-text-secondary flex items-center justify-center">
+              <CalendarX2 size={24} strokeWidth={1.75} />
+            </div>
+            <p className="text-text-secondary">Nenhum agendamento ainda.</p>
+          </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

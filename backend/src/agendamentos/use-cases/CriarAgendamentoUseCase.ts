@@ -6,6 +6,7 @@ import { IServicoRepository } from '../../services/domain/interfaces/IServicoRep
 import { IUsuarioRepository } from '../../usuarios/domain/interfaces/IUsuarioRepository'
 import { IBusinessHoursRepository } from '../../barbershops/domain/interfaces/IBusinessHoursRepository'
 import { IVerificarBloqueioUseCase } from '../../unavailabilities/domain/interfaces/IVerificarBloqueioUseCase'
+import { INotificationService } from '../../shared/interfaces/INotificationService'
 import { AppError } from '../../shared/errors/AppError'
 import { somarMinutos, dataNoPassado, diaDaSemana } from '../../shared/utils/dateUtils'
 
@@ -27,7 +28,8 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
     private readonly servicoRepository: IServicoRepository,
     private readonly usuarioRepository: IUsuarioRepository,
     private readonly businessHoursRepository: IBusinessHoursRepository,
-    private readonly verificarBloqueioUseCase: IVerificarBloqueioUseCase
+    private readonly verificarBloqueioUseCase: IVerificarBloqueioUseCase,
+    private readonly notificationService: INotificationService
   ) {}
 
   async executar(dados: CriarAgendamentoDTO): Promise<AgendamentoResponseDTO> {
@@ -97,6 +99,24 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
     })
 
     const usuarioProfissional = await this.usuarioRepository.buscarPorId(profissional.userId)
+
+    // RF012 — notifica o cliente por e-mail. Melhor esforço: falha no
+    // envio não pode derrubar a criação do agendamento, já persistido.
+    try {
+      const cliente = await this.usuarioRepository.buscarPorId(dados.clientId)
+      if (cliente) {
+        await this.notificationService.notificarAgendamentoCriado({
+          clienteEmail: cliente.email,
+          clienteNome: cliente.name,
+          profissionalNome: usuarioProfissional?.name ?? '',
+          servicoNome: servico.name,
+          date: agendamentoCriado.date,
+          startTime: agendamentoCriado.startTime.slice(0, 5),
+        })
+      }
+    } catch (err) {
+      console.error('Falha ao enviar notificação de agendamento:', err)
+    }
 
     return {
       id: agendamentoCriado.id,

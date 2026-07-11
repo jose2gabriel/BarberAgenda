@@ -1,6 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../features/auth/model/useAuth'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { Card } from '../shared/ui/Card'
@@ -9,18 +7,18 @@ import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { StatusBadge } from '../shared/ui/StatusBadge'
-import { Logo } from '../shared/ui/Logo'
+import { ApiError } from '../shared/lib/api'
+import type { RawAppointment } from '../entities/appointment/types'
 
 function hoje(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
 export function ProfessionalSchedulePage() {
-  const { logout } = useAuth()
-  const navigate = useNavigate()
-  const { agendaProfissional, loading, error, listarAgendaProfissional } = useAgendamento()
+  const { agendaProfissional, loading, error, listarAgendaProfissional, cancelarAgendamento } = useAgendamento()
   const { servicos, listarServicos } = useBarbeiro()
   const [date, setDate] = useState(hoje())
+  const [acaoErro, setAcaoErro] = useState<string | null>(null)
 
   useEffect(() => {
     listarAgendaProfissional()
@@ -39,25 +37,21 @@ export function ProfessionalSchedulePage() {
 
   const agendaDoDia = agendaProfissional.filter((a) => a.date === date)
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
+  async function handleCancelar(agendamento: RawAppointment) {
+    const confirmado = window.confirm(`Cancelar o agendamento de ${nomeServico(agendamento.serviceId)}?`)
+    if (!confirmado) return
+
+    setAcaoErro(null)
+    try {
+      await cancelarAgendamento(agendamento.id)
+      await listarAgendaProfissional()
+    } catch (err) {
+      setAcaoErro(err instanceof ApiError ? err.message : 'Não foi possível cancelar. Tente novamente.')
+    }
   }
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-4xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-text-primary mb-8">Minha agenda</h1>
 
@@ -72,6 +66,11 @@ export function ProfessionalSchedulePage() {
         )}
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {acaoErro && (
+          <div className="mb-4">
+            <ErrorMessage>{acaoErro}</ErrorMessage>
+          </div>
+        )}
 
         {!loading && !error && agendaDoDia.length === 0 && (
           <p className="text-text-secondary">Nenhum agendamento nesse dia.</p>
@@ -86,7 +85,14 @@ export function ProfessionalSchedulePage() {
                   {agendamento.startTime.slice(0, 5)}–{agendamento.endTime.slice(0, 5)}
                 </p>
               </div>
-              <StatusBadge status={agendamento.status} />
+              <div className="flex items-center gap-3">
+                <StatusBadge status={agendamento.status} />
+                {agendamento.status === 'agendado' && (
+                  <Button size="sm" variant="danger" onClick={() => handleCancelar(agendamento)}>
+                    Cancelar
+                  </Button>
+                )}
+              </div>
             </Card>
           ))}
         </div>

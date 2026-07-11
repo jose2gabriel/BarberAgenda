@@ -74,10 +74,11 @@
 #### Etapa 5 — Perfil
 - [x] Página `/profile` — ver e editar dados, excluir conta
 
-### Módulo 5 — Notificações (se houver tempo)
-- [ ] RF012 — Notificação de agendamento
-- [ ] RF013 — Notificação de cancelamento
-- [ ] ADR-006 — Adapter para provedores
+### Módulo 5 — Notificações (se houver tempo) ✅
+- [x] RF012 — Notificação de agendamento (e-mail, cliente)
+- [x] RF013 — Notificação de cancelamento (e-mail, cliente)
+- [x] ADR-006 — Adapter para provedores (`INotificationService` + `EmailNotificationService`;
+      Observer/Audit/Metrics do ADR não implementados — só uma reação hoje, sem necessidade ainda)
 
 ---
 

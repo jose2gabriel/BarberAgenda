@@ -2,14 +2,29 @@ import { IAgendamentoRepository } from '../domain/interfaces/IAgendamentoReposit
 import { ICancelarAgendamentoUseCase } from '../domain/interfaces/ICancelarAgendamentoUseCase'
 import { AppError } from '../../shared/errors/AppError'
 import { IProfissionalRepository } from '../../professionals/domain/interfaces/IProfissionalRepository'
+import { IBarbeariaRepository } from '../../barbershops/domain/interfaces/IBarbeariaRepository'
+import { IUsuarioRepository } from '../../usuarios/domain/interfaces/IUsuarioRepository'
+import { IServicoRepository } from '../../services/domain/interfaces/IServicoRepository'
+import { INotificationService } from '../../shared/interfaces/INotificationService'
 
+/**
+ * RF008 — Cancelamento de agendamento.
+ * Quem pode cancelar: o cliente dono do agendamento, o profissional
+ * vinculado a ele, ou o owner da barbearia — checado pela relação real
+ * (userId do profissional / ownerId da barbearia), não pela claim
+ * `role` do JWT (que é singular e não reflete multi-papel).
+ */
 export class CancelarAgendamentoUseCase implements ICancelarAgendamentoUseCase {
   constructor(
     private readonly agendamentoRepository: IAgendamentoRepository,
-    private readonly profissionalRepository: IProfissionalRepository
+    private readonly profissionalRepository: IProfissionalRepository,
+    private readonly barbeariaRepository: IBarbeariaRepository,
+    private readonly usuarioRepository: IUsuarioRepository,
+    private readonly servicoRepository: IServicoRepository,
+    private readonly notificationService: INotificationService
   ) {}
 
-  async executar(agendamentoId: string, userId: string, userRole: string): Promise<void> {
+  async executar(agendamentoId: string, userId: string): Promise<void> {
     const agendamento = await this.agendamentoRepository.buscarPorId(agendamentoId)
 
     if (!agendamento) {
@@ -20,25 +35,16 @@ export class CancelarAgendamentoUseCase implements ICancelarAgendamentoUseCase {
       throw new AppError('Agendamento já está cancelado.', 400, 'ALREADY_CANCELLED')
     }
 
-    // Validação de permissão
-    let autorizado = false
+    let autorizado = agendamento.clientId === userId
 
-    if (userRole === 'cliente') {
-      autorizado = agendamento.clientId === userId
-    } else if (userRole === 'profissional') {
-      autorizado = agendamento.professionalId === userId
-    } else if (userRole === 'owner') {
-      // Precisa verificar se este owner é dono desta barbearia
+    if (!autorizado) {
       const profissional = await this.profissionalRepository.buscarPorIdGlobal(agendamento.professionalId)
-      // Aqui assumimos que se o owner tem acesso, a logica de validação deve ser mais robusta,
-      // mas por ora, vamos assumir que o profissional pertence à barbearia do owner
-      // ou precisamos de uma IBarbeariaRepository para validar ownership.
-      // Com base na estrutura, vamos simplificar assumindo que se é owner, ele tem permissão
-      // se a barbershopId bater com a do owner.
-      // Como não temos IBarbeariaRepository aqui, vamos ver se podemos inferir.
-      // O owner deve ter uma relação com barbershop.
-      // Vou deixar uma verificação simplificada por enquanto.
-      autorizado = profissional?.barbershopId === userId // Placeholder para validação real de owner
+      autorizado = profissional?.userId === userId
+    }
+
+    if (!autorizado) {
+      const barbearia = await this.barbeariaRepository.buscarPorId(agendamento.barbershopId)
+      autorizado = barbearia?.ownerId === userId
     }
 
     if (!autorizado) {
@@ -48,5 +54,32 @@ export class CancelarAgendamentoUseCase implements ICancelarAgendamentoUseCase {
     await this.agendamentoRepository.atualizar(agendamentoId, {
       status: 'cancelado',
     })
+
+    // RF013 — notifica o cliente por e-mail. Melhor esforço: falha no
+    // envio não pode derrubar o cancelamento, que já foi persistido.
+    try {
+      const [cliente, profissional, servico] = await Promise.all([
+        this.usuarioRepository.buscarPorId(agendamento.clientId),
+        this.profissionalRepository.buscarPorIdGlobal(agendamento.professionalId),
+        this.servicoRepository.buscarPorId(agendamento.serviceId, agendamento.barbershopId),
+      ])
+
+      if (cliente) {
+        const usuarioProfissional = profissional
+          ? await this.usuarioRepository.buscarPorId(profissional.userId)
+          : null
+
+        await this.notificationService.notificarAgendamentoCancelado({
+          clienteEmail: cliente.email,
+          clienteNome: cliente.name,
+          profissionalNome: usuarioProfissional?.name ?? '',
+          servicoNome: servico?.name ?? '',
+          date: agendamento.date,
+          startTime: agendamento.startTime.slice(0, 5),
+        })
+      }
+    } catch (err) {
+      console.error('Falha ao enviar notificação de cancelamento:', err)
+    }
   }
 }

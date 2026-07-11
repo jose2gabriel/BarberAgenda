@@ -7,7 +7,6 @@ import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 import type { Barbershop } from '../entities/barbershop/types'
 
 /**
@@ -17,7 +16,7 @@ import type { Barbershop } from '../entities/barbershop/types'
  * virando owner nesse momento.
  */
 export function OwnerBarbershopsPage() {
-  const { user, refreshUser, logout } = useAuth()
+  const { user, refreshUser } = useAuth()
   const navigate = useNavigate()
   const { barbearias, loading, error, listarBarbearias, criarBarbearia } = useBarbeiro()
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
@@ -28,11 +27,6 @@ export function OwnerBarbershopsPage() {
 
   const minhasBarbearias = barbearias.filter((b) => b.ownerId === user?.id)
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
-
   async function handleBarbeariaCriada(barbershop: Barbershop) {
     await refreshUser()
     setMostrarFormulario(false)
@@ -41,18 +35,6 @@ export function OwnerBarbershopsPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex items-center justify-between mb-8 gap-4 flex-wrap">
           <h1 className="text-3xl font-bold text-text-primary">Minhas barbearias</h1>

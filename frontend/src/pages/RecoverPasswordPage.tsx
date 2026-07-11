@@ -6,26 +6,32 @@ import { RecoverPasswordForm } from '../features/auth/ui/RecoverPasswordForm'
 export function RecoverPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-primary p-4">
-      <Card className="w-full max-w-sm flex flex-col gap-6 shadow-xl shadow-black/5">
-        <div className="flex flex-col items-center text-center gap-3">
-          <Logo size="lg" />
-          <div>
-            <h1 className="text-2xl font-bold text-text-primary">Recuperar senha</h1>
-            <p className="text-text-secondary text-sm">
-              Informe seu e-mail e enviaremos um link para redefinir sua senha
-            </p>
+      <div className="w-full max-w-sm flex flex-col gap-4">
+        <Link to="/login" className="text-accent text-sm font-medium hover:underline">
+          ← Voltar
+        </Link>
+
+        <Card className="flex flex-col gap-6 shadow-xl shadow-black/5">
+          <div className="flex flex-col items-center text-center gap-3">
+            <Logo size="lg" />
+            <div>
+              <h1 className="text-2xl font-bold text-text-primary">Recuperar senha</h1>
+              <p className="text-text-secondary text-sm">
+                Informe seu e-mail e enviaremos um link para redefinir sua senha
+              </p>
+            </div>
           </div>
-        </div>
 
-        <RecoverPasswordForm />
+          <RecoverPasswordForm />
 
-        <p className="text-center text-sm text-text-secondary">
-          Lembrou a senha?{' '}
-          <Link to="/login" className="text-accent font-semibold hover:underline">
-            Entrar
-          </Link>
-        </p>
-      </Card>
+          <p className="text-center text-sm text-text-secondary">
+            Lembrou a senha?{' '}
+            <Link to="/login" className="text-accent font-semibold hover:underline">
+              Entrar
+            </Link>
+          </p>
+        </Card>
+      </div>
     </div>
   )
 }

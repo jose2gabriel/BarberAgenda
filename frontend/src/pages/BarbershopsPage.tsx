@@ -1,43 +1,23 @@
 import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../features/auth/model/useAuth'
+import { Link } from 'react-router-dom'
+import { Store, MapPin, Phone } from 'lucide-react'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { Card } from '../shared/ui/Card'
-import { Button } from '../shared/ui/Button'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 
 export function BarbershopsPage() {
-  const { logout } = useAuth()
-  const navigate = useNavigate()
   const { barbearias, loading, error, listarBarbearias } = useBarbeiro()
 
   useEffect(() => {
     listarBarbearias()
   }, [listarBarbearias])
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
-
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-3xl font-bold text-text-primary mb-8">Barbearias</h1>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">Barbearias</h1>
+        <p className="text-text-secondary mb-8">Escolha uma barbearia pra ver profissionais e serviços.</p>
 
         {loading && (
           <div className="flex justify-center py-12">
@@ -48,16 +28,30 @@ export function BarbershopsPage() {
         {error && <ErrorMessage>{error}</ErrorMessage>}
 
         {!loading && !error && barbearias.length === 0 && (
-          <p className="text-text-secondary">Nenhuma barbearia cadastrada ainda.</p>
+          <div className="flex flex-col items-center text-center gap-3 py-16">
+            <div className="w-14 h-14 rounded-full bg-secondary text-text-secondary flex items-center justify-center">
+              <Store size={24} strokeWidth={1.75} />
+            </div>
+            <p className="text-text-secondary">Nenhuma barbearia cadastrada ainda.</p>
+          </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {barbearias.map((barbearia) => (
             <Link key={barbearia.id} to={`/barbershops/${barbearia.id}`}>
-              <Card className="h-full hover:shadow-lg transition-shadow">
-                <h2 className="font-semibold text-text-primary mb-1">{barbearia.name}</h2>
-                <p className="text-text-secondary text-sm">{barbearia.address}</p>
-                <p className="text-text-secondary text-sm">{barbearia.phone}</p>
+              <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4">
+                  <Store size={20} strokeWidth={1.75} />
+                </div>
+                <h2 className="font-semibold text-text-primary mb-2">{barbearia.name}</h2>
+                <p className="text-text-secondary text-sm flex items-center gap-2 mb-1">
+                  <MapPin size={14} strokeWidth={1.75} className="shrink-0" />
+                  <span className="truncate">{barbearia.address}</span>
+                </p>
+                <p className="text-text-secondary text-sm flex items-center gap-2">
+                  <Phone size={14} strokeWidth={1.75} className="shrink-0" />
+                  {barbearia.phone}
+                </p>
               </Card>
             </Link>
           ))}

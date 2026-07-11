@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../features/auth/model/useAuth'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 import { ApiError } from '../shared/lib/api'
 
 function hoje(): string {
@@ -15,8 +12,6 @@ function hoje(): string {
 }
 
 export function UnavailabilityPage() {
-  const { logout } = useAuth()
-  const navigate = useNavigate()
   const {
     indisponibilidades,
     meuProfissional,
@@ -40,11 +35,6 @@ export function UnavailabilityPage() {
       if (profissional) listarIndisponibilidades(profissional.barbershopId, profissional.id)
     })
   }, [buscarMeuProfissional, listarIndisponibilidades])
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
 
   async function handleRegistrar() {
     if (!meuProfissional) return
@@ -78,18 +68,6 @@ export function UnavailabilityPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold text-text-primary mb-8">Minha indisponibilidade</h1>
 
