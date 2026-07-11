@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
+import { useActiveBarbershop } from '../features/barbershop/model/ActiveBarbershopContext'
 import { CreateServiceForm } from '../features/service/ui/CreateServiceForm'
 import { EditServiceForm } from '../features/service/ui/EditServiceForm'
 import { Card } from '../shared/ui/Card'
@@ -27,13 +28,15 @@ export function OwnerServicesPage() {
     criarServico,
     atualizarServico,
   } = useBarbeiro()
+  const { selecionarBarbearia } = useActiveBarbershop()
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [editandoId, setEditandoId] = useState<string | null>(null)
 
   useEffect(() => {
     buscarBarbearia(barbershopId)
     listarServicos(barbershopId)
-  }, [barbershopId, buscarBarbearia, listarServicos])
+    selecionarBarbearia(barbershopId)
+  }, [barbershopId, buscarBarbearia, listarServicos, selecionarBarbearia])
 
   const ehDono = !!barbearia && !!user && barbearia.ownerId === user.id
 

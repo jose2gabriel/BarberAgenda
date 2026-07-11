@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
+import { useActiveBarbershop } from '../features/barbershop/model/ActiveBarbershopContext'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
@@ -16,6 +17,7 @@ export function OwnerBusinessHoursPage() {
   const barbershopId = id as string
   const { user } = useAuth()
   const { barbearia, horarios, loading, error, buscarBarbearia, listarHorarios, salvarHorario } = useBarbeiro()
+  const { selecionarBarbearia } = useActiveBarbershop()
 
   const [valores, setValores] = useState<Record<number, { openTime: string; closeTime: string }>>({})
   const [salvandoDia, setSalvandoDia] = useState<number | null>(null)
@@ -24,7 +26,8 @@ export function OwnerBusinessHoursPage() {
   useEffect(() => {
     buscarBarbearia(barbershopId)
     listarHorarios(barbershopId)
-  }, [barbershopId, buscarBarbearia, listarHorarios])
+    selecionarBarbearia(barbershopId)
+  }, [barbershopId, buscarBarbearia, listarHorarios, selecionarBarbearia])
 
   useEffect(() => {
     const iniciais: Record<number, { openTime: string; closeTime: string }> = {}

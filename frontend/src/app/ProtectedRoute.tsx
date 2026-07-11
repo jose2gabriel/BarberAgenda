@@ -3,6 +3,9 @@ import type { ReactNode } from 'react'
 import { useAuth } from '../features/auth/model/useAuth'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { Sidebar } from '../widgets/sidebar/Sidebar'
+import { SidebarProvider } from '../widgets/sidebar/SidebarContext'
+import { TopBar } from '../widgets/topbar/TopBar'
+import { ActiveBarbershopProvider } from '../features/barbershop/model/ActiveBarbershopContext'
 import type { Role } from '../entities/usuario/types'
 
 interface ProtectedRouteProps {
@@ -35,9 +38,16 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   return (
-    <div className="min-h-screen flex bg-primary">
-      <Sidebar />
-      <div className="flex-1 min-w-0">{children}</div>
-    </div>
+    <ActiveBarbershopProvider>
+      <SidebarProvider>
+        <div className="min-h-screen flex bg-primary">
+          <Sidebar />
+          <div className="flex-1 min-w-0 flex flex-col">
+            <TopBar />
+            <div className="flex-1">{children}</div>
+          </div>
+        </div>
+      </SidebarProvider>
+    </ActiveBarbershopProvider>
   )
 }

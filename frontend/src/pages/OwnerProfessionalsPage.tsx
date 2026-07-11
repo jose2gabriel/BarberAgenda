@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
+import { useActiveBarbershop } from '../features/barbershop/model/ActiveBarbershopContext'
 import { CreateProfessionalForm } from '../features/professional/ui/CreateProfessionalForm'
 import { EditProfessionalForm } from '../features/professional/ui/EditProfessionalForm'
 import { Card } from '../shared/ui/Card'
@@ -27,13 +28,15 @@ export function OwnerProfessionalsPage() {
     removerProfissional,
     tornarSeProfissional,
   } = useBarbeiro()
+  const { selecionarBarbearia } = useActiveBarbershop()
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [editandoId, setEditandoId] = useState<string | null>(null)
 
   useEffect(() => {
     buscarBarbearia(barbershopId)
     listarProfissionais(barbershopId)
-  }, [barbershopId, buscarBarbearia, listarProfissionais])
+    selecionarBarbearia(barbershopId)
+  }, [barbershopId, buscarBarbearia, listarProfissionais, selecionarBarbearia])
 
   async function handleRemover(profissional: Professional) {
     const confirmado = window.confirm(`Remover ${profissional.name} desta barbearia?`)
