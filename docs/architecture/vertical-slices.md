@@ -23,12 +23,22 @@ barber-agenda/
 │   ├── use-cases/
 │   ├── adapters/
 │   └── infrastructure/
-├── barbeiros/
+├── professionals/
 │   ├── domain/
 │   ├── use-cases/
 │   ├── adapters/
 │   └── infrastructure/
-├── servicos/
+├── services/
+│   ├── domain/
+│   ├── use-cases/
+│   ├── adapters/
+│   └── infrastructure/
+├── barbershops/
+│   ├── domain/
+│   ├── use-cases/
+│   ├── adapters/
+│   └── infrastructure/
+├── unavailabilities/
 │   ├── domain/
 │   ├── use-cases/
 │   ├── adapters/
@@ -43,7 +53,7 @@ barber-agenda/
 ## Benefícios para o Time
 
 - Cada integrante pode trabalhar em um módulo sem conflitos de merge
-- Mudanças em `agendamentos/` não afetam `servicos/` ou `usuarios/`
+- Mudanças em `agendamentos/` não afetam `services/` ou `usuarios/`
 - Testes ficam próximos do código que testam
 - Onboarding facilitado: para entender uma feature, basta olhar um único diretório
 

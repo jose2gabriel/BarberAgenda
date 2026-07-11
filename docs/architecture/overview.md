@@ -14,7 +14,7 @@ O Barber Agenda adota uma combinação de três padrões em níveis distintos de
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Frontend | HTML, CSS, TypeScript, Vite |
+| Frontend | React + TypeScript + Vite, Tailwind CSS, React Router |
 | Backend | Node.js + Express |
 | Autenticação | JWT implementado no backend |
 | Banco de Dados | PostgreSQL hospedado no Supabase |
@@ -27,11 +27,12 @@ O sistema é dividido internamente em módulos com isolamento lógico e responsa
 
 | Módulo | Responsabilidade |
 |--------|-----------------|
-| Usuarios | Autenticação, perfil, permissões (JWT) |
-| Barbeiros | Cadastro, agenda, disponibilidade |
-| Servicos | Catálogo, preços, duração |
-| Agendamentos | Criação, validação de conflitos, notificações (Observer) |
-| Barbershops | Multi-tenant, gestão da barbearia pelo owner (ADR-007) |
+| usuarios | Autenticação, perfil, permissões (roles calculadas: cliente / profissional / owner) |
+| professionals | Cadastro de profissionais na barbearia |
+| services | Catálogo de serviços, preços, duração |
+| unavailabilities | Indisponibilidade dos profissionais (RF024, RF025) |
+| agendamentos | Motor de agendamento: criação, conflitos, cancelamento, notificações |
+| barbershops | Multi-tenant, gestão da barbearia pelo owner (ADR-007) |
 
 ## Fluxo de Dados
 

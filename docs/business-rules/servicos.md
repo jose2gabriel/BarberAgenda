@@ -1,6 +1,6 @@
 # Regras de Negócio — Serviços
 
-Módulo: `servicos/`  
+Módulo: `services/`  
 Requisitos relacionados: RF014, RF015, RF016
 
 ---

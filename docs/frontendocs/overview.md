@@ -25,47 +25,48 @@ Organização baseada em FSD — cada camada só pode importar das camadas abaix
 frontend/
 ├── src/
 │   ├── app/                    ← configuração global (rotas, providers, estilos)
-│   │   └── App.tsx
+│   │   ├── App.tsx
+│   │   └── ProtectedRoute.tsx  ← protege rotas por role e renderiza a Sidebar globalmente
 │   │
-│   ├── pages/                  ← composição de widgets por página
-│   │   ├── LoginPage.tsx
-│   │   ├── CadastroPage.tsx
-│   │   ├── AgendamentoPage.tsx
-│   │   ├── MeusAgendamentosPage.tsx
-│   │   └── DashboardPage.tsx
+│   ├── pages/                  ← composição de widgets/features por página (ver pages.md)
+│   │   ├── HomePage.tsx
+│   │   ├── LoginPage.tsx, RegisterPage.tsx, RegisterBarbershopPage.tsx
+│   │   ├── RecoverPasswordPage.tsx, ResetPasswordPage.tsx
+│   │   ├── BarbershopsPage.tsx, BarbershopDetailPage.tsx
+│   │   ├── NewAppointmentPage.tsx, AppointmentsPage.tsx
+│   │   ├── ProfessionalSchedulePage.tsx, UnavailabilityPage.tsx
+│   │   ├── ProfilePage.tsx
+│   │   └── OwnerBarbershopsPage.tsx, OwnerBarbershopDetailPage.tsx,
+│   │       OwnerProfessionalsPage.tsx, OwnerServicesPage.tsx, OwnerBusinessHoursPage.tsx
 │   │
 │   ├── widgets/                ← blocos visuais compostos por features
-│   │   ├── Header/
-│   │   └── AgendaCalendar/
+│   │   └── sidebar/             ← Sidebar.tsx (nav global, retrátil) + SidebarContext.tsx
 │   │
 │   ├── features/               ← funcionalidades com lógica de negócio
-│   │   ├── auth/               ← login, cadastro, logout
-│   │   │   ├── ui/             ← LoginForm.tsx, CadastroForm.tsx
-│   │   │   ├── model/          ← useAuth.ts
-│   │   │   └── api/            ← authService.ts (chama o backend)
-│   │   ├── agendamento/        ← criar, cancelar, reagendar
-│   │   │   ├── ui/             ← AgendamentoForm.tsx, SlotPicker.tsx
-│   │   │   ├── model/          ← useAgendamento.ts
-│   │   │   └── api/            ← agendamentoService.ts
-│   │   └── barbershop/         ← listar barbearias e profissionais
-│   │       ├── ui/             ← BarbershopCard.tsx, ProfissionalList.tsx
-│   │       ├── model/          ← useBarbeiro.ts
-│   │       └── api/            ← barbershopService.ts
+│   │   ├── auth/                ← login, cadastro, logout, perfil
+│   │   │   ├── ui/               ← LoginForm.tsx, RegisterForm.tsx, ...
+│   │   │   └── model/            ← AuthContext.tsx, useAuth.ts
+│   │   ├── agendamento/          ← criar, cancelar, reagendar
+│   │   │   └── model/            ← useAgendamento.ts
+│   │   ├── barbershop/           ← listar/gerenciar barbearias
+│   │   │   ├── ui/
+│   │   │   └── model/            ← useBarbeiro.ts, ActiveBarbershopContext.tsx
+│   │   ├── professional/         ← gerenciar profissionais (owner)
+│   │   │   └── ui/
+│   │   └── service/               ← gerenciar serviços (owner)
+│   │       └── ui/
 │   │
-│   ├── entities/               ← tipos e interfaces de domínio
-│   │   ├── usuario/
-│   │   │   └── types.ts        ← interface User
-│   │   ├── agendamento/
-│   │   │   └── types.ts        ← interface Appointment
-│   │   └── barbershop/
-│   │       └── types.ts        ← interface Barbershop
+│   ├── entities/               ← tipos de domínio (types.ts por entidade)
+│   │   ├── usuario/, appointment/, barbershop/, professional/, service/
 │   │
 │   └── shared/                 ← código reutilizável sem lógica de negócio
-│       ├── ui/                 ← Button.tsx, Input.tsx, Card.tsx (Design System)
+│       ├── ui/                 ← Button, Input, Card, Avatar, StatusBadge, Logo, LoadingSpinner...
 │       ├── schemas/            ← schemas Zod compartilhados
 │       └── lib/
 │           └── api.ts          ← client HTTP (base URL do backend)
 ```
+
+Ícones em toda a UI usam `lucide-react` (monocromáticos, sem emoji).
 
 ## Regra de Importação FSD
 

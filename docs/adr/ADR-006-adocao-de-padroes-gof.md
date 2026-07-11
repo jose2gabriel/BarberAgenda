@@ -64,3 +64,17 @@ Todas as ações pós-agendamento concentradas no `AgendamentoService`, gerando 
 
 - **Positivas:** menor acoplamento, maior testabilidade, extensibilidade sem refatoração estrutural
 - **Negativas:** mais interfaces e arquivos; requer disciplina para não criar adapters desnecessários
+
+## Status de Implementação (atualizado)
+
+Do que foi decidido acima, só o **Adapter** foi implementado no MVP, para RF012/RF013:
+
+- `INotificationService` (`backend/src/shared/interfaces/`) + `EmailNotificationService`
+  (`backend/src/shared/infrastructure/`) — mesmo padrão do `IEmailService`/`NodemailerEmailService`
+  já existente, notificando o cliente ao criar (RF012) e cancelar (RF013) um agendamento.
+- `WhatsAppAdapter`/`InternalAdapter` **não** foram implementados — não há outro provedor hoje.
+- O **Observer** (`NotificationObserver`/`AuditObserver`/`MetricsObserver`) **não** foi implementado:
+  `CriarAgendamentoUseCase`/`CancelarAgendamentoUseCase` chamam `INotificationService` diretamente,
+  dentro de um `try/catch` que só loga o erro (best-effort, nunca bloqueia o agendamento). Só existe
+  uma reação hoje (notificação), então o Observer seria abstração prematura — ver roadmap.md
+  (Fase 2 — Pós-MVP: "Painel de métricas (Observer — MetricsObserver)").

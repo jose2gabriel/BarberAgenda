@@ -13,20 +13,19 @@ graph TD
         
         subgraph Modulos["Módulos (Vertical Slices)"]
             MOD_USR["usuarios/\nCadastro, Login, Perfil"]
-            MOD_BAR["barbeiros/\nAgenda, Disponibilidade"]
-            MOD_SRV["servicos/\nCatálogo"]
+            MOD_BAR["professionals/\nCadastro de profissionais"]
+            MOD_SRV["services/\nCatálogo"]
+            MOD_UNA["unavailabilities/\nIndisponibilidade"]
             MOD_AGD["agendamentos/\nMotor de Agendamento"]
             MOD_ADM["barbershops/\nMulti-tenant, Owner"]
         end
 
-        subgraph Patterns["Padrões GoF (ADR-006)"]
-            OBS["Observer\nAgendamentoService"]
+        subgraph Patterns["Padrão GoF implementado (ADR-006)"]
             ADP["Adapter\nINotificationService"]
         end
 
-        subgraph Adapters["Implementações do Adapter"]
-            EMAIL["EmailAdapter"]
-            INTERNAL["InternalAdapter\n(fallback)"]
+        subgraph AdapterImpl["Implementação do Adapter"]
+            EMAIL["EmailNotificationService\n(Nodemailer/Gmail)"]
         end
     end
 
@@ -39,17 +38,17 @@ graph TD
     MW --> MOD_USR
     MW --> MOD_BAR
     MW --> MOD_SRV
+    MW --> MOD_UNA
     MW --> MOD_AGD
     MW --> MOD_ADM
 
-    MOD_AGD -->|"emite evento"| OBS
-    OBS -->|"notifica"| ADP
+    MOD_AGD -->|"chama diretamente ao criar/cancelar"| ADP
     ADP --> EMAIL
-    ADP --> INTERNAL
 
     MOD_USR --> DB
     MOD_BAR --> DB
     MOD_SRV --> DB
+    MOD_UNA --> DB
     MOD_AGD --> DB
     MOD_ADM --> DB
 
@@ -90,5 +89,7 @@ sequenceDiagram
 | Módulos | Regras de negócio isoladas por domínio | Node.js + Express |
 | Use Cases | Orquestração da lógica de negócio (Clean Architecture) | TypeScript |
 | Repositórios | Acesso ao banco de dados | PostgreSQL via Supabase |
-| Observer | Disparo de eventos pós-agendamento | Padrão GoF |
-| Adapter | Envio de notificações desacoplado do provider | Padrão GoF |
+| Adapter | Envio de notificações desacoplado do provider | Padrão GoF (`INotificationService`) |
+
+> Observer/Audit/Metrics descritos no ADR-006 não foram implementados — hoje existe só uma reação
+> (notificação por e-mail) chamada diretamente pelo use case, sem necessidade do padrão ainda.

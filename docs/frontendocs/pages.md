@@ -28,6 +28,16 @@
 - **Feature:** `features/auth/`
 - **Endpoints:** `PATCH /api/v1/auth/reset-password`
 - **Elementos:** formulário nova senha + confirmação, token via query param `?token=...`
+- Alias de `/redefinir-senha`, que é o link real enviado por e-mail
+
+### `/register-barbershop` — Cadastro Guiado de Dono de Barbearia
+- **Feature:** `features/auth/` + `features/barbershop/`
+- **Endpoints:** `POST /api/v1/auth/register`, `POST /api/v1/barbershops`
+- **Elementos:** fluxo único (cadastro de usuário + criação da barbearia) acessado pelo link
+  "É dono de uma barbearia?" na Home
+
+> `/dashboard` foi removido (era idêntico a `/barbershops` na prática) — a rota continua registrada
+> só como `<Navigate to="/barbershops" replace />`, pra não quebrar links antigos.
 
 ---
 
@@ -68,8 +78,8 @@
 
 ### `/professional/schedule` — Minha Agenda
 - **Feature:** `features/agendamento/`
-- **Endpoints:** `GET /api/v1/appointments` (filtrado por profissional)
-- **Elementos:** calendário ou lista de agendamentos do dia/semana, status de cada atendimento
+- **Endpoints:** `GET /api/v1/appointments` (filtrado por profissional), `PATCH /api/v1/appointments/:id/cancelar`
+- **Elementos:** lista de agendamentos do profissional com status e botão "Cancelar" (agendamentos ativos)
 - **Hook:** `useAgendamento`
 
 ### `/professional/unavailability` — Minha Indisponibilidade
@@ -102,6 +112,28 @@
 - **Endpoints:** `GET /api/v1/barbershops/:id/services`, `POST /api/v1/barbershops/:id/services`
 - **Elementos:** lista de serviços (nome, preço, duração, foto), formulário cadastrar novo serviço
 
+### `/owner/barbershops/:id/hours` — Horário de Funcionamento
+- **Feature:** `features/barbershop/`
+- **Endpoints:** `GET /api/v1/barbershops/:id/hours`, `POST /api/v1/barbershops/:id/hours`
+- **Elementos:** formulário de horário de abertura/fechamento por dia da semana
+
+---
+
+## Navegação (Sidebar)
+
+Todas as telas autenticadas são envolvidas por `ProtectedRoute`, que renderiza a `Sidebar`
+globalmente (`widgets/sidebar/Sidebar.tsx`) — não há mais cabeçalho por página. A sidebar é
+retrátil (`SidebarContext`, persistida em `localStorage`) e os links variam por papel:
+
+- **Todos os papéis:** Barbearias, Meus agendamentos, Meu perfil.
+- **Owner:** enquanto nenhuma barbearia estiver "ativa", só aparece "Minhas barbearias". Ao entrar
+  em `/owner/barbershops/:id` (clicando na lista ou navegando direto pela URL), essa barbearia vira
+  a **barbearia ativa** (`ActiveBarbershopContext`, persistida em `localStorage`) e a sidebar passa
+  a mostrar atalhos diretos: Editar barbearia, Profissionais, Serviços, Horários, Trocar barbearia.
+- **Profissional:** "Minha agenda" e "Indisponibilidade" aparecem direto, sem seleção prévia (um
+  profissional contratado só tem uma barbearia). Ficam no mesmo grupo "Sua barbearia" do owner —
+  não há seção separada.
+
 ---
 
 ## Componentes Compartilhados (shared/ui)
@@ -126,6 +158,7 @@
 | `/register` | ✅ | — | — | — |
 | `/recover-password` | ✅ | — | — | — |
 | `/reset-password` | ✅ | — | — | — |
+| `/register-barbershop` | ✅ | — | — | — |
 | `/barbershops` | — | ✅ | ✅ | ✅ |
 | `/barbershops/:id` | — | ✅ | ✅ | ✅ |
 | `/appointments/new` | — | ✅ | — | — |
@@ -137,3 +170,4 @@
 | `/owner/barbershops/:id` | — | — | — | ✅ |
 | `/owner/barbershops/:id/professionals` | — | — | — | ✅ |
 | `/owner/barbershops/:id/services` | — | — | — | ✅ |
+| `/owner/barbershops/:id/hours` | — | — | — | ✅ |

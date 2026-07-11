@@ -27,11 +27,12 @@ Com equipe reduzida (4 integrantes) e prazo acadêmico, microsserviços aumentar
 
 ```
 barber-agenda/
-├── usuarios/        ← Autenticação, perfil, permissões (JWT)
-├── barbeiros/       ← Cadastro, agenda, disponibilidade
-├── servicos/        ← Catálogo, preços, duração
-├── agendamentos/    ← Criação, validação de conflitos, notificações
-└── barbershops/     ← Multi-tenant, gestão da barbearia pelo owner (ADR-007)
+├── usuarios/          ← Autenticação, perfil, permissões (JWT)
+├── professionals/     ← Cadastro de profissionais na barbearia
+├── services/          ← Catálogo, preços, duração
+├── unavailabilities/  ← Indisponibilidade dos profissionais (RF024, RF025)
+├── agendamentos/      ← Criação, validação de conflitos, notificações
+└── barbershops/       ← Multi-tenant, gestão da barbearia pelo owner (ADR-007)
 ```
 
 > **Regra:** módulos se comunicam por interfaces bem definidas, nunca por acesso direto a repositórios ou banco de dados uns dos outros.

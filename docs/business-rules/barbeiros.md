@@ -1,6 +1,6 @@
 # Regras de Negócio — Barbeiros (Profissionais)
 
-Módulo: `barbeiros/`  
+Módulo: `professionals/`  
 Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF024, RF025, RF026
 
 ---
