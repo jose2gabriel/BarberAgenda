@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from '../features/auth/model/AuthContext'
 import { ProtectedRoute } from './ProtectedRoute'
 import { HomePage } from '../pages/HomePage'
@@ -7,7 +7,6 @@ import { RegisterPage } from '../pages/RegisterPage'
 import { RegisterBarbershopPage } from '../pages/RegisterBarbershopPage'
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage'
 import { ResetPasswordPage } from '../pages/ResetPasswordPage'
-import { DashboardPage } from '../pages/DashboardPage'
 import { BarbershopsPage } from '../pages/BarbershopsPage'
 import { BarbershopDetailPage } from '../pages/BarbershopDetailPage'
 import { OwnerBarbershopsPage } from '../pages/OwnerBarbershopsPage'
@@ -35,14 +34,9 @@ function App() {
               /reset-password fica como alias por consistência com o roadmap. */}
           <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
+          {/* Painel e Barbearias eram a mesma tela na prática — removido, /dashboard
+              redireciona pra /barbershops pra não quebrar links antigos. */}
+          <Route path="/dashboard" element={<Navigate to="/barbershops" replace />} />
           <Route
             path="/barbershops"
             element={
