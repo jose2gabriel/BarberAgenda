@@ -2,19 +2,23 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { Card } from '../shared/ui/Card'
+import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { StatusBadge } from '../shared/ui/StatusBadge'
+import { ApiError } from '../shared/lib/api'
+import type { RawAppointment } from '../entities/appointment/types'
 
 function hoje(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
 export function ProfessionalSchedulePage() {
-  const { agendaProfissional, loading, error, listarAgendaProfissional } = useAgendamento()
+  const { agendaProfissional, loading, error, listarAgendaProfissional, cancelarAgendamento } = useAgendamento()
   const { servicos, listarServicos } = useBarbeiro()
   const [date, setDate] = useState(hoje())
+  const [acaoErro, setAcaoErro] = useState<string | null>(null)
 
   useEffect(() => {
     listarAgendaProfissional()
@@ -33,6 +37,19 @@ export function ProfessionalSchedulePage() {
 
   const agendaDoDia = agendaProfissional.filter((a) => a.date === date)
 
+  async function handleCancelar(agendamento: RawAppointment) {
+    const confirmado = window.confirm(`Cancelar o agendamento de ${nomeServico(agendamento.serviceId)}?`)
+    if (!confirmado) return
+
+    setAcaoErro(null)
+    try {
+      await cancelarAgendamento(agendamento.id)
+      await listarAgendaProfissional()
+    } catch (err) {
+      setAcaoErro(err instanceof ApiError ? err.message : 'Não foi possível cancelar. Tente novamente.')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-primary">
       <main className="max-w-4xl mx-auto px-6 py-12">
@@ -49,6 +66,11 @@ export function ProfessionalSchedulePage() {
         )}
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {acaoErro && (
+          <div className="mb-4">
+            <ErrorMessage>{acaoErro}</ErrorMessage>
+          </div>
+        )}
 
         {!loading && !error && agendaDoDia.length === 0 && (
           <p className="text-text-secondary">Nenhum agendamento nesse dia.</p>
@@ -63,7 +85,14 @@ export function ProfessionalSchedulePage() {
                   {agendamento.startTime.slice(0, 5)}–{agendamento.endTime.slice(0, 5)}
                 </p>
               </div>
-              <StatusBadge status={agendamento.status} />
+              <div className="flex items-center gap-3">
+                <StatusBadge status={agendamento.status} />
+                {agendamento.status === 'agendado' && (
+                  <Button size="sm" variant="danger" onClick={() => handleCancelar(agendamento)}>
+                    Cancelar
+                  </Button>
+                )}
+              </div>
             </Card>
           ))}
         </div>

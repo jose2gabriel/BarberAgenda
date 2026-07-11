@@ -34,6 +34,7 @@ import { RedefinirSenhaUseCase } from './usuarios/use-cases/RedefinirSenhaUseCas
 import { ExcluirContaUseCase } from './usuarios/use-cases/ExcluirContaUseCase'
 import { SupabasePasswordResetTokenRepository } from './usuarios/infrastructure/repositories/SupabasePasswordResetTokenRepository'
 import { NodemailerEmailService } from './shared/infrastructure/NodemailerEmailService'
+import { EmailNotificationService } from './shared/infrastructure/EmailNotificationService'
 import { SupabaseBarbeariaRepository } from './barbershops/infrastructure/repositories/SupabaseBarbeariaRepository'
 import { CriarBarbeariaUseCase } from './barbershops/use-cases/CriarBarbeariaUseCase'
 import { ListarBarbeariasUseCase } from './barbershops/use-cases/ListarBarbeariasUseCase'
@@ -98,6 +99,8 @@ const renovarTokenUseCase = new RenovarTokenUseCase(usuarioRepository, barbearia
 // RF030 — Recuperação de senha
 const passwordResetTokenRepository = new SupabasePasswordResetTokenRepository()
 const emailService = new NodemailerEmailService()
+// RF012/RF013 — Adapter de notificação (ADR-006); hoje só e-mail.
+const notificationService = new EmailNotificationService()
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
 const solicitarRecuperacaoSenhaUseCase = new SolicitarRecuperacaoSenhaUseCase(
   usuarioRepository,
@@ -211,15 +214,21 @@ const criarAgendamentoUseCase = new CriarAgendamentoUseCase(
   servicoRepository,
   usuarioRepository,
   businessHoursRepository,
-  verificarBloqueioUseCase
+  verificarBloqueioUseCase,
+  notificationService
 )
 const cancelarAgendamentoUseCase = new CancelarAgendamentoUseCase(
   agendamentoRepository,
-  profissionalRepository
+  profissionalRepository,
+  barbeariaRepository,
+  usuarioRepository,
+  servicoRepository,
+  notificationService
 )
 const concluirAgendamentoUseCase = new ConcluirAgendamentoUseCase(
   agendamentoRepository,
-  profissionalRepository
+  profissionalRepository,
+  barbeariaRepository
 )
 const reagendarAgendamentoUseCase = new ReagendarAgendamentoUseCase(
   agendamentoRepository,

@@ -88,11 +88,7 @@ export class AgendamentoController {
 
       const id = req.params.id as string
 
-      await this.cancelarAgendamentoUseCase.executar(
-        id,
-        req.usuario.id,
-        req.usuario.role
-      )
+      await this.cancelarAgendamentoUseCase.executar(id, req.usuario.id)
 
       return res.status(204).send()
     } catch (err) {
@@ -109,11 +105,7 @@ export class AgendamentoController {
 
       const id = req.params.id as string
 
-      await this.concluirAgendamentoUseCase.executar(
-        id,
-        req.usuario.id,
-        req.usuario.role
-      )
+      await this.concluirAgendamentoUseCase.executar(id, req.usuario.id)
 
       return res.status(204).send()
     } catch (err) {
