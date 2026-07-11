@@ -14,6 +14,30 @@ function hoje(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
+function formatPrice(price: number): string {
+  return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
+interface ResumoLinhaProps {
+  icon: string
+  label: string
+  value: string
+}
+
+function ResumoLinha({ icon, label, value }: ResumoLinhaProps) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-9 h-9 rounded-full bg-accent/10 text-accent flex items-center justify-center text-base shrink-0">
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <p className="text-text-secondary text-xs">{label}</p>
+        <p className="font-medium text-text-primary truncate">{value}</p>
+      </div>
+    </div>
+  )
+}
+
 export function NewAppointmentPage() {
   const [searchParams] = useSearchParams()
   const barbershopId = searchParams.get('barbershopId')
@@ -89,20 +113,22 @@ export function NewAppointmentPage() {
 
         {dadosCompletos && (
           <Card className="flex flex-col gap-6">
-            <div>
-              <p className="text-text-secondary text-sm">Barbearia</p>
-              <p className="font-medium text-text-primary">{barbearia?.name ?? '...'}</p>
+            <div className="flex flex-col gap-4">
+              <ResumoLinha icon="💈" label="Barbearia" value={barbearia?.name ?? '...'} />
+              <ResumoLinha icon="🧔" label="Profissional" value={profissional?.name ?? '...'} />
+              <ResumoLinha
+                icon="✂️"
+                label="Serviço"
+                value={servico ? `${servico.name} · ${servico.durationMinutes} min` : '...'}
+              />
             </div>
-            <div>
-              <p className="text-text-secondary text-sm">Profissional</p>
-              <p className="font-medium text-text-primary">{profissional?.name ?? '...'}</p>
-            </div>
-            <div>
-              <p className="text-text-secondary text-sm">Serviço</p>
-              <p className="font-medium text-text-primary">
-                {servico ? `${servico.name} (${servico.durationMinutes} min)` : '...'}
-              </p>
-            </div>
+
+            {servico && (
+              <div className="flex items-center justify-between pt-4 border-t border-border">
+                <span className="text-text-secondary text-sm">Total</span>
+                <span className="text-xl font-bold text-accent">{formatPrice(servico.price)}</span>
+              </div>
+            )}
 
             <Input
               label="Data"
@@ -126,17 +152,20 @@ export function NewAppointmentPage() {
                 {horariosDisponiveis.length === 0 ? (
                   <p className="text-text-secondary text-sm">Nenhum horário disponível nesse dia.</p>
                 ) : (
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {horariosDisponiveis.map((horario) => (
-                      <Button
+                      <button
                         key={horario}
                         type="button"
-                        variant={selectedTime === horario ? 'primary' : 'secondary'}
-                        size="sm"
                         onClick={() => setSelectedTime(horario)}
+                        className={`text-sm font-semibold py-2 rounded-full transition-colors ${
+                          selectedTime === horario
+                            ? 'bg-accent text-white'
+                            : 'border border-accent text-accent hover:bg-accent/10'
+                        }`}
                       >
                         {horario}
-                      </Button>
+                      </button>
                     ))}
                   </div>
                 )}

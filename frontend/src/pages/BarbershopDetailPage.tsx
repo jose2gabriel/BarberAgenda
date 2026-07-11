@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
-import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { Avatar } from '../shared/ui/Avatar'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
@@ -38,9 +37,13 @@ export function BarbershopDetailPage() {
     navigate(`/appointments/new?barbershopId=${id}&professionalId=${professionalId}&serviceId=${serviceId}`)
   }
 
+  const profissionalSelecionado = profissionais.find((p) => p.id === professionalId)
+  const servicoSelecionado = servicos.find((s) => s.id === serviceId)
+  const temSelecao = !!professionalId || !!serviceId
+
   return (
     <div className="min-h-screen bg-primary">
-      <main className="max-w-6xl mx-auto px-6 py-12">
+      <main className={`max-w-6xl mx-auto px-6 py-12 ${temSelecao ? 'pb-32' : ''}`}>
         <Link to="/barbershops" className="text-accent text-sm font-medium hover:underline">
           ← Voltar para barbearias
         </Link>
@@ -59,40 +62,55 @@ export function BarbershopDetailPage() {
 
         {barbearia && (
           <>
-            <div className="mt-4 mb-10">
-              <h1 className="text-3xl font-bold text-text-primary">{barbearia.name}</h1>
-              <p className="text-text-secondary">{barbearia.address}</p>
-              <p className="text-text-secondary">{barbearia.phone}</p>
+            <div className="mt-4 mb-10 flex items-center gap-4 bg-dark rounded-2xl px-6 py-6">
+              <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-2xl shrink-0">
+                💈
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">{barbearia.name}</h1>
+                <p className="text-white/70 text-sm">{barbearia.address}</p>
+                <p className="text-white/70 text-sm">{barbearia.phone}</p>
+              </div>
             </div>
 
             <section className="mb-10">
-              <h2 className="text-xl font-semibold text-text-primary mb-4">Profissionais</h2>
+              <h2 className="text-xl font-semibold text-text-primary mb-4">Profissionais disponíveis</h2>
               {profissionais.length === 0 ? (
                 <p className="text-text-secondary text-sm">Nenhum profissional cadastrado ainda.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {profissionais.map((profissional) => (
-                    <button
-                      key={profissional.id}
-                      type="button"
-                      onClick={() => setProfessionalId(profissional.id)}
-                      className="text-left"
-                    >
-                      <Card
-                        className={`flex items-center gap-3 ${
-                          professionalId === profissional.id ? 'border-2 border-accent' : ''
-                        }`}
+                <div className="flex flex-col gap-3">
+                  {profissionais.map((profissional) => {
+                    const selecionado = professionalId === profissional.id
+                    return (
+                      <button
+                        key={profissional.id}
+                        type="button"
+                        onClick={() => setProfessionalId(profissional.id)}
+                        className="text-left"
                       >
-                        <Avatar name={profissional.name} />
-                        <div>
-                          <p className="font-medium text-text-primary">{profissional.name}</p>
-                          {profissional.specialty && (
-                            <p className="text-text-secondary text-sm">{profissional.specialty}</p>
-                          )}
+                        <div
+                          className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${
+                            selecionado ? 'border-accent bg-accent/5' : 'border-border bg-secondary hover:border-accent/40'
+                          }`}
+                        >
+                          <Avatar name={profissional.name} size="md" />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-text-primary truncate">{profissional.name}</p>
+                            {profissional.specialty && (
+                              <p className="text-text-secondary text-sm truncate">{profissional.specialty}</p>
+                            )}
+                          </div>
+                          <span
+                            className={`shrink-0 text-sm font-semibold px-4 py-1.5 rounded-full whitespace-nowrap ${
+                              selecionado ? 'bg-accent text-white' : 'border border-accent text-accent'
+                            }`}
+                          >
+                            {selecionado ? 'Selecionado ✓' : 'Selecionar'}
+                          </span>
                         </div>
-                      </Card>
-                    </button>
-                  ))}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </section>
@@ -102,33 +120,69 @@ export function BarbershopDetailPage() {
               {servicos.length === 0 ? (
                 <p className="text-text-secondary text-sm">Nenhum serviço cadastrado ainda.</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {servicos.map((servico) => (
-                    <button key={servico.id} type="button" onClick={() => setServiceId(servico.id)} className="text-left">
-                      <Card className={serviceId === servico.id ? 'border-2 border-accent' : ''}>
-                        <p className="font-medium text-text-primary">{servico.name}</p>
-                        {servico.description && (
-                          <p className="text-text-secondary text-sm mb-2">{servico.description}</p>
-                        )}
-                        <div className="flex items-center justify-between text-sm text-text-secondary">
-                          <span>{servico.durationMinutes} min</span>
-                          <span className="font-semibold text-accent">{formatPrice(servico.price)}</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {servicos.map((servico) => {
+                    const selecionado = serviceId === servico.id
+                    return (
+                      <button key={servico.id} type="button" onClick={() => setServiceId(servico.id)} className="text-left h-full">
+                        <div
+                          className={`flex flex-col gap-3 p-5 h-full rounded-xl border transition-colors ${
+                            selecionado ? 'border-accent bg-accent/5' : 'border-border bg-secondary hover:border-accent/40'
+                          }`}
+                        >
+                          <div className="w-11 h-11 rounded-full bg-accent/10 text-accent flex items-center justify-center text-xl">
+                            ✂️
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold text-text-primary">{servico.name}</p>
+                            {servico.description && (
+                              <p className="text-text-secondary text-sm mt-1">{servico.description}</p>
+                            )}
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-text-secondary">{servico.durationMinutes} min</span>
+                            <span className="font-bold text-accent">{formatPrice(servico.price)}</span>
+                          </div>
+                          <span
+                            className={`text-center text-sm font-semibold px-3 py-1.5 rounded-full ${
+                              selecionado ? 'bg-accent text-white' : 'border border-accent text-accent'
+                            }`}
+                          >
+                            {selecionado ? 'Selecionado ✓' : 'Selecionar'}
+                          </span>
                         </div>
-                      </Card>
-                    </button>
-                  ))}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </section>
-
-            <div className="mt-10 flex justify-end">
-              <Button disabled={!professionalId || !serviceId} onClick={handleContinuar}>
-                Continuar para agendamento
-              </Button>
-            </div>
           </>
         )}
       </main>
+
+      {barbearia && temSelecao && (
+        <div className="fixed bottom-0 left-0 right-0 md:left-60 bg-dark border-t border-white/10 px-6 py-4 z-10">
+          <div className="max-w-6xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+            <div className="text-white text-sm flex flex-wrap gap-x-6 gap-y-1">
+              {profissionalSelecionado && (
+                <span>
+                  Profissional: <strong>{profissionalSelecionado.name}</strong>
+                </span>
+              )}
+              {servicoSelecionado && (
+                <span>
+                  Serviço: <strong>{servicoSelecionado.name}</strong>{' '}
+                  <span className="text-accent font-semibold">{formatPrice(servicoSelecionado.price)}</span>
+                </span>
+              )}
+            </div>
+            <Button disabled={!professionalId || !serviceId} onClick={handleContinuar}>
+              Continuar para agendamento
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
