@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { Card } from '../shared/ui/Card'
@@ -9,7 +8,6 @@ import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { SuccessMessage } from '../shared/ui/SuccessMessage'
-import { Logo } from '../shared/ui/Logo'
 import { ApiError } from '../shared/lib/api'
 
 function hoje(): string {
@@ -22,7 +20,6 @@ export function NewAppointmentPage() {
   const professionalId = searchParams.get('professionalId')
   const serviceId = searchParams.get('serviceId')
 
-  const { logout } = useAuth()
   const navigate = useNavigate()
   const { barbearia, profissionais, servicos, buscarBarbearia, listarProfissionais, listarServicos } = useBarbeiro()
   const {
@@ -54,11 +51,6 @@ export function NewAppointmentPage() {
     buscarHorariosDisponiveis(barbershopId!, professionalId!, date, serviceId!)
   }, [dadosCompletos, barbershopId, professionalId, serviceId, date, buscarHorariosDisponiveis])
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
-
   async function handleConfirmar() {
     if (!selectedTime) return
     setConfirmando(true)
@@ -79,18 +71,6 @@ export function NewAppointmentPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-2xl mx-auto px-6 py-12">
         <Link
           to={barbershopId ? `/barbershops/${barbershopId}` : '/barbershops'}

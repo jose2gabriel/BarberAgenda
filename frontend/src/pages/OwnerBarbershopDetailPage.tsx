@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { EditBarbershopForm } from '../features/barbershop/ui/EditBarbershopForm'
@@ -7,7 +7,6 @@ import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 
 /**
  * Hub de gerenciamento da barbearia: editar dados próprios e navegar
@@ -18,35 +17,17 @@ import { Logo } from '../shared/ui/Logo'
  */
 export function OwnerBarbershopDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth()
   const { barbearia, loading, error, buscarBarbearia, atualizarBarbearia } = useBarbeiro()
 
   useEffect(() => {
     if (id) buscarBarbearia(id)
   }, [id, buscarBarbearia])
 
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
-
   const ehDono = !!barbearia && !!user && barbearia.ownerId === user.id
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-3xl mx-auto px-6 py-12">
         <Link to="/owner/barbershops" className="text-accent text-sm font-medium hover:underline">
           ← Voltar para minhas barbearias

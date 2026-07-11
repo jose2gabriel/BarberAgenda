@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { Card } from '../shared/ui/Card'
@@ -7,7 +7,6 @@ import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
-import { Logo } from '../shared/ui/Logo'
 import { ApiError } from '../shared/lib/api'
 
 const DIAS_DA_SEMANA = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
@@ -15,8 +14,7 @@ const DIAS_DA_SEMANA = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sex
 export function OwnerBusinessHoursPage() {
   const { id } = useParams<{ id: string }>()
   const barbershopId = id as string
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth()
   const { barbearia, horarios, loading, error, buscarBarbearia, listarHorarios, salvarHorario } = useBarbeiro()
 
   const [valores, setValores] = useState<Record<number, { openTime: string; closeTime: string }>>({})
@@ -35,11 +33,6 @@ export function OwnerBusinessHoursPage() {
     }
     setValores((atual) => ({ ...iniciais, ...atual }))
   }, [horarios])
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
 
   function handleChange(dayOfWeek: number, campo: 'openTime' | 'closeTime', valor: string) {
     setValores((atual) => ({
@@ -71,18 +64,6 @@ export function OwnerBusinessHoursPage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-2xl mx-auto px-6 py-12">
         <Link to={`/owner/barbershops/${barbershopId}`} className="text-accent text-sm font-medium hover:underline">
           ← Voltar para {barbearia?.name ?? 'a barbearia'}

@@ -1,24 +1,18 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/model/useAuth'
 import { UpdateProfileForm } from '../features/auth/ui/UpdateProfileForm'
 import { ChangePasswordForm } from '../features/auth/ui/ChangePasswordForm'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
-import { Logo } from '../shared/ui/Logo'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { ApiError } from '../shared/lib/api'
 
 export function ProfilePage() {
-  const { user, logout, atualizarUsuario, excluirConta } = useAuth()
+  const { user, atualizarUsuario, excluirConta } = useAuth()
   const navigate = useNavigate()
   const [excluindo, setExcluindo] = useState(false)
   const [excluirErro, setExcluirErro] = useState<string | null>(null)
-
-  async function handleLogout() {
-    await logout()
-    navigate('/login')
-  }
 
   async function handleExcluirConta() {
     const confirmado = window.confirm(
@@ -42,24 +36,8 @@ export function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-primary">
-      <header className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="font-bold text-lg text-white">Barber Agenda</span>
-          </div>
-          <Button variant="secondary" size="sm" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
-
       <main className="max-w-2xl mx-auto px-6 py-12">
-        <Link to="/dashboard" className="text-accent text-sm font-medium hover:underline">
-          ← Voltar para o painel
-        </Link>
-
-        <h1 className="text-3xl font-bold text-text-primary mt-4 mb-8">Meu perfil</h1>
+        <h1 className="text-3xl font-bold text-text-primary mb-8">Meu perfil</h1>
 
         <div className="flex flex-col gap-8">
           <Card className="flex flex-col gap-4">
