@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
+import { useAgendamento } from '../features/agendamento/model/useAgendamento'
+import { useAuth } from '../features/auth/model/useAuth'
 import { Button } from '../shared/ui/Button'
 import { Avatar } from '../shared/ui/Avatar'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
@@ -23,8 +25,12 @@ export function BarbershopDetailPage() {
     listarProfissionais,
     listarServicos,
   } = useBarbeiro()
+  const { buscarMeuProfissional } = useAgendamento()
+  const { user } = useAuth()
   const [professionalId, setProfessionalId] = useState<string | null>(null)
   const [serviceId, setServiceId] = useState<string | null>(null)
+  const [meuProfissionalId, setMeuProfissionalId] = useState<string | null>(null)
+  const ehProfissional = !!user?.roles.includes('profissional')
 
   useEffect(() => {
     if (!id) return
@@ -32,6 +38,19 @@ export function BarbershopDetailPage() {
     listarProfissionais(id)
     listarServicos(id)
   }, [id, buscarBarbearia, listarProfissionais, listarServicos])
+
+  useEffect(() => {
+    if (!id || !ehProfissional) return
+    buscarMeuProfissional().then((meuProfissional) => {
+      if (meuProfissional?.barbershopId === id) {
+        setMeuProfissionalId(meuProfissional.id)
+      }
+    })
+  }, [id, ehProfissional, buscarMeuProfissional])
+
+  // Barbeiro não pode agendar um horário com ele mesmo (regra de negócio,
+  // validada de verdade no backend — isso aqui só evita a seleção inútil).
+  const profissionaisSelecionaveis = profissionais.filter((p) => p.id !== meuProfissionalId)
 
   function handleContinuar() {
     navigate(`/appointments/new?barbershopId=${id}&professionalId=${professionalId}&serviceId=${serviceId}`)
@@ -75,11 +94,11 @@ export function BarbershopDetailPage() {
 
             <section className="mb-10">
               <h2 className="text-xl font-semibold text-text-primary mb-4">Profissionais disponíveis</h2>
-              {profissionais.length === 0 ? (
+              {profissionaisSelecionaveis.length === 0 ? (
                 <p className="text-text-secondary text-sm">Nenhum profissional cadastrado ainda.</p>
               ) : (
                 <div className="flex flex-col gap-3">
-                  {profissionais.map((profissional) => {
+                  {profissionaisSelecionaveis.map((profissional) => {
                     const selecionado = professionalId === profissional.id
                     return (
                       <button

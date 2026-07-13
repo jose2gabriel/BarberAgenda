@@ -33,6 +33,15 @@ Núcleo central e de maior complexidade técnica do sistema. Integra clientes, p
   - O horário está fora do funcionamento da barbearia (RF020)
 - Em caso de conflito, retorna `409 SCHEDULE_CONFLICT`
 
+## Restrição de Auto-Agendamento
+
+- Um profissional não pode criar um agendamento tendo a si mesmo como profissional — checado em
+  `CriarAgendamentoUseCase` comparando `profissional.userId` com o `clientId` da requisição
+- Retorna `400 SELF_BOOKING_NOT_ALLOWED`
+- O frontend também esconde o próprio profissional da lista de seleção em `/barbershops/:id`
+  (só quando o usuário logado tem o papel `profissional` nessa barbearia) — a validação real,
+  porém, é só no backend
+
 ## Status do Agendamento (RF029)
 
 | Status | Descrição |
