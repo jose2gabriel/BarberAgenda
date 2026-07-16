@@ -17,12 +17,13 @@ export function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const base = 'rounded-lg font-semibold transition-all duration-200 flex items-center gap-2'
+  const base =
+    'rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:pointer-events-none'
 
   const variants = {
-    primary: 'bg-accent hover:bg-accent/90 text-white',
+    primary: 'bg-accent hover:bg-accent/90 text-white shadow-sm shadow-accent/20 hover:shadow-md hover:shadow-accent/25',
     secondary: 'bg-transparent border border-accent text-accent hover:bg-accent hover:text-white',
-    danger: 'bg-red-800 hover:bg-red-900 text-white',
+    danger: 'bg-red-800 hover:bg-red-900 text-white shadow-sm shadow-red-900/20',
   }
 
   const sizes = {

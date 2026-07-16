@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Store, Scissors, Check } from 'lucide-react'
 import { useBarbeiro } from '../features/barbershop/model/useBarbeiro'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
 import { useAuth } from '../features/auth/model/useAuth'
@@ -82,8 +83,8 @@ export function BarbershopDetailPage() {
         {barbearia && (
           <>
             <div className="mt-4 mb-10 flex items-center gap-4 bg-dark rounded-2xl px-6 py-6">
-              <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-2xl shrink-0">
-                💈
+              <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center shrink-0">
+                <Store size={24} strokeWidth={1.75} className="text-white" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white">{barbearia.name}</h1>
@@ -108,8 +109,10 @@ export function BarbershopDetailPage() {
                         className="text-left"
                       >
                         <div
-                          className={`flex items-center gap-4 p-4 rounded-xl border transition-colors ${
-                            selecionado ? 'border-accent bg-accent/5' : 'border-border bg-secondary hover:border-accent/40'
+                          className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-colors ${
+                            selecionado
+                              ? 'border-selected bg-selected/5'
+                              : 'border-border bg-secondary hover:border-selected/40'
                           }`}
                         >
                           <Avatar name={profissional.name} size="md" />
@@ -120,11 +123,12 @@ export function BarbershopDetailPage() {
                             )}
                           </div>
                           <span
-                            className={`shrink-0 text-sm font-semibold px-4 py-1.5 rounded-full whitespace-nowrap ${
-                              selecionado ? 'bg-accent text-white' : 'border border-accent text-accent'
+                            className={`shrink-0 flex items-center gap-1.5 text-sm font-semibold px-4 py-1.5 rounded-full whitespace-nowrap ${
+                              selecionado ? 'bg-selected text-white' : 'border border-border text-text-secondary'
                             }`}
                           >
-                            {selecionado ? 'Selecionado ✓' : 'Selecionar'}
+                            {selecionado && <Check size={14} strokeWidth={2.5} />}
+                            {selecionado ? 'Selecionado' : 'Selecionar'}
                           </span>
                         </div>
                       </button>
@@ -145,12 +149,14 @@ export function BarbershopDetailPage() {
                     return (
                       <button key={servico.id} type="button" onClick={() => setServiceId(servico.id)} className="text-left h-full">
                         <div
-                          className={`flex flex-col gap-3 p-5 h-full rounded-xl border transition-colors ${
-                            selecionado ? 'border-accent bg-accent/5' : 'border-border bg-secondary hover:border-accent/40'
+                          className={`flex flex-col gap-3 p-5 h-full rounded-xl border-2 transition-colors ${
+                            selecionado
+                              ? 'border-selected bg-selected/5'
+                              : 'border-border bg-secondary hover:border-selected/40'
                           }`}
                         >
-                          <div className="w-11 h-11 rounded-full bg-accent/10 text-accent flex items-center justify-center text-xl">
-                            ✂️
+                          <div className="w-11 h-11 rounded-full bg-accent/10 text-accent flex items-center justify-center">
+                            <Scissors size={20} strokeWidth={1.75} />
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold text-text-primary">{servico.name}</p>
@@ -163,11 +169,12 @@ export function BarbershopDetailPage() {
                             <span className="font-bold text-accent">{formatPrice(servico.price)}</span>
                           </div>
                           <span
-                            className={`text-center text-sm font-semibold px-3 py-1.5 rounded-full ${
-                              selecionado ? 'bg-accent text-white' : 'border border-accent text-accent'
+                            className={`flex items-center justify-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full ${
+                              selecionado ? 'bg-selected text-white' : 'border border-border text-text-secondary'
                             }`}
                           >
-                            {selecionado ? 'Selecionado ✓' : 'Selecionar'}
+                            {selecionado && <Check size={14} strokeWidth={2.5} />}
+                            {selecionado ? 'Selecionado' : 'Selecionar'}
                           </span>
                         </div>
                       </button>

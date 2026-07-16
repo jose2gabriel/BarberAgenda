@@ -38,7 +38,7 @@ export function RegisterPage() {
               type="button"
               onClick={() => handleTipoConta('cliente')}
               className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${
-                tipoConta === 'cliente' ? 'bg-accent text-white' : 'text-text-secondary'
+                tipoConta === 'cliente' ? 'bg-selected text-white' : 'text-text-secondary'
               }`}
             >
               Sou cliente
@@ -47,7 +47,7 @@ export function RegisterPage() {
               type="button"
               onClick={() => handleTipoConta('barbeiro')}
               className={`flex-1 rounded-md py-2 text-sm font-semibold transition-colors ${
-                tipoConta === 'barbeiro' ? 'bg-accent text-white' : 'text-text-secondary'
+                tipoConta === 'barbeiro' ? 'bg-selected text-white' : 'text-text-secondary'
               }`}
             >
               Sou barbeiro
