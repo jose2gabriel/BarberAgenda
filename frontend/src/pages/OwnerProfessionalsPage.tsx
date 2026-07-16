@@ -43,6 +43,10 @@ export function OwnerProfessionalsPage() {
     if (!confirmado) return
 
     await removerProfissional(barbershopId, profissional.id)
+    // Não dá pra saber pelo lado do cliente se o removido é o próprio dono
+    // (a listagem pública não expõe userId) — atualiza o usuário sempre,
+    // assim "Também sou profissional aqui" reaparece na hora se for o caso.
+    await refreshUser()
     await listarProfissionais(barbershopId)
   }
 
