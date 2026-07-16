@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { CalendarX2 } from 'lucide-react'
+import { CalendarX2, FilterX } from 'lucide-react'
 import { useAgendamento } from '../features/agendamento/model/useAgendamento'
+import { useFiltroAgendamentos } from '../features/agendamento/model/useFiltroAgendamentos'
+import { FiltroAgendamentos, filtrosPadrao, type FiltroAgendamentosValues } from '../features/agendamento/ui/FiltroAgendamentos'
 import { Card } from '../shared/ui/Card'
 import { Button } from '../shared/ui/Button'
 import { Input } from '../shared/ui/Input'
@@ -17,6 +19,9 @@ export function AppointmentsPage() {
   const [novaData, setNovaData] = useState('')
   const [novoHorario, setNovoHorario] = useState('')
   const [acaoErro, setAcaoErro] = useState<string | null>(null)
+  const [filtros, setFiltros] = useState<FiltroAgendamentosValues>(filtrosPadrao)
+
+  const { agendamentosFiltrados, profissionais } = useFiltroAgendamentos(agendamentos, filtros)
 
   useEffect(() => {
     listarMeusAgendamentos()
@@ -73,6 +78,10 @@ export function AppointmentsPage() {
           </div>
         )}
 
+        {!loading && !error && agendamentos.length > 0 && (
+          <FiltroAgendamentos profissionais={profissionais} onChange={setFiltros} />
+        )}
+
         {!loading && !error && agendamentos.length === 0 && (
           <div className="flex flex-col items-center text-center gap-3 py-16">
             <div className="w-14 h-14 rounded-full bg-secondary text-text-secondary flex items-center justify-center">
@@ -82,8 +91,17 @@ export function AppointmentsPage() {
           </div>
         )}
 
+        {!loading && !error && agendamentos.length > 0 && agendamentosFiltrados.length === 0 && (
+          <div className="flex flex-col items-center text-center gap-3 py-16">
+            <div className="w-14 h-14 rounded-full bg-secondary text-text-secondary flex items-center justify-center">
+              <FilterX size={24} strokeWidth={1.75} />
+            </div>
+            <p className="text-text-secondary">Nenhum agendamento encontrado para esses filtros.</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {agendamentos.map((agendamento) => (
+          {agendamentosFiltrados.map((agendamento) => (
             <Card key={agendamento.id}>
               <div className="flex items-center justify-between mb-2">
                 <p className="font-medium text-text-primary">{agendamento.service.name}</p>
