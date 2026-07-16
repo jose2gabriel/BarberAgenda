@@ -34,6 +34,16 @@ export interface Unavailability {
   createdAt: string
 }
 
+export interface RecurringUnavailability {
+  id: string
+  professionalId: string
+  dayOfWeek: number
+  startTime: string
+  endTime: string
+  reason: string | null
+  createdAt: string
+}
+
 export interface MeuProfissional {
   id: string
   barbershopId: string

@@ -66,6 +66,12 @@ import { RegistrarIndisponibilidadeUseCase } from './unavailabilities/use-cases/
 import { RemoverIndisponibilidadeUseCase } from './unavailabilities/use-cases/RemoverIndisponibilidadeUseCase'
 import { ListarIndisponibilidadesUseCase } from './unavailabilities/use-cases/ListarIndisponibilidadesUseCase'
 import { VerificarBloqueioUseCase } from './unavailabilities/use-cases/VerificarBloqueioUseCase'
+import { routerIndisponibilidadeRecorrente } from './unavailabilities/adapters/routes/recurring-unavailability.routes'
+import { IndisponibilidadeRecorrenteController } from './unavailabilities/adapters/controllers/IndisponibilidadeRecorrenteController'
+import { SupabaseIndisponibilidadeRecorrenteRepository } from './unavailabilities/infrastructure/repositories/SupabaseIndisponibilidadeRecorrenteRepository'
+import { RegistrarIndisponibilidadeRecorrenteUseCase } from './unavailabilities/use-cases/RegistrarIndisponibilidadeRecorrenteUseCase'
+import { RemoverIndisponibilidadeRecorrenteUseCase } from './unavailabilities/use-cases/RemoverIndisponibilidadeRecorrenteUseCase'
+import { ListarIndisponibilidadesRecorrentesUseCase } from './unavailabilities/use-cases/ListarIndisponibilidadesRecorrentesUseCase'
 
 dotenv.config()
 
@@ -192,12 +198,36 @@ const removerIndisponibilidadeUseCase = new RemoverIndisponibilidadeUseCase(
   profissionalRepository,
   barbeariaRepository
 )
-const verificarBloqueioUseCase = new VerificarBloqueioUseCase(indisponibilidadeRepository)
 const listarIndisponibilidadesUseCase = new ListarIndisponibilidadesUseCase(indisponibilidadeRepository)
 const indisponibilidadeController = new IndisponibilidadeController(
   registrarIndisponibilidadeUseCase,
   removerIndisponibilidadeUseCase,
   listarIndisponibilidadesUseCase
+)
+
+const indisponibilidadeRecorrenteRepository = new SupabaseIndisponibilidadeRecorrenteRepository()
+const registrarIndisponibilidadeRecorrenteUseCase = new RegistrarIndisponibilidadeRecorrenteUseCase(
+  indisponibilidadeRecorrenteRepository,
+  profissionalRepository,
+  barbeariaRepository
+)
+const removerIndisponibilidadeRecorrenteUseCase = new RemoverIndisponibilidadeRecorrenteUseCase(
+  indisponibilidadeRecorrenteRepository,
+  profissionalRepository,
+  barbeariaRepository
+)
+const listarIndisponibilidadesRecorrentesUseCase = new ListarIndisponibilidadesRecorrentesUseCase(
+  indisponibilidadeRecorrenteRepository
+)
+const indisponibilidadeRecorrenteController = new IndisponibilidadeRecorrenteController(
+  registrarIndisponibilidadeRecorrenteUseCase,
+  removerIndisponibilidadeRecorrenteUseCase,
+  listarIndisponibilidadesRecorrentesUseCase
+)
+
+const verificarBloqueioUseCase = new VerificarBloqueioUseCase(
+  indisponibilidadeRepository,
+  indisponibilidadeRecorrenteRepository
 )
 
 const agendamentoRepository = new SupabaseAgendamentoRepository()
@@ -253,7 +283,8 @@ const listarHorariosDisponiveisUseCase = new ListarHorariosDisponiveisUseCase(
   servicoRepository,
   businessHoursRepository,
   agendamentoRepository,
-  indisponibilidadeRepository
+  indisponibilidadeRepository,
+  indisponibilidadeRecorrenteRepository
 )
 const horariosDisponiveisController = new HorariosDisponiveisController(listarHorariosDisponiveisUseCase)
 
@@ -273,6 +304,10 @@ apiV1.use('/appointments', routerAgendamento(agendamentoController))
 apiV1.use(
   '/barbershops/:barbershopId/professionals/:professionalId/unavailability',
   routerIndisponibilidade(indisponibilidadeController)
+)
+apiV1.use(
+  '/barbershops/:barbershopId/professionals/:professionalId/recurring-unavailability',
+  routerIndisponibilidadeRecorrente(indisponibilidadeRecorrenteController)
 )
 apiV1.use(
   '/barbershops/:barbershopId/professionals/:professionalId/available-slots',

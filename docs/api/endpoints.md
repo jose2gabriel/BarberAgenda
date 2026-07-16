@@ -54,8 +54,12 @@ Authorization: Bearer <token_jwt>
 | POST | `/barbershops/:barbershopId/professionals` | RF003 — Cadastra profissional na barbearia | ✅ Owner (própria) |
 | GET | `/barbershops/:barbershopId/professionals/:id` | RF026 — Dados do profissional | ✅ |
 | GET | `/barbershops/:barbershopId/professionals/:id/available-slots` | RF022 — Horários disponíveis | ✅ |
-| POST | `/barbershops/:barbershopId/professionals/:id/unavailability` | RF024 — Registra indisponibilidade | ✅ Profissional (próprio) ou Owner (da barbearia) |
-| DELETE | `/barbershops/:barbershopId/professionals/:id/unavailability/:uid` | RF024 — Remove indisponibilidade | ✅ Profissional (próprio) ou Owner (da barbearia) |
+| GET | `/barbershops/:barbershopId/professionals/:id/unavailability` | RF024 — Lista indisponibilidades (data específica) | ✅ |
+| POST | `/barbershops/:barbershopId/professionals/:id/unavailability` | RF024 — Registra indisponibilidade (data específica) | ✅ Profissional (próprio) ou Owner (da barbearia) |
+| DELETE | `/barbershops/:barbershopId/professionals/:id/unavailability/:uid` | RF024 — Remove indisponibilidade (data específica) | ✅ Profissional (próprio) ou Owner (da barbearia) |
+| GET | `/barbershops/:barbershopId/professionals/:id/recurring-unavailability` | RF024 — Lista indisponibilidades recorrentes (dia da semana) | ✅ |
+| POST | `/barbershops/:barbershopId/professionals/:id/recurring-unavailability` | RF024 — Registra indisponibilidade recorrente | ✅ Profissional (próprio) ou Owner (da barbearia) |
+| DELETE | `/barbershops/:barbershopId/professionals/:id/recurring-unavailability/:uid` | RF024 — Remove indisponibilidade recorrente | ✅ Profissional (próprio) ou Owner (da barbearia) |
 
 > **Nota sobre `/available-slots`:** recebe `?date=YYYY-MM-DD&serviceId=uuid` como query params. O backend calcula os slots livres considerando agendamentos existentes, indisponibilidades, horário de funcionamento da barbearia e duração do serviço (RF007, RF016, RF025).
 
@@ -75,8 +79,8 @@ Authorization: Bearer <token_jwt>
 
 | Método | Rota | Referência | Auth |
 |--------|------|-----------|------|
-| GET | `/barbershops/:barbershopId/business-hours` | RF020 — Consulta horário de funcionamento | ✅ |
-| PUT | `/barbershops/:barbershopId/business-hours` | RF020 — Atualiza horário de funcionamento | ✅ Owner (própria) |
+| GET | `/barbershops/:barbershopId/hours` | RF020 — Consulta horário de funcionamento | ✅ |
+| POST | `/barbershops/:barbershopId/hours` | RF020 — Cria/atualiza horário de funcionamento (upsert por dia da semana) | ✅ Owner (própria) |
 
 ---
 

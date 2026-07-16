@@ -8,9 +8,22 @@ import { Button } from '../shared/ui/Button'
 import { Avatar } from '../shared/ui/Avatar'
 import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
+import type { BusinessHours } from '../entities/barbershop/types'
 
 function formatPrice(price: number): string {
   return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+
+// Aberto/fechado agora, comparando com o horário de funcionamento do dia
+// da semana atual (hora local do navegador — mesma convenção usada pelo
+// dono ao cadastrar o horário).
+function estaAbertoAgora(horarios: BusinessHours[]): boolean {
+  const agora = new Date()
+  const horarioDeHoje = horarios.find((h) => h.dayOfWeek === agora.getDay())
+  if (!horarioDeHoje) return false
+
+  const horaAtual = `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`
+  return horaAtual >= horarioDeHoje.openTime.slice(0, 5) && horaAtual < horarioDeHoje.closeTime.slice(0, 5)
 }
 
 export function BarbershopDetailPage() {
@@ -20,11 +33,13 @@ export function BarbershopDetailPage() {
     barbearia,
     profissionais,
     servicos,
+    horarios,
     loading,
     error,
     buscarBarbearia,
     listarProfissionais,
     listarServicos,
+    listarHorarios,
   } = useBarbeiro()
   const { buscarMeuProfissional } = useAgendamento()
   const { user } = useAuth()
@@ -38,7 +53,8 @@ export function BarbershopDetailPage() {
     buscarBarbearia(id)
     listarProfissionais(id)
     listarServicos(id)
-  }, [id, buscarBarbearia, listarProfissionais, listarServicos])
+    listarHorarios(id)
+  }, [id, buscarBarbearia, listarProfissionais, listarServicos, listarHorarios])
 
   useEffect(() => {
     if (!id || !ehProfissional) return
@@ -86,8 +102,22 @@ export function BarbershopDetailPage() {
               <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center shrink-0">
                 <Store size={24} strokeWidth={1.75} className="text-white" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">{barbearia.name}</h1>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="text-2xl font-bold text-white">{barbearia.name}</h1>
+                  <span
+                    className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      estaAbertoAgora(horarios)
+                        ? 'bg-success/15 text-success border border-success/30'
+                        : 'bg-white/10 text-white/60 border border-white/20'
+                    }`}
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${estaAbertoAgora(horarios) ? 'bg-success' : 'bg-white/40'}`}
+                    />
+                    {estaAbertoAgora(horarios) ? 'Aberto agora' : 'Fechado agora'}
+                  </span>
+                </div>
                 <p className="text-white/70 text-sm">{barbearia.address}</p>
                 <p className="text-white/70 text-sm">{barbearia.phone}</p>
               </div>
