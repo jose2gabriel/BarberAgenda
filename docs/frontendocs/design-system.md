@@ -11,7 +11,7 @@
 |------|-----|-----|
 | Primary | `#FFFFFF` | Fundo principal |
 | Secondary | `#F9FAFB` | Fundo de cards |
-| Accent | `#DC2626` | Botões primários, destaques, links |
+| Accent | `#DC2626` | Botões primários, CTAs, links, destaques de marca |
 | Dark | `#1A1A1A` | Header/nav — contraste "barbearia" (preto + vermelho + branco) |
 | Text Primary | `#1A1A2E` | Textos principais |
 | Text Secondary | `#6B7280` | Textos secundários, placeholders |
@@ -19,9 +19,12 @@
 | Warning | `#FF9800` | Alertas |
 | Error | `#F44336` | Erros de validação |
 | Border | `#E5E7EB` | Bordas de inputs e cards |
+| Selected | `#4F46E5` | Estado "selecionado/ativo" — cards de escolha (profissional/serviço/horário), nav ativa da sidebar, foco de input |
 
 > Tema claro — visual moderno e limpo para navegador. Vermelho mais forte + faixa escura no header
-> remetem à identidade visual clássica de barbearia (preto, vermelho e branco).
+> remetem à identidade visual clássica de barbearia (preto, vermelho e branco). **Vermelho nunca
+> indica seleção** — só CTA/marca/perigo — pra não ser confundido com erro; "selecionado" usa
+> sempre o indigo (`Selected`).
 
 ---
 
@@ -54,12 +57,12 @@ interface ButtonProps {
 }
 
 export function Button({ variant = 'primary', size = 'md', loading, children, className = '', ...props }: ButtonProps) {
-  const base = 'rounded-lg font-semibold transition-all duration-200 flex items-center gap-2'
+  const base = 'rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:pointer-events-none'
 
   const variants = {
-    primary:   'bg-accent hover:bg-accent/90 text-white',
+    primary:   'bg-accent hover:bg-accent/90 text-white shadow-sm shadow-accent/20 hover:shadow-md hover:shadow-accent/25',
     secondary: 'bg-transparent border border-accent text-accent hover:bg-accent hover:text-white',
-    danger:    'bg-red-800 hover:bg-red-900 text-white',
+    danger:    'bg-red-800 hover:bg-red-900 text-white shadow-sm shadow-red-900/20',
   }
 
   const sizes = {
@@ -90,9 +93,9 @@ export function Input({ label, error, ...props }: InputProps) {
       <label className="text-sm font-medium text-text-secondary">{label}</label>
       <input
         className={`
-          bg-white border rounded-lg px-4 py-2.5 text-text-primary
+          bg-white border rounded-xl px-4 py-2.5 text-text-primary
           placeholder-text-secondary outline-none transition-all
-          focus:border-accent focus:ring-2 focus:ring-accent/20
+          focus:border-selected focus:ring-2 focus:ring-selected/20
           ${error ? 'border-error' : 'border-border'}
         `}
         {...props}
@@ -108,7 +111,7 @@ export function Input({ label, error, ...props }: InputProps) {
 // src/shared/ui/Card.tsx
 export function Card({ children, className = '' }: { children: React.ReactNode, className?: string }) {
   return (
-    <div className={`bg-secondary border border-border rounded-xl p-6 ${className}`}>
+    <div className={`bg-secondary border border-border rounded-xl p-6 shadow-sm shadow-black/[0.03] ${className}`}>
       {children}
     </div>
   )
@@ -140,8 +143,13 @@ em vez de `tailwind.config.ts`:
   --color-warning: #ff9800;
   --color-error: #f44336;
   --color-border: #e5e7eb;
+  --color-selected: #4f46e5;
 }
 ```
+
+Além do `@theme`, `index.css` define um `:focus-visible` global (outline em `--color-selected`)
+pra garantir navegação por teclado visível em qualquer elemento focável, sem precisar repetir
+classe de foco componente por componente.
 
 ---
 
@@ -151,4 +159,6 @@ em vez de `tailwind.config.ts`:
 - Botões sempre têm estado de loading
 - Cards sempre têm a mesma borda e fundo
 - Espaçamento base: múltiplos de 4px (Tailwind padrão)
-- Bordas arredondadas: `rounded-lg` (8px) para inputs, `rounded-xl` (12px) para cards
+- Bordas arredondadas: `rounded-xl` (12px) em inputs, botões e cards — visual consistente em todo o app
+- Estado "selecionado" (cards de escolha, nav ativa, foco de input) sempre em `--color-selected`
+  (indigo), nunca em `--color-accent` (vermelho é só CTA/marca/perigo)
