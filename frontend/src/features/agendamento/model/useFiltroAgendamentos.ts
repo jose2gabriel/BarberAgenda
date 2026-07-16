@@ -2,17 +2,6 @@ import { useMemo } from 'react'
 import type { Appointment } from '../../../entities/appointment/types'
 import type { FiltroAgendamentosValues } from '../ui/FiltroAgendamentos'
 
-/**
- * RF028 — Histórico com filtros avançados.
- *
- * Filtra em memória a lista de agendamentos já carregada por
- * `useAgendamento().listarMeusAgendamentos()`. O backend atual
- * (`GET /appointments`) não aceita query params de status/período/
- * profissional — ver observação no CLAUDE.md sobre a divergência
- * com `docs/api/endpoints.md`. Esta é uma solução legítima de
- * camada de apresentação (não acessa banco, não duplica regra de
- * negócio) enquanto o endpoint dedicado não existir.
- */
 export function useFiltroAgendamentos(agendamentos: Appointment[], filtros: FiltroAgendamentosValues) {
   const profissionais = useMemo(() => {
     const mapa = new Map<string, string>()
