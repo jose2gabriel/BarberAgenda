@@ -80,7 +80,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 bg-dark min-h-screen flex flex-col transition-all duration-200`}
+      className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 bg-gradient-to-b from-dark to-indigo-950 min-h-screen flex flex-col transition-all duration-200`}
     >
       <div
         className={`py-6 flex items-center border-b border-white/10 ${

@@ -9,24 +9,42 @@ const FEATURES = [
     icon: Scissors,
     title: 'Escolha o profissional',
     description: 'Veja os barbeiros disponíveis em cada barbearia e escolha o de sua preferência.',
+    tom: 'accent',
   },
   {
     icon: CalendarCheck,
     title: 'Agende na hora',
     description: 'Veja os horários livres e marque em poucos segundos.',
+    tom: 'selected',
   },
   {
     icon: BellRing,
     title: 'Fique por dentro',
     description: 'Acompanhe seus agendamentos e receba confirmação por e-mail.',
+    tom: 'accent',
   },
-]
+] as const
 
 const PASSOS = [
-  { icon: UserPlus, title: 'Crie sua conta', description: 'Cadastro rápido, sem burocracia.' },
-  { icon: Search, title: 'Encontre uma barbearia', description: 'Veja profissionais, serviços e preços.' },
-  { icon: CheckCircle2, title: 'Confirme seu horário', description: 'Escolha o melhor horário disponível e pronto.' },
-]
+  { icon: UserPlus, title: 'Crie sua conta', description: 'Cadastro rápido, sem burocracia.', tom: 'selected' },
+  { icon: Search, title: 'Encontre uma barbearia', description: 'Veja profissionais, serviços e preços.', tom: 'accent' },
+  {
+    icon: CheckCircle2,
+    title: 'Confirme seu horário',
+    description: 'Escolha o melhor horário disponível e pronto.',
+    tom: 'selected',
+  },
+] as const
+
+const TOM_BADGE = {
+  accent: 'bg-accent/10 text-accent',
+  selected: 'bg-selected/10 text-selected',
+}
+
+const TOM_SOLIDO = {
+  accent: 'bg-accent',
+  selected: 'bg-selected',
+}
 
 export function HomePage() {
   return (
@@ -54,13 +72,17 @@ export function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="bg-dark">
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-28 flex flex-col items-center text-center gap-6">
+      <section className="bg-gradient-to-br from-dark via-dark to-indigo-950 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,70,229,0.18),transparent_60%)]" />
+        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-28 flex flex-col items-center text-center gap-6">
           <span className="inline-flex items-center gap-2 bg-accent/15 text-accent text-sm font-semibold px-4 py-1.5 rounded-full border border-accent/30">
             <Scissors size={16} strokeWidth={2} />A forma mais simples de agendar seu corte
           </span>
           <h1 className="text-4xl md:text-6xl font-bold text-white max-w-3xl leading-tight">
-            Agende seu horário na barbearia <span className="text-accent">sem complicação</span>
+            Agende seu horário na barbearia{' '}
+            <span className="bg-gradient-to-r from-accent to-selected bg-clip-text text-transparent">
+              sem complicação
+            </span>
           </h1>
           <p className="text-white/70 text-lg max-w-xl">
             Escolha o profissional, o serviço e o melhor horário — tudo em poucos cliques.
@@ -89,8 +111,13 @@ export function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FEATURES.map((feature) => (
-            <Card key={feature.title} className="text-center hover:shadow-lg hover:-translate-y-1 transition-all">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4">
+            <Card
+              key={feature.title}
+              className="text-center hover:shadow-lg hover:-translate-y-1 hover:border-selected/30 transition-all"
+            >
+              <div
+                className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-4 ${TOM_BADGE[feature.tom]}`}
+              >
                 <feature.icon size={22} strokeWidth={1.75} />
               </div>
               <h3 className="font-semibold text-text-primary mb-1">{feature.title}</h3>
@@ -101,7 +128,7 @@ export function HomePage() {
       </section>
 
       {/* Como funciona */}
-      <section className="bg-secondary">
+      <section className="bg-gradient-to-b from-secondary to-indigo-50/40">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-2">Como funciona</h2>
@@ -110,7 +137,9 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {PASSOS.map((passo, index) => (
               <div key={passo.title} className="flex flex-col items-center text-center gap-3">
-                <div className="relative w-14 h-14 rounded-full bg-accent text-white flex items-center justify-center">
+                <div
+                  className={`relative w-14 h-14 rounded-full text-white flex items-center justify-center ${TOM_SOLIDO[passo.tom]}`}
+                >
                   <passo.icon size={24} strokeWidth={1.75} />
                   <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-dark text-white text-xs font-bold flex items-center justify-center border-2 border-secondary">
                     {index + 1}
@@ -125,11 +154,13 @@ export function HomePage() {
       </section>
 
       {/* CTA final */}
-      <section className="max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center gap-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-text-primary">Pronto pra agendar seu próximo corte?</h2>
-        <Link to="/register">
-          <Button size="lg">Criar conta grátis</Button>
-        </Link>
+      <section className="bg-gradient-to-b from-indigo-50/40 to-primary">
+        <div className="max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center gap-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-primary">Pronto pra agendar seu próximo corte?</h2>
+          <Link to="/register">
+            <Button size="lg">Criar conta grátis</Button>
+          </Link>
+        </div>
       </section>
     </div>
   )
