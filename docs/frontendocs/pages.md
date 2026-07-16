@@ -51,8 +51,10 @@
 
 ### `/barbershops/:id` — Detalhes da Barbearia
 - **Feature:** `features/barbershop/`
-- **Endpoints:** `GET /api/v1/barbershops/:id`, `GET /api/v1/barbershops/:id/professionals`, `GET /api/v1/barbershops/:id/services`
-- **Elementos:** foto da barbearia, nome, endereço, lista de profissionais, lista de serviços, botão "Agendar"
+- **Endpoints:** `GET /api/v1/barbershops/:id`, `GET /api/v1/barbershops/:id/professionals`, `GET /api/v1/barbershops/:id/services`, `GET /api/v1/barbershops/:id/hours`
+- **Elementos:** foto da barbearia, nome, badge "Aberto agora"/"Fechado agora" (calculado no frontend a
+  partir do horário de funcionamento do dia da semana atual), endereço, lista de profissionais, lista
+  de serviços, botão "Agendar"
 - **Hook:** `useBarbeiro`
 
 ### `/appointments/new` — Novo Agendamento
@@ -84,8 +86,10 @@
 
 ### `/professional/unavailability` — Minha Indisponibilidade
 - **Feature:** `features/agendamento/`
-- **Endpoints:** `POST /api/v1/barbershops/:id/professionals/:id/unavailability`
-- **Elementos:** calendário para selecionar período, campo motivo, lista de indisponibilidades registradas
+- **Endpoints:** `GET/POST/DELETE /api/v1/barbershops/:id/professionals/:id/recurring-unavailability`
+- **Elementos:** seleção de um ou mais dias da semana (chips), horário de início/fim, campo motivo,
+  lista das indisponibilidades recorrentes registradas com botão remover. O bloqueio se repete toda
+  semana nos dias marcados — não precisa registrar de novo.
 
 ---
 

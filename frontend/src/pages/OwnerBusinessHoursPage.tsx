@@ -10,7 +10,15 @@ import { LoadingSpinner } from '../shared/ui/LoadingSpinner'
 import { ErrorMessage } from '../shared/ui/ErrorMessage'
 import { ApiError } from '../shared/lib/api'
 
-const DIAS_DA_SEMANA = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+// Segunda a sexta vira um único grupo — o horário definido se repete
+// automaticamente nos 5 dias, já que a imensa maioria das barbearias
+// funciona igual de segunda a sexta. Sábado e domingo continuam à parte
+// porque costumam ter horário diferente (ou fechado, no caso de domingo).
+const GRUPOS: { chave: string; label: string; dias: number[] }[] = [
+  { chave: 'seg-sex', label: 'Segunda a sexta', dias: [1, 2, 3, 4, 5] },
+  { chave: 'sabado', label: 'Sábado', dias: [6] },
+  { chave: 'domingo', label: 'Domingo', dias: [0] },
+]
 
 export function OwnerBusinessHoursPage() {
   const { id } = useParams<{ id: string }>()
@@ -19,9 +27,9 @@ export function OwnerBusinessHoursPage() {
   const { barbearia, horarios, loading, error, buscarBarbearia, listarHorarios, salvarHorario } = useBarbeiro()
   const { selecionarBarbearia } = useActiveBarbershop()
 
-  const [valores, setValores] = useState<Record<number, { openTime: string; closeTime: string }>>({})
-  const [salvandoDia, setSalvandoDia] = useState<number | null>(null)
-  const [dayError, setDayError] = useState<Record<number, string>>({})
+  const [valores, setValores] = useState<Record<string, { openTime: string; closeTime: string }>>({})
+  const [salvandoGrupo, setSalvandoGrupo] = useState<string | null>(null)
+  const [grupoError, setGrupoError] = useState<Record<string, string>>({})
 
   useEffect(() => {
     buscarBarbearia(barbershopId)
@@ -30,36 +38,46 @@ export function OwnerBusinessHoursPage() {
   }, [barbershopId, buscarBarbearia, listarHorarios, selecionarBarbearia])
 
   useEffect(() => {
-    const iniciais: Record<number, { openTime: string; closeTime: string }> = {}
+    const porDia: Record<number, { openTime: string; closeTime: string }> = {}
     for (const horario of horarios) {
-      iniciais[horario.dayOfWeek] = { openTime: horario.openTime.slice(0, 5), closeTime: horario.closeTime.slice(0, 5) }
+      porDia[horario.dayOfWeek] = { openTime: horario.openTime.slice(0, 5), closeTime: horario.closeTime.slice(0, 5) }
+    }
+    // Representa o grupo pelo horário do primeiro dia (ex.: segunda, pro grupo seg-sex)
+    const iniciais: Record<string, { openTime: string; closeTime: string }> = {}
+    for (const grupo of GRUPOS) {
+      const doPrimeiroDia = porDia[grupo.dias[0]]
+      if (doPrimeiroDia) iniciais[grupo.chave] = doPrimeiroDia
     }
     setValores((atual) => ({ ...iniciais, ...atual }))
   }, [horarios])
 
-  function handleChange(dayOfWeek: number, campo: 'openTime' | 'closeTime', valor: string) {
+  function handleChange(chave: string, campo: 'openTime' | 'closeTime', valor: string) {
     setValores((atual) => ({
       ...atual,
-      [dayOfWeek]: { ...atual[dayOfWeek], [campo]: valor },
+      [chave]: { ...atual[chave], [campo]: valor },
     }))
   }
 
-  async function handleSalvar(dayOfWeek: number) {
-    const valor = valores[dayOfWeek]
+  async function handleSalvar(grupo: (typeof GRUPOS)[number]) {
+    const valor = valores[grupo.chave]
     if (!valor?.openTime || !valor?.closeTime) return
 
-    setSalvandoDia(dayOfWeek)
-    setDayError((atual) => ({ ...atual, [dayOfWeek]: '' }))
+    setSalvandoGrupo(grupo.chave)
+    setGrupoError((atual) => ({ ...atual, [grupo.chave]: '' }))
     try {
-      await salvarHorario(barbershopId, { dayOfWeek, openTime: valor.openTime, closeTime: valor.closeTime })
+      await Promise.all(
+        grupo.dias.map((dayOfWeek) =>
+          salvarHorario(barbershopId, { dayOfWeek, openTime: valor.openTime, closeTime: valor.closeTime })
+        )
+      )
       await listarHorarios(barbershopId)
     } catch (err) {
-      setDayError((atual) => ({
+      setGrupoError((atual) => ({
         ...atual,
-        [dayOfWeek]: err instanceof ApiError ? err.message : 'Não foi possível salvar. Tente novamente.',
+        [grupo.chave]: err instanceof ApiError ? err.message : 'Não foi possível salvar. Tente novamente.',
       }))
     } finally {
-      setSalvandoDia(null)
+      setSalvandoGrupo(null)
     }
   }
 
@@ -94,36 +112,36 @@ export function OwnerBusinessHoursPage() {
           <>
             <h1 className="text-3xl font-bold text-text-primary mt-4 mb-2">Horário de funcionamento</h1>
             <p className="text-text-secondary text-sm mb-8">
-              Defina o horário de abertura e fechamento por dia da semana. Dias sem horário definido ficam fechados
-              para agendamento.
+              Defina o horário de abertura e fechamento. Segunda a sexta usa sempre o mesmo horário
+              — sábado e domingo ficam à parte. Dias sem horário definido ficam fechados para agendamento.
             </p>
 
             <div className="flex flex-col gap-4">
-              {DIAS_DA_SEMANA.map((nome, dayOfWeek) => (
-                <Card key={dayOfWeek} className="flex items-center gap-4">
-                  <span className="w-24 font-medium text-text-primary">{nome}</span>
+              {GRUPOS.map((grupo) => (
+                <Card key={grupo.chave} className="flex items-center gap-4">
+                  <span className="w-32 font-medium text-text-primary">{grupo.label}</span>
                   <Input
                     label="Abre"
                     type="time"
-                    value={valores[dayOfWeek]?.openTime ?? ''}
-                    onChange={(e) => handleChange(dayOfWeek, 'openTime', e.target.value)}
+                    value={valores[grupo.chave]?.openTime ?? ''}
+                    onChange={(e) => handleChange(grupo.chave, 'openTime', e.target.value)}
                   />
                   <Input
                     label="Fecha"
                     type="time"
-                    value={valores[dayOfWeek]?.closeTime ?? ''}
-                    onChange={(e) => handleChange(dayOfWeek, 'closeTime', e.target.value)}
+                    value={valores[grupo.chave]?.closeTime ?? ''}
+                    onChange={(e) => handleChange(grupo.chave, 'closeTime', e.target.value)}
                   />
                   <Button
                     size="sm"
                     variant="secondary"
-                    loading={salvandoDia === dayOfWeek}
-                    disabled={!valores[dayOfWeek]?.openTime || !valores[dayOfWeek]?.closeTime}
-                    onClick={() => handleSalvar(dayOfWeek)}
+                    loading={salvandoGrupo === grupo.chave}
+                    disabled={!valores[grupo.chave]?.openTime || !valores[grupo.chave]?.closeTime}
+                    onClick={() => handleSalvar(grupo)}
                   >
                     Salvar
                   </Button>
-                  {dayError[dayOfWeek] && <ErrorMessage>{dayError[dayOfWeek]}</ErrorMessage>}
+                  {grupoError[grupo.chave] && <ErrorMessage>{grupoError[grupo.chave]}</ErrorMessage>}
                 </Card>
               ))}
             </div>

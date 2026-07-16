@@ -39,7 +39,7 @@ export function BarbershopsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {barbearias.map((barbearia) => (
             <Link key={barbearia.id} to={`/barbershops/${barbearia.id}`}>
-              <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all">
+              <Card className="h-full hover:shadow-lg hover:-translate-y-1 hover:border-selected/30 transition-all">
                 <div className="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4">
                   <Store size={20} strokeWidth={1.75} />
                 </div>

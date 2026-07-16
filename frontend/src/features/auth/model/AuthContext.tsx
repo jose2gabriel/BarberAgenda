@@ -52,6 +52,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false))
   }, [])
 
+  // O token fica em localStorage, compartilhado entre todas as abas da mesma
+  // origem. Se outra aba loga com uma conta diferente (ou desloga), o evento
+  // 'storage' dispara AQUI (nunca na aba que fez a mudança) — sem isso, esta
+  // aba continuaria mostrando dados da conta antiga na tela, mas usando o
+  // token novo (de outra conta) em qualquer requisição futura. Recarregar
+  // força todo componente a refazer fetch já com a sessão correta.
+  useEffect(() => {
+    function handleStorageChange(event: StorageEvent) {
+      if (event.key === 'token' || event.key === null) {
+        window.location.reload()
+      }
+    }
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
+
   async function login(email: string, password: string) {
     const { token, usuario } = await api.post<LoginResponse>('/auth/login', { email, password })
     localStorage.setItem('token', token)

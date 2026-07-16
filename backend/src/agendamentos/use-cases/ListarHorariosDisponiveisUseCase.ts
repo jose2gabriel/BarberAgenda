@@ -4,6 +4,7 @@ import { IProfissionalRepository } from '../../professionals/domain/interfaces/I
 import { IServicoRepository } from '../../services/domain/interfaces/IServicoRepository'
 import { IBusinessHoursRepository } from '../../barbershops/domain/interfaces/IBusinessHoursRepository'
 import { IIndisponibilidadeRepository } from '../../unavailabilities/domain/interfaces/IIndisponibilidadeRepository'
+import { IIndisponibilidadeRecorrenteRepository } from '../../unavailabilities/domain/interfaces/IIndisponibilidadeRecorrenteRepository'
 import { AppError } from '../../shared/errors/AppError'
 import { dataNoPassado, diaDaSemana, hhmmParaMinutos, minutosParaHHmm } from '../../shared/utils/dateUtils'
 
@@ -22,7 +23,8 @@ export class ListarHorariosDisponiveisUseCase implements IListarHorariosDisponiv
     private readonly servicoRepository: IServicoRepository,
     private readonly businessHoursRepository: IBusinessHoursRepository,
     private readonly agendamentoRepository: IAgendamentoRepository,
-    private readonly indisponibilidadeRepository: IIndisponibilidadeRepository
+    private readonly indisponibilidadeRepository: IIndisponibilidadeRepository,
+    private readonly indisponibilidadeRecorrenteRepository: IIndisponibilidadeRecorrenteRepository
   ) {}
 
   async executar(barbershopId: string, professionalId: string, date: string, serviceId: string): Promise<string[]> {
@@ -55,6 +57,8 @@ export class ListarHorariosDisponiveisUseCase implements IListarHorariosDisponiv
 
     const agendamentosDoDia = await this.agendamentoRepository.listarPorProfissionalEData(professionalId, date)
     const indisponibilidades = await this.indisponibilidadeRepository.listarPorProfissional(professionalId)
+    const todasRecorrentes = await this.indisponibilidadeRecorrenteRepository.listarPorProfissional(professionalId)
+    const indisponibilidadesRecorrentesDoDia = todasRecorrentes.filter((i) => i.dayOfWeek === diaDaSemana(date))
 
     const hoje = !dataNoPassado(date) && date === new Date().toISOString().slice(0, 10)
     const agoraMin = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
@@ -79,6 +83,11 @@ export class ListarHorariosDisponiveisUseCase implements IListarHorariosDisponiv
         (i) => new Date(i.startsAt) < new Date(fimISO) && new Date(i.endsAt) > new Date(inicioISO)
       )
       if (conflitaIndisponibilidade) continue
+
+      const conflitaIndisponibilidadeRecorrente = indisponibilidadesRecorrentesDoDia.some(
+        (i) => inicioStr < i.endTime.slice(0, 5) && fimStr > i.startTime.slice(0, 5)
+      )
+      if (conflitaIndisponibilidadeRecorrente) continue
 
       slots.push(inicioStr)
     }

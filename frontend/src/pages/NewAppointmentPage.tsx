@@ -160,8 +160,8 @@ export function NewAppointmentPage() {
                         onClick={() => setSelectedTime(horario)}
                         className={`text-sm font-semibold py-2 rounded-full transition-colors ${
                           selectedTime === horario
-                            ? 'bg-accent text-white'
-                            : 'border border-accent text-accent hover:bg-accent/10'
+                            ? 'bg-selected text-white'
+                            : 'border border-border text-text-secondary hover:border-selected/40 hover:text-selected'
                         }`}
                       >
                         {horario}

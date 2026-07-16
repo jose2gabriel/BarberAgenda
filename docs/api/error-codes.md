@@ -18,6 +18,7 @@
 | `VALIDATION_ERROR` | Dados inválidos na requisição. | Campo obrigatório ausente ou formato incorreto |
 | `INVALID_DATE` | Data ou horário inválido. | Data no passado ou formato incorreto |
 | `INVALID_RESET_TOKEN` | Token inválido ou expirado. | Token de recuperação de senha inexistente, expirado ou já usado (RF030) |
+| `SELF_BOOKING_NOT_ALLOWED` | Você não pode agendar um horário com você mesmo. | Profissional tentando se agendar como cliente de si mesmo |
 
 ## HTTP 401 — Unauthorized
 

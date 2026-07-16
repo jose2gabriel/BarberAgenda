@@ -1,6 +1,12 @@
 import { useCallback, useRef, useState } from 'react'
 import { api, ApiError } from '../../../shared/lib/api'
-import type { Appointment, RawAppointment, Unavailability, MeuProfissional } from '../../../entities/appointment/types'
+import type {
+  Appointment,
+  RawAppointment,
+  Unavailability,
+  RecurringUnavailability,
+  MeuProfissional,
+} from '../../../entities/appointment/types'
 
 /**
  * Busca e gerencia agendamentos, horários disponíveis e indisponibilidades
@@ -10,6 +16,7 @@ export function useAgendamento() {
   const [agendamentos, setAgendamentos] = useState<Appointment[]>([])
   const [agendaProfissional, setAgendaProfissional] = useState<RawAppointment[]>([])
   const [indisponibilidades, setIndisponibilidades] = useState<Unavailability[]>([])
+  const [indisponibilidadesRecorrentes, setIndisponibilidadesRecorrentes] = useState<RecurringUnavailability[]>([])
   const [horariosDisponiveis, setHorariosDisponiveis] = useState<string[]>([])
   const [meuProfissional, setMeuProfissional] = useState<MeuProfissional | null>(null)
   const [loading, setLoading] = useState(false)
@@ -134,10 +141,49 @@ export function useAgendamento() {
     []
   )
 
+  const listarIndisponibilidadesRecorrentes = useCallback(async (barbershopId: string, professionalId: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await api.get<RecurringUnavailability[]>(
+        `/barbershops/${barbershopId}/professionals/${professionalId}/recurring-unavailability`
+      )
+      setIndisponibilidadesRecorrentes(data)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Erro ao buscar indisponibilidades recorrentes.')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const criarIndisponibilidadeRecorrente = useCallback(
+    async (
+      barbershopId: string,
+      professionalId: string,
+      dados: { dayOfWeek: number; startTime: string; endTime: string; reason?: string }
+    ) => {
+      return api.post<RecurringUnavailability>(
+        `/barbershops/${barbershopId}/professionals/${professionalId}/recurring-unavailability`,
+        dados
+      )
+    },
+    []
+  )
+
+  const removerIndisponibilidadeRecorrente = useCallback(
+    async (barbershopId: string, professionalId: string, recurringUnavailabilityId: string) => {
+      await api.delete(
+        `/barbershops/${barbershopId}/professionals/${professionalId}/recurring-unavailability/${recurringUnavailabilityId}`
+      )
+    },
+    []
+  )
+
   return {
     agendamentos,
     agendaProfissional,
     indisponibilidades,
+    indisponibilidadesRecorrentes,
     horariosDisponiveis,
     meuProfissional,
     loading,
@@ -152,5 +198,8 @@ export function useAgendamento() {
     reagendarAgendamento,
     criarIndisponibilidade,
     removerIndisponibilidade,
+    listarIndisponibilidadesRecorrentes,
+    criarIndisponibilidadeRecorrente,
+    removerIndisponibilidadeRecorrente,
   }
 }

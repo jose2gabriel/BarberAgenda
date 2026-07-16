@@ -43,6 +43,10 @@ export class CriarAgendamentoUseCase implements ICriarAgendamentoUseCase {
       throw new AppError('Profissional não encontrado.', 404, 'PROFESSIONAL_NOT_FOUND')
     }
 
+    if (profissional.userId === dados.clientId) {
+      throw new AppError('Você não pode agendar um horário com você mesmo.', 400, 'SELF_BOOKING_NOT_ALLOWED')
+    }
+
     const servico = await this.servicoRepository.buscarPorId(dados.serviceId, profissional.barbershopId)
 
     if (!servico) {

@@ -35,7 +35,18 @@ Requisitos relacionados: RF003, RF004, RF011, RF021, RF022, RF024, RF025, RF026
 
 ## Controle de Indisponibilidade (RF024, RF025)
 
-- Profissionais podem registrar períodos em que não estarão disponíveis (folgas, férias, compromissos)
+Duas formas de bloqueio, ambas verificadas por `VerificarBloqueioUseCase` (RF025) e excluídas do
+cálculo de horários livres (RF022):
+
+- **Por data específica** (`unavailabilities`) — período pontual (folga de um dia, compromisso),
+  com data e hora de início/fim.
+- **Recorrente por dia da semana** (`recurring_unavailabilities`) — se repete toda semana no(s)
+  dia(s) marcados (ex.: "nunca atendo aos domingos", "almoço todo dia às 12h"), sem precisar
+  registrar de novo a cada semana. Um registro pode marcar vários dias de uma vez (um horário de
+  início/fim + motivo, aplicado a cada dia selecionado).
+
+Em ambos os casos:
+- Profissionais podem registrar suas próprias indisponibilidades
 - O owner da barbearia também pode registrar/remover indisponibilidade em nome de qualquer profissional que trabalhe para ele (ADR-007)
 - O sistema **impede automaticamente** novos agendamentos em períodos marcados como indisponíveis
 - Agendamentos já existentes nesses períodos devem ser gerenciados manualmente pelo **owner** da barbearia

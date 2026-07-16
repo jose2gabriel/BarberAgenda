@@ -38,7 +38,7 @@ function SidebarLink({ to, icon: Icon, label, collapsed, end }: SidebarLinkProps
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
           collapsed ? 'justify-center' : ''
-        } ${isActive ? 'bg-accent text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`
+        } ${isActive ? 'bg-selected text-white' : 'text-white/70 hover:bg-white/10 hover:text-white'}`
       }
     >
       <Icon size={18} strokeWidth={1.75} className="shrink-0" />
@@ -80,7 +80,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 bg-dark min-h-screen flex flex-col transition-all duration-200`}
+      className={`${collapsed ? 'w-16' : 'w-60'} shrink-0 bg-gradient-to-b from-dark to-indigo-950 min-h-screen flex flex-col transition-all duration-200`}
     >
       <div
         className={`py-6 flex items-center border-b border-white/10 ${
@@ -103,7 +103,7 @@ export function Sidebar() {
 
       <nav className="flex-1 flex flex-col gap-1 px-3 py-6 overflow-y-auto">
         <SidebarLink to="/barbershops" icon={Store} label="Barbearias" collapsed={collapsed} />
-        <SidebarLink to="/appointments" icon={Calendar} label="Meus agendamentos" collapsed={collapsed} />
+        <SidebarLink to="/appointments" icon={Calendar} label="Meus agendamentos" collapsed={collapsed} end />
         <SidebarLink to="/profile" icon={User} label="Meu perfil" collapsed={collapsed} />
 
         {(ehOwner || ehProfissional) && (
