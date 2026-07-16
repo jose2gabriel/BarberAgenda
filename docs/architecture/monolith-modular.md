@@ -9,7 +9,7 @@ Um Monolito Modular é uma aplicação única dividida internamente em módulos 
 Com equipe reduzida (4 integrantes) e prazo acadêmico, microsserviços aumentariam exponencialmente a complexidade de desenvolvimento e deploy. O Monolito Modular oferece:
 
 - Desenvolvimento e deploy simplificados
-- Menor custo de infraestrutura (Vercel free tier + Supabase free tier)
+- Menor custo de infraestrutura (Vercel + Render + Supabase, todos free tier)
 - Consistência transacional nativa (sem SAGA ou 2PC)
 - Organização interna sem overhead operacional
 - Possibilidade de evolução para microsserviços no futuro

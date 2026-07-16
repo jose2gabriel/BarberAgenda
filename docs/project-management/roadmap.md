@@ -67,9 +67,18 @@
 #### Etapa 4 — Agendamentos (depende de: Módulo 3 ✅)
 - [x] `useAgendamento` implementado (`features/agendamento/model/useAgendamento.ts`)
 - [x] Página `/appointments/new` — novo agendamento
-- [x] Página `/appointments` — meus agendamentos com cancelar/reagendar
-- [x] Página `/professional/schedule` — agenda do profissional
-- [x] Página `/professional/unavailability` — registrar indisponibilidade
+- [x] Página `/appointments` — meus agendamentos com cancelar/reagendar, filtro por status/
+      profissional/período (RF028 — só no lado do cliente; `/professional/schedule` ainda não
+      tem os mesmos filtros, ver nota abaixo)
+- [x] Página `/professional/schedule` — agenda do profissional, com cancelar
+- [x] Página `/professional/unavailability` — indisponibilidade **recorrente** por dia da
+      semana (chips de dom-sáb + horário + motivo, repete toda semana), além do bloqueio por
+      data específica já existente
+- [x] Profissional não pode agendar um horário consigo mesmo (validado no backend)
+- [x] `/owner/barbershops/:id/hours` agrupa segunda-a-sexta num único horário (evita repetir
+      5x o mesmo cadastro)
+- [x] Badge "Aberto agora"/"Fechado agora" em `/barbershops/:id`, calculado a partir do
+      horário de funcionamento do dia atual
 
 #### Etapa 5 — Perfil
 - [x] Página `/profile` — ver e editar dados, excluir conta
@@ -88,10 +97,23 @@
 - Refresh token
 - Upload de imagens (Supabase Storage — `architecture/storage.md`)
 - Notificações via WhatsApp (quando integração estiver estável)
-- RF028 — Histórico de atendimentos com filtros avançados
+- RF028 — Levar o filtro avançado (status/profissional/período) também pra
+  `/professional/schedule` — hoje só existe em `/appointments` (lado do cliente)
 - Relatórios de utilização para owners
 - Painel de métricas (Observer — MetricsObserver)
 - Possível migração de módulos críticos para microsserviços
+
+---
+
+## Deploy
+
+| Camada | Onde | Status |
+|--------|------|--------|
+| Frontend | Vercel | ✅ no ar |
+| Backend | Render (free tier — hiberna após inatividade, primeira request "acorda" em ~20-50s) | ✅ no ar |
+| Banco | Supabase (PostgreSQL) | ✅ |
+
+Configuração completa em `docs/operations/deployment.md` (`render.yaml` + `frontend/vercel.json`).
 
 ---
 

@@ -118,6 +118,20 @@ export function Card({ children, className = '' }: { children: React.ReactNode, 
 }
 ```
 
+### Select
+```tsx
+// src/shared/ui/Select.tsx — usado em FiltroAgendamentos.tsx (RF028)
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label: string
+  error?: string
+}
+```
+
+> ⚠️ **Inconsistência conhecida:** `Select.tsx` ainda usa `border-accent`/`ring-accent` (vermelho)
+> no foco e `rounded-lg` (8px), em vez de `border-selected`/`ring-selected` e `rounded-xl` como o
+> resto do Design System — foi criado numa branch em paralelo, antes do padrão `--color-selected`
+> existir. Ajustar quando mexer nesse componente de novo.
+
 ---
 
 ## Tokens de Cor (Tailwind v4 — CSS-first)

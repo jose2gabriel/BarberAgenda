@@ -78,6 +78,13 @@ As notificações são enviadas via `INotificationService` (padrão Adapter — 
 - Clientes e profissionais podem consultar atendimentos realizados anteriormente
 - O histórico inclui: data, horário, profissional, serviço e status final
 - Dados históricos são preservados mesmo após cancelamento de conta (anonimizados — RNF010)
+- **Filtros avançados** (status, profissional, período de/até) implementados em `/appointments`
+  — 100% client-side, filtrando o array já retornado por `GET /appointments` (que não tem corte
+  de data — devolve todo o histórico do usuário, passado e futuro, não só os agendamentos
+  futuros)
+- **Pendente:** os mesmos filtros ainda não existem em `/professional/schedule` (agenda do
+  profissional) — hoje só o lado do cliente tem essa UI, embora a regra diga que profissionais
+  também devem poder consultar com filtros
 
 ## Consulta de Agendamentos (RF010, RF011)
 

@@ -66,8 +66,13 @@
 ### `/appointments` — Meus Agendamentos
 - **Feature:** `features/agendamento/`
 - **Endpoints:** `GET /api/v1/appointments`
-- **Elementos:** lista de agendamentos futuros com status, botões cancelar e reagendar
+- **Elementos:** filtro avançado (RF028 — status, profissional, período "de/até") acima da
+  lista, feito 100% client-side sobre os agendamentos já carregados
+  (`FiltroAgendamentos.tsx` + `useFiltroAgendamentos.ts`); lista de agendamentos com status,
+  botões cancelar e reagendar; estado vazio diferente pra "sem agendamento nenhum" vs "sem
+  resultado pros filtros aplicados"
 - **Hook:** `useAgendamento`
+- Filtro só existe aqui (lado do cliente) — `/professional/schedule` ainda não tem
 
 ### `/profile` — Meu Perfil
 - **Feature:** `features/auth/`

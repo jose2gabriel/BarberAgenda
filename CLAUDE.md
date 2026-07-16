@@ -17,8 +17,9 @@ owner só enxerga/gerencia as suas (ADR-007).
 
 ### Frontend
 - React + Vite + TypeScript
-- Tailwind CSS v4 (tokens em `@theme`, `src/index.css`) — cores: `--color-accent` (vermelho),
-  `--color-dark`, `--color-primary/secondary`, `--color-text-primary/secondary`
+- Tailwind CSS v4 (tokens em `@theme`, `src/index.css`) — cores: `--color-accent` (vermelho, marca/
+  CTA/perigo), `--color-selected` (indigo, estados de seleção/ativo — nunca vermelho, pra não
+  parecer erro), `--color-dark`, `--color-primary/secondary`, `--color-text-primary/secondary`
 - React Router (rotas em `src/app/App.tsx`)
 - React Hook Form + Zod nos formulários
 - Ícones: `lucide-react` (monocromáticos, sem emoji)
@@ -83,6 +84,17 @@ relação real (`agendamento.clientId === userId`, `profissional.userId === user
   recebe e-mail (confirmação ao criar, aviso ao cancelar); falha de envio nunca bloqueia a operação
   (try/catch que só loga)
 - Frontend não acessa o Supabase diretamente — tudo passa pela API REST do backend (ADR-005)
+- Profissional não pode agendar horário consigo mesmo (`SELF_BOOKING_NOT_ALLOWED`) — todo
+  profissional também é cliente (roles acumulam), então isso é checado de verdade no backend
+- Indisponibilidade tem dois modelos: `unavailabilities` (bloqueio por data específica) e
+  `recurring_unavailabilities` (por dia da semana, repete toda semana — mesmo padrão de
+  `business_hours`, só que por profissional). Os dois são checados juntos em
+  `VerificarBloqueioUseCase` e `ListarHorariosDisponiveisUseCase`
+
+## Deploy
+Frontend na Vercel (root `frontend/`, `vercel.json` reescreve rotas pra `index.html` por causa do
+React Router). Backend no Render (`render.yaml` na raiz — Web Service Node, `rootDir: backend`,
+free tier hiberna após inatividade). Detalhes em `docs/operations/deployment.md`.
 
 ## Documentação
 - Regras de negócio por módulo: `docs/business-rules/`

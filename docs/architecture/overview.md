@@ -18,7 +18,7 @@ O Barber Agenda adota uma combinação de três padrões em níveis distintos de
 | Backend | Node.js + Express |
 | Autenticação | JWT implementado no backend |
 | Banco de Dados | PostgreSQL hospedado no Supabase |
-| Hospedagem | Vercel (frontend) |
+| Hospedagem | Vercel (frontend) + Render (backend) |
 | Controle de Versão | Git + GitHub |
 
 ## Módulos do Sistema
